@@ -27,6 +27,7 @@ const initialState = {
       colors: {}, // map of family => true (session-only)
     },
   },
+  editCount: 0,
   flags: {
     requiredOnboardingComplete: false,
   },
@@ -70,6 +71,10 @@ function reducer(state, action) {
       return { ...state, favorites: { ...action.favorites } }
     case 'setEntitlements':
       return { ...state, entitlements: { ...state.entitlements, ...action.entitlements } }
+    case 'setAnswers':
+      return { ...state, answers: { ...state.answers, ...action.answers } }
+    case 'incrementEditCount':
+      return { ...state, editCount: state.editCount + 1 }
     case 'excludeColorFamily': {
       const fam = action.family
       return { ...state, session: { ...state.session, exclusions: { ...state.session.exclusions, colors: { ...state.session.exclusions.colors, [fam]: true } } } }
