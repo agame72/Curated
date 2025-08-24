@@ -1,6 +1,7 @@
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import Header from './components/Header'
 import Footer from './components/Footer'
+import LegalModal from './components/LegalModal'
 import { UserStoreProvider } from './state/userStore.jsx'
 import Home from './pages/Home'
 import Upload from './pages/Upload'
@@ -22,6 +23,7 @@ export default function App() {
           </Routes>
         </main>
         <Footer />
+        <LegalModal />
       </div>
     </UserStoreProvider>
   )

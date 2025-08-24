@@ -1,5 +1,8 @@
 import { useNavigate } from 'react-router-dom'
 import Button from '../components/Button'
+import HowItWorks from '../components/HowItWorks'
+import WhatWeConsider from '../components/WhatWeConsider'
+import ProductPreview from '../components/ProductPreview'
 
 export default function Home() {
   const navigate = useNavigate()
@@ -17,6 +20,9 @@ export default function Home() {
           Get Started — It’s Free
         </Button>
       </div>
+      <HowItWorks />
+      <WhatWeConsider />
+      <ProductPreview />
     </div>
   )
 }
