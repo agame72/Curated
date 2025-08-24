@@ -1,0 +1,13 @@
+[
+  {"item_id":"o1","title":"Wool Topcoat","category":"outerwear","color_simple":"neutral","image_url_webp":"/images/outerwear_1.webp","palette_tags":["11","09"],"vibes":["Classic","Minimal"],"weight":"cooler"},
+  {"item_id":"m1","title":"Quilted Liner Jacket","category":"mid-layer","color_simple":"neutral","image_url_webp":"/images/mid_1.webp","palette_tags":["11"],"vibes":["Sporty","Minimal"],"weight":"cooler"},
+  {"item_id":"t1","title":"Merino Crewneck","category":"top","color_simple":"neutral","image_url_webp":"/images/top_1.webp","palette_tags":["07","11"],"vibes":["Classic"],"weight":"cooler"},
+  {"item_id":"b1","title":"Twill Chino","category":"bottom","color_simple":"neutral","image_url_webp":"/images/bottom_1.webp","palette_tags":["07"],"vibes":["Classic","Relaxed Tailored"],"weight":"mixed"},
+  {"item_id":"s1","title":"Clean Sneaker","category":"shoe","color_simple":"neutral","image_url_webp":"/images/shoe_1.webp","palette_tags":["03","11"],"vibes":["Minimal"],"weight":"mixed"},
+  {"item_id":"a1","title":"Leather Belt","category":"accessory","color_simple":"neutral","image_url_webp":"/images/acc_1.webp","palette_tags":["07","08"],"vibes":["Classic"],"weight":"mixed"},
+  {"item_id":"t2","title":"Soft Navy Tee","category":"top","color_simple":"accent","image_url_webp":"/images/top_2.webp","palette_tags":["11"],"vibes":["Minimal"],"weight":"warmer"},
+  {"item_id":"b2","title":"Dark Denim","category":"bottom","color_simple":"neutral","image_url_webp":"/images/bottom_2.webp","palette_tags":["11"],"vibes":["Classic"],"weight":"cooler"},
+  {"item_id":"o2","title":"Light Parka","category":"outerwear","color_simple":"accent","image_url_webp":"/images/outerwear_2.webp","palette_tags":["05"],"vibes":["Sporty"],"weight":"cooler"},
+  {"item_id":"m2","title":"Cardigan","category":"mid-layer","color_simple":"accent","image_url_webp":"/images/mid_2.webp","palette_tags":["06"],"vibes":["Soft"],"weight":"warmer"}
+]
+
