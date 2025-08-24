@@ -12,7 +12,7 @@ import { applyEntitlementsFromStripe } from '../lib/payments'
 import { track } from '../lib/analytics'
 
 export default function Results() {
-  const { state } = useUserStore()
+  const { state, dispatch } = useUserStore()
   const location = useLocation()
   const showWizard = useMemo(() => {
     const search = new URLSearchParams(location.search)
@@ -38,10 +38,9 @@ export default function Results() {
       if (data.paid) {
         const plan = data.entitlements.maxRecommendations === 100 ? 'style_guide' : 'starter'
         track('checkout_success', { plan })
-        // set entitlements
-        // use dispatch once available via store hook
+        dispatch({ type: 'setEntitlements', ...data.entitlements })
+        window.history.replaceState({}, '', '/app')
       }
-      window.history.replaceState({}, '', '/app')
     })()
   }, [])
 
