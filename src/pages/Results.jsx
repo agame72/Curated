@@ -22,12 +22,16 @@ export default function Results() {
   }
 
   // Grid + filters
-  const [filters, setFilters] = useState({ categories: [], color: null })
+  const [filters, setFilters] = useState({ categories: [], color: null, favoritesOnly: false })
   const [visibleCount, setVisibleCount] = useState(20)
 
-  const ranked = useMemo(() => rankItems(itemsData, { answers: state.answers }), [state.answers])
+  const ranked = useMemo(() => rankItems(itemsData, { answers: state.answers, favorites: state.favorites }), [state.answers, state.favorites])
   const filtered = useMemo(() => {
-    return ranked.filter(it => {
+    let arr = ranked
+    if (filters.favoritesOnly) {
+      arr = arr.filter(it => state.favorites[it.item_id])
+    }
+    return arr.filter(it => {
       const byCat = filters.categories.length ? filters.categories.includes(it.category) : true
       const byColor = filters.color ? it.color_simple === filters.color : true
       return byCat && byColor
@@ -55,7 +59,13 @@ export default function Results() {
         </div>
       </div>
       <Filters value={filters} onChange={setFilters} />
-      <Grid items={toShow} onLoadMore={loadMore} />
+      {filters.favoritesOnly && filtered.length === 0 ? (
+        <div className="text-center text-gray-600 py-20">
+          No favorites yet. <button className="btn-primary ml-2" onClick={() => setFilters(f => ({ ...f, favoritesOnly:false }))}>Show all</button>
+        </div>
+      ) : (
+        <Grid items={toShow} onLoadMore={loadMore} />
+      )}
     </div>
   )
 }

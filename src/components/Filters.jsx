@@ -11,6 +11,11 @@ export default function Filters({ value, onChange }) {
     onChange(next)
     track('filter_applied', { category: Array.from(set).join(',') || undefined, color: next.color || undefined })
   }
+  function toggleFavorites() {
+    const next = { ...value, favoritesOnly: !value.favoritesOnly }
+    onChange(next)
+    track('filter_applied', { favorites: next.favoritesOnly || undefined, category: (next.categories && next.categories.join(',')) || undefined, color: next.color || undefined })
+  }
   function setColor(col) {
     const next = { ...value, color: value.color === col ? null : col }
     onChange(next)
@@ -38,6 +43,11 @@ export default function Filters({ value, onChange }) {
             </button>
           ))}
         </div>
+      </div>
+      <div className="mt-3">
+        <button type="button" className="chip" aria-pressed={value.favoritesOnly?'true':'false'} onClick={toggleFavorites}>
+          Favorites
+        </button>
       </div>
     </div>
   )

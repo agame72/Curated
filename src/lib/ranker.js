@@ -55,7 +55,18 @@ export function rankItems(items, user, opts = {}) {
   const scale = plan / 100
   const remaining = Object.fromEntries(Object.entries(quota100).map(([k,v]) => [k, Math.max(1, Math.round(v*scale))]))
 
-  const byScore = scored.sort((a,b) => b.score - a.score)
+  const favSet = new Set(Object.keys(user.favorites || {}))
+  const FAVORITE_BONUS = 0.2
+  for (const s of scored) {
+    if (favSet.has(s.item.item_id)) s.score += FAVORITE_BONUS
+  }
+  const byScore = scored.sort((a,b) => {
+    if (b.score !== a.score) return b.score - a.score
+    // stable seeded tiebreaker based on item_id + seed
+    const ha = hashString(safeId(a.item))
+    const hb = hashString(safeId(b.item))
+    return ha - hb
+  })
   const result = []
   const excludeRing = []
   for (const s of byScore) {
@@ -73,6 +84,10 @@ export function rankItems(items, user, opts = {}) {
   }
 
   return result
+}
+
+function safeId(it){
+  return String(it.item_id || '')
 }
 
 

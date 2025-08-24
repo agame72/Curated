@@ -21,6 +21,7 @@ const initialState = {
     recommendationsUsed: 0,
     accessoriesUsed: 0,
   },
+  favorites: {},
   flags: {
     requiredOnboardingComplete: false,
   },
@@ -54,6 +55,14 @@ function reducer(state, action) {
       return { ...state, flags: { ...state.flags, requiredOnboardingComplete: true } }
     case 'hydrate':
       return action.state
+    case 'toggleFavorite': {
+      const fav = { ...state.favorites }
+      if (fav[action.id]) delete fav[action.id]
+      else fav[action.id] = true
+      return { ...state, favorites: fav }
+    }
+    case 'setFavorites':
+      return { ...state, favorites: { ...action.favorites } }
     case 'setEntitlements':
       return { ...state, entitlements: { ...state.entitlements, ...action.entitlements } }
     // E-003 optionals
@@ -107,7 +116,11 @@ export function UserStoreProvider({ children }) {
 export function useUserStore() {
   const ctx = useContext(StoreContext)
   if (!ctx) throw new Error('useUserStore must be used within UserStoreProvider')
-  return ctx
+  const { state, dispatch } = ctx
+  const isFavorited = (id) => Boolean(state.favorites[id])
+  const toggleFavorite = (id) => dispatch({ type: 'toggleFavorite', id })
+  const favoriteIds = () => Object.keys(state.favorites)
+  return { state, dispatch, isFavorited, toggleFavorite, favoriteIds }
 }
 
 
