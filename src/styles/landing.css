@@ -159,7 +159,7 @@
 
 /* Keep images behind and center content above them */
 .hero-pane{ position: relative; z-index: 0; }
-.hero-center{ position: relative; z-index: 2; }
+.hero-center{ position: relative; z-index: 2; isolation: isolate; }
 
 /* Solid navy CTA with white text; block theme overrides */
 .hero .hero-cta{
@@ -169,7 +169,10 @@
   min-height: 54px;
   padding: 18px 40px !important;
 
-  background-color: var(--brand-navy) !important; /* #102652 */
+  background: #102652 !important;                 /* direct fallback */
+  background-color: #102652 !important;
+  background-image: none !important;
+  background-color: var(--brand-navy) !important; /* prefer token */
   color: #fff !important;
   border: 0 !important;
   border-radius: 100px !important;
@@ -241,9 +244,10 @@
   font-weight: 500 !important;
 }
 .hero .hero-kicker .bolt{
-  width: 18px; height: 18px;
+  width: 21px; height: 21px;     /* ~15% larger */
   display: inline-block;
   vertical-align: text-bottom;
-  margin-right: 8px;
+  margin-right: 4px;              /* tighter to text */
+  position: relative; top: -2px;  /* nudge up */
 }
 .hero .hero-kicker .muted{ color:#9AA1AD; margin-left:6px; }
