@@ -145,7 +145,7 @@
 /* === Hardening: ensure hero type/color and CTA match mock exactly === */
 .hero .hero-title {
   font-family: "Canela Deck", Georgia, ui-serif, "Times New Roman", Times, serif;
-  font-weight: 400;                 /* Regular – more elegant */
+  font-weight: 500;                 /* Medium per spec */
   color: #102652 !important;        /* target brand navy */
   font-size: clamp(44px, 5.2vw, 72px);
   line-height: 1.06;
@@ -159,6 +159,8 @@
 
 /* Solid navy CTA with white text; block theme overrides */
 .hero .btn-cta {
+  background: var(--brand-navy) !important;       /* ensure background shows */
+  background-image: none !important;
   background-color: var(--brand-navy) !important; /* flat navy pill */
   color: #fff !important;
   border: 0 !important;
@@ -208,6 +210,12 @@
 }
 .hero .hero-kicker span{
   font-family: "Neue Haas Unica","NeueHaasUnica",-apple-system,system-ui,"Segoe UI",Roboto,Helvetica,Arial,sans-serif !important;
+}
+
+/* Explicit override: ensure the "NEW" chip uses Unica and not Times */
+.hero .label-new{
+  font-family: "Neue Haas Unica","NeueHaasUnica",-apple-system,system-ui,"Segoe UI",Roboto,Helvetica,Arial,sans-serif !important;
+  font-weight: 500 !important;
 }
 .hero .hero-kicker .bolt{ color:#C99B2B; margin-right:8px; }
 .hero .hero-kicker .muted{ color:#9AA1AD; }
