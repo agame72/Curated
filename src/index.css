@@ -1,3 +1,25 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root{
+  --brand-navy:#0F2A52;
+  --bg-cream:#F6F0E6;
+  --focus-blue:#0A7AFF;
+  --radius-card:18px;
+}
+
+body{ background: var(--bg-cream); }
+
+.btn-primary{ height:44px; padding:0 24px; border-radius:9999px; background:var(--brand-navy); color:#fff; font-weight:600; display:inline-flex; align-items:center; justify-content:center; }
+.btn-primary[aria-disabled="true"]{ opacity:.5; cursor:not-allowed; }
+.btn-primary:focus-visible{ outline:2px solid var(--focus-blue); outline-offset:2px; }
+
+.chip{ height:44px; padding:0 14px; border-radius:9999px; border:1px solid #E6E3DC; background:#F5F2EC; color:#15202B; display:inline-flex; align-items:center; gap:8px; }
+.chip[aria-pressed="true"]{ background:var(--brand-navy); color:#fff; border-color:var(--brand-navy); }
+.chip:focus-visible{ outline:2px solid var(--focus-blue); outline-offset:2px; }
+
+.card{ background:#fff; border:1px solid #E6E3DC; border-radius:var(--radius-card); box-shadow:0 8px 24px rgba(0,0,0,.08); }
+
+.progress-dot{ width:10px; height:10px; border-radius:50%; background:#E6E3DC; }
+.progress-dot.active{ background:var(--brand-navy); }
