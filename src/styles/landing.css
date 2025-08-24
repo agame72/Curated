@@ -75,13 +75,13 @@
   z-index: 1;                     /* ensure not blending with images */
   display: inline-block;
   font-family: var(--sans);
-  background: var(--brand);       /* solid navy */
+  background: var(--brand-navy);  /* solid navy */
   color: #fff;
   text-decoration: none;
   font-weight: 700;
   padding: 18px 36px;             /* big, pill-like */
   border-radius: 9999px;
-  box-shadow: 0 10px 28px rgba(14,42,82,0.22);
+  box-shadow: none;
   transition: transform .05s ease, box-shadow .2s ease, background .2s ease;
 }
 .btn-cta:hover { transform: translateY(-1px); box-shadow: 0 14px 32px rgba(14,42,82,0.28); }
@@ -102,7 +102,7 @@
 .hero .hero-kicker,
 .hero .hero-kicker span { font-family: "Neue Haas Unica", var(--sans) !important; }
 
-/* “Curated” wordmark footer in hero */
+/* "Curated" wordmark footer in hero */
 .hero-brand {
   text-align: center;
   font-family: "Canela Deck", Georgia, ui-serif, "Times New Roman", Times, serif;
@@ -152,16 +152,15 @@
 
 /* Solid navy CTA with white text; block theme overrides */
 .hero .btn-cta {
-  background-color: #102652 !important; /* flat navy pill */
+  background-color: var(--brand-navy) !important; /* flat navy pill */
   color: #fff !important;
-  border: 0;
-  border-radius: 100px;
+  border: 0 !important;
+  border-radius: 100px !important;
   box-shadow: none !important;
-  padding: 18px 40px;
+  padding: 18px 40px !important;
   font-size: 18px;
-  font-weight: 700;
-  font-family: "Neue Haas Unica", "NeueHaasUnica", var(--sans) !important;
-  letter-spacing: .2px;
+  font-weight: 500 !important; /* Medium */
+  font-family: "Neue Haas Unica","NeueHaasUnica",-apple-system,system-ui,"Segoe UI",Roboto,Helvetica,Arial,sans-serif !important;
   line-height: 1;
   transition: background-color .15s ease, transform .05s ease;
   opacity: 1;
@@ -187,6 +186,7 @@
   max-width: 420px;                 /* wrap more aggressively */
   margin: 10px 0 24px;
   text-align: center;
+  font-weight: 400;
 }
 
 /* Kicker tone + spacing */

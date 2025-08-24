@@ -1,12 +1,16 @@
 :root {
+  /* brand tokens */
+  --brand-navy:#102652;
+  --bg-cream:#F6F0E6;
+  --ink:#102652;
+  /* legacy aliases (temporary) */
   --brand: #0E2A52;
   --bg: #F7F4EE;
-  --ink: #15202B;
   --muted: #6A7280;
   --border: #E6E3DC;
   --focus: #0A7AFF;
 
-  --accent-gold: #C9A44C;         /* “NEW” badge */
+  --accent-gold: #C9A44C;         /* "NEW" badge */
   --radius: 12px;
   --radius-pill: 9999px;
 

@@ -1,4 +1,4 @@
-/* === Curated web fonts === */
+/* === Canela Deck (headlines) === */
 @font-face{
   font-family:"Canela Deck";
   src:url("/fonts/canela-deck/CanelaDeck-Regular.woff2") format("woff2"),
@@ -12,7 +12,7 @@
   font-weight:700; font-style:normal; font-display:swap;
 }
 
-/* Neue Haas Unica (UI sans) — provide both names to be safe */
+/* === Neue Haas Unica (UI sans) — spaced and no‑space family names === */
 @font-face{
   font-family:"Neue Haas Unica";
   src:url("/fonts/NeueHaasUnica/NeueHaasUnica-Regular.woff2") format("woff2"),
@@ -25,7 +25,14 @@
       url("/fonts/NeueHaasUnica/NeueHaasUnica-Medium.woff") format("woff");
   font-weight:500; font-style:normal; font-display:swap;
 }
-/* Alias name without the space, same sources */
+/* Bold alias -> use Medium file at weight 700 so browsers don't jump families */
+@font-face{
+  font-family:"Neue Haas Unica";
+  src:url("/fonts/NeueHaasUnica/NeueHaasUnica-Medium.woff2") format("woff2"),
+      url("/fonts/NeueHaasUnica/NeueHaasUnica-Medium.woff") format("woff");
+  font-weight:700; font-style:normal; font-display:swap;
+}
+/* Mirror the same 3 faces for the alias family name without space */
 @font-face{
   font-family:"NeueHaasUnica";
   src:url("/fonts/NeueHaasUnica/NeueHaasUnica-Regular.woff2") format("woff2"),
@@ -37,5 +44,11 @@
   src:url("/fonts/NeueHaasUnica/NeueHaasUnica-Medium.woff2") format("woff2"),
       url("/fonts/NeueHaasUnica/NeueHaasUnica-Medium.woff") format("woff");
   font-weight:500; font-style:normal; font-display:swap;
+}
+@font-face{
+  font-family:"NeueHaasUnica";
+  src:url("/fonts/NeueHaasUnica/NeueHaasUnica-Medium.woff2") format("woff2"),
+      url("/fonts/NeueHaasUnica/NeueHaasUnica-Medium.woff") format("woff");
+  font-weight:700; font-style:normal; font-display:swap;
 }
 

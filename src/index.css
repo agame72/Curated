@@ -1,16 +1,11 @@
-@import './styles/fonts.css';
+@import "./styles/fonts.css";
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @import './styles/tokens.css';
 
-:root{
-  --brand-navy:#0F2A52;
-  --bg-cream:#F6F0E6;
-  --focus-blue:#0A7AFF;
-  --radius-card:18px;
-}
+/* tokens come from src/styles/tokens.css */
 
 html, body { margin: 0; }
 body{ background: var(--bg-cream); font-family: var(--sans) !important; }
