@@ -45,9 +45,7 @@
   outline-offset: 3px;
 }
 
-.hero .hero-cta:hover .cta-pill{
-  filter: brightness(0.96);
-}
+.hero .hero-cta:hover .cta-pill{ filter:none; }
 
 /* Ensure any remaining global link rules can’t override the text color */
 .hero .hero-cta:link .cta-pill,
@@ -248,10 +246,7 @@
   color: #fff !important;
 }
 .hero .hero-cta:hover,
-.hero [data-cta="hero"]:hover{
-  transform: translateY(-1px);
-  transition: transform .05s ease;
-}
+.hero [data-cta="hero"]:hover{ transform:none; transition:none; }
 .hero .hero-cta:focus-visible,
 .hero [data-cta="hero"]:focus-visible{ outline: 2px solid var(--focus-blue); outline-offset: 2px; }
 
