@@ -98,6 +98,7 @@
   text-align: center;
   padding: 12px 24px 12px;   /* tighter top/bottom */
   gap: 8px;
+  margin-top: -45px;         /* lift middle block up */
 }
 
 /* Utility: force Canela Deck where applied */
