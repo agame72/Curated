@@ -1,7 +1,9 @@
-import { useMemo, useState } from 'react'
+// E-002 Required questions wizard
+import { useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useUserStore } from '../state/userStore'
+import { useUserStore } from '../state/userStore.jsx'
 import { track } from '../lib/analytics'
+import { GOALS, VIBES, NEUTRALS, ACCENTS, isStepValid } from '../state/answersSchema'
 
 function Chip({ pressed, children, ...props }) {
   return (
@@ -26,10 +28,7 @@ function ProgressDots({ step, total }) {
   )
 }
 
-const GOALS = ['Everyday polish','Work-smart casual','Trip','Capsule refresh','Special event']
-const VIBES = ['Minimal','Classic','Soft','Sporty','Edgy','Preppy','Relaxed Tailored']
-const NEUTRALS = ['Black','Charcoal-Grey','Navy','Stone-Beige','Cream-Ivory','Brown']
-const ACCENTS = ['Keep it neutral','Small accents okay','Color-curious']
+// Options imported from answers schema
 
 export default function OnboardingWizard() {
   const { state, dispatch } = useUserStore()
@@ -37,14 +36,12 @@ export default function OnboardingWizard() {
   const [step, setStep] = useState(1)
   const total = 4
 
-  const canContinue = useMemo(() => {
-    const a = state.answers
-    if (step === 1) return Boolean(a.goal)
-    if (step === 2) return a.vibes.length >= 1 && a.vibes.length <= 2
-    if (step === 3) return a.neutrals.length >= 1 && a.neutrals.length <= 2
-    if (step === 4) return Boolean(a.accent)
-    return false
-  }, [step, state.answers])
+  useEffect(() => {
+    const map = {1:'goal',2:'vibe',3:'neutrals',4:'accent'}
+    track('onboarding_step_view', { step: map[step] })
+  }, [step])
+
+  const canContinue = useMemo(() => isStepValid(step, state.answers), [step, state.answers])
 
   function next() {
     if (step < total) setStep(step + 1)
@@ -62,7 +59,7 @@ export default function OnboardingWizard() {
   }
 
   return (
-    <div className="max-w-2xl mx-auto my-10 p-6 card" role="dialog" aria-labelledby="wiz-title">
+    <div className="max-w-2xl mx-auto my-10 p-6 card" role="dialog" aria-labelledby="wiz-title" aria-live="polite">
       <div className="flex items-center justify-between mb-6">
         <h1 id="wiz-title" className="text-3xl font-serif">Let’s tune your guide</h1>
         <ProgressDots step={step} total={total} />

@@ -1,3 +1,4 @@
+// E-002 user store (answers + flags)
 import { createContext, useContext, useReducer, useEffect } from 'react'
 
 const initialState = {
@@ -6,6 +7,7 @@ const initialState = {
     vibes: [],
     neutrals: [],
     accent: null,
+    // E-003 fields will be added later
   },
   flags: {
     requiredOnboardingComplete: false,

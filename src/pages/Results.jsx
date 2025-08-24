@@ -1,7 +1,7 @@
 import OnboardingWizard from '../components/OnboardingWizard'
 import { useMemo } from 'react'
 import { useLocation } from 'react-router-dom'
-import { useUserStore } from '../state/userStore'
+import { useUserStore } from '../state/userStore.jsx'
 
 export default function Results() {
   const { state } = useUserStore()
