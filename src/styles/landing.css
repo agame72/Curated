@@ -1,15 +1,17 @@
 /* ===== Hero (marketing) ===== */
 
 .hero {
-  background: var(--bg);
-  color: var(--ink);
-  position: relative;
+  background: var(--bg);          /* #F7F4EE */
+  color: var(--ink);              /* #15202B */
+  margin-top: 0;                  /* flush to top */
 }
 
 .hero-grid {
   display: grid;
-  grid-template-columns: minmax(300px, 1fr) minmax(560px, 640px) minmax(300px, 1fr);
-  min-height: 88vh;
+  /* Side panels full-bleed, center column fixed to mock width */
+  grid-template-columns: 1fr minmax(560px, 640px) 1fr;
+  column-gap: 0;                  /* no gutters in mock */
+  min-height: 92vh;               /* generous height */
 }
 
 .hero-pane {
@@ -24,6 +26,8 @@
   height: 100%;
   object-fit: cover;
 }
+.hero-grid > .hero-pane[data-pane="left"]  img { object-position: 35% 50%; } /* face stays in frame */
+.hero-grid > .hero-pane[data-pane="right"] img { object-position: 50% 50%; } /* rails centered */
 
 .hero-center {
   display: flex;
@@ -31,88 +35,95 @@
   align-items: center;
   justify-content: center;
   text-align: center;
-  padding: var(--space-12) var(--space-6);
-  gap: var(--space-3);
+  padding: 64px 24px;
+  gap: 8px;
 }
 
 .label-new {
-  color: var(--accent-gold);
+  color: #C9A44C;                 /* gold */
+  font-family: var(--sans);
   font-weight: 700;
   letter-spacing: .18em;
   font-size: 12px;
+  margin-bottom: 10px;
 }
 
 .hero-title {
+  /* Canela Deck */
   font-family: "Canela Deck", Georgia, ui-serif, "Times New Roman", Times, serif;
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  font-size: clamp(40px, 6vw, 72px);
+  font-weight: 700;               /* bold — mock is heavy */
+  color: var(--brand);            /* #0E2A52 */
+  /* Two-line lock: 72–88 desktop, scales down on mobile */
+  font-size: clamp(48px, 6.8vw, 88px);
   line-height: 1.05;
-  color: var(--brand);
-  margin: var(--space-2) 0 var(--space-2);
+  letter-spacing: -0.01em;
+  margin: 4px 0 6px;
+  max-width: 720px;
 }
 
 .hero-sub {
   font-family: var(--sans);
-  font-size: 18px;
-  line-height: 1.5;
   color: var(--ink);
-  max-width: 540px;
-  margin-bottom: var(--space-6);
+  font-size: 20px;                /* mock is slightly larger than 18 */
+  line-height: 1.5;
+  max-width: 640px;
+  margin-bottom: 28px;
 }
 
 .btn-cta {
+  position: relative;
+  z-index: 1;                     /* ensure not blending with images */
   display: inline-block;
   font-family: var(--sans);
-  background: var(--brand);
+  background: var(--brand);       /* solid navy */
   color: #fff;
   text-decoration: none;
   font-weight: 700;
-  padding: 16px 28px;
-  border-radius: var(--radius-pill);
-  box-shadow: 0 8px 24px rgba(14, 42, 82, 0.18);
+  padding: 18px 36px;             /* big, pill-like */
+  border-radius: 9999px;
+  box-shadow: 0 10px 28px rgba(14,42,82,0.22);
   transition: transform .05s ease, box-shadow .2s ease, background .2s ease;
 }
-.btn-cta:hover { transform: translateY(-1px); box-shadow: 0 12px 28px rgba(14,42,82,0.24); }
+.btn-cta:hover { transform: translateY(-1px); box-shadow: 0 14px 32px rgba(14,42,82,0.28); }
 .btn-cta:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
 
 .hero-kicker {
-  margin-top: var(--space-4);
+  margin-top: 12px;
   font-family: var(--sans);
   font-size: 16px;
 }
-.hero-kicker .muted { color: #8A8F98; }
 .hero-kicker .bolt { margin-right: 8px; }
+.hero-kicker .muted { color: #9AA1AD; } /* “30 sec” lighter like the comp */
 
 /* “Curated” wordmark footer in hero */
 .hero-brand {
   text-align: center;
-  font-family: var(--serif);
-  color: #8A8A8A;
+  font-family: "Canela Deck", Georgia, ui-serif, "Times New Roman", Times, serif;
+  color: #9A9A9A;
   font-size: 32px;
   letter-spacing: .06em;
-  padding: var(--space-10) 0 var(--space-6);
+  padding: 54px 0 28px;
 }
 
 /* ===== Responsive ===== */
-@media (max-width: 1100px) {
-  .hero-grid {
-    grid-template-columns: 1fr minmax(520px, 640px) 1fr;
-    min-height: 82vh;
-  }
+@media (max-width: 1200px) {
+  .hero-grid { grid-template-columns: 1fr minmax(520px, 600px) 1fr; min-height: 88vh; }
+  .hero-title { font-size: clamp(44px, 7.5vw, 80px); }
 }
 @media (max-width: 900px) {
   /* Hide right image on medium screens to preserve composition */
-  .hero-grid { grid-template-columns: 1fr minmax(520px, 640px); }
+  .hero-grid { grid-template-columns: 1fr minmax(520px, 600px); }
   .hero-grid > .hero-pane:last-child { display: none; }
 }
 @media (max-width: 640px) {
-  .hero-grid {
-    grid-template-columns: 1fr;
-    min-height: auto;
-  }
-  .hero-pane:first-child { height: 38vh; }
-  .hero-center { padding: var(--space-10) var(--space-6); }
+  .hero-grid { grid-template-columns: 1fr; min-height: auto; }
+  .hero-pane:first-child { height: 36vh; }
+  .hero-center { padding: 56px 20px; }
   .hero-title { font-size: clamp(36px, 9vw, 48px); }
-  .hero-brand { font-size: 24px; padding: var(--space-8) 0 var(--space-4); }
+  .hero-brand { font-size: 24px; padding: 36px 0 20px; }
+}
+
+:root[data-landing="true"] body {
+  padding-top: 0 !important;
+  margin-top: 0 !important;
 }
