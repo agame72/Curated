@@ -5,6 +5,7 @@ import { useUserStore } from '../state/userStore.jsx'
 import Filters from '../components/Filters'
 import Grid from '../components/Grid'
 import { rankItems } from '../lib/ranker'
+import { colorFamilyFromItem } from '../lib/color'
 import Counters from '../components/Counters'
 import itemsData from '../data/items.sample.json'
 
@@ -26,10 +27,17 @@ export default function Results() {
   const [visibleCount, setVisibleCount] = useState(20)
 
   const ranked = useMemo(() => rankItems(itemsData, { answers: state.answers, favorites: state.favorites }), [state.answers, state.favorites])
+  // expose ranked to cards for local suggestion strips
+  useEffect(() => { state.__ranked = ranked }, [ranked])
   const filtered = useMemo(() => {
     let arr = ranked
     if (filters.favoritesOnly) {
       arr = arr.filter(it => state.favorites[it.item_id])
+    }
+    // session color exclusions
+    const excluded = state.session?.exclusions?.colors || {}
+    if (excluded && Object.keys(excluded).length) {
+      arr = arr.filter(it => !excluded[colorFamilyFromItem(it)])
     }
     return arr.filter(it => {
       const byCat = filters.categories.length ? filters.categories.includes(it.category) : true

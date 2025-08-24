@@ -22,6 +22,11 @@ const initialState = {
     accessoriesUsed: 0,
   },
   favorites: {},
+  session: {
+    exclusions: {
+      colors: {}, // map of family => true (session-only)
+    },
+  },
   flags: {
     requiredOnboardingComplete: false,
   },
@@ -65,6 +70,15 @@ function reducer(state, action) {
       return { ...state, favorites: { ...action.favorites } }
     case 'setEntitlements':
       return { ...state, entitlements: { ...state.entitlements, ...action.entitlements } }
+    case 'excludeColorFamily': {
+      const fam = action.family
+      return { ...state, session: { ...state.session, exclusions: { ...state.session.exclusions, colors: { ...state.session.exclusions.colors, [fam]: true } } } }
+    }
+    case 'clearColorFamily': {
+      const next = { ...state.session.exclusions.colors }
+      delete next[action.family]
+      return { ...state, session: { ...state.session, exclusions: { ...state.session.exclusions, colors: next } } }
+    }
     // E-003 optionals
     case 'toggleCategory': {
       const exists = state.answers.categories.includes(action.category)
