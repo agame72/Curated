@@ -95,6 +95,13 @@
 .hero-kicker .bolt { margin-right: 8px; }
 .hero-kicker .muted { color: #9AA1AD; } /* “30 sec” lighter like the comp */
 
+/* Ensure all non-headline hero UI uses Neue Haas Unica */
+.hero .label-new,
+.hero .hero-sub,
+.hero .btn-cta,
+.hero .hero-kicker,
+.hero .hero-kicker span { font-family: "Neue Haas Unica", var(--sans); }
+
 /* “Curated” wordmark footer in hero */
 .hero-brand {
   text-align: center;
@@ -102,7 +109,7 @@
   color: #9A9A9A;
   font-size: 32px;
   letter-spacing: .06em;
-  padding: 54px 0 28px;
+  padding: 24px 0 16px;
 }
 
 /* ===== Responsive ===== */
