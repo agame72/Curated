@@ -25,7 +25,7 @@
   color: var(--cta-fg);
 
   font-family: "Neue Haas Unica","NeueHaasUnica", var(--sans) !important;
-  font-weight: 500 !important;
+  font-weight: 400 !important;
   font-size: 18px;
   line-height: 1;
 
@@ -36,7 +36,7 @@
 /* Hard-lock Unica across CTA subtree to defeat any cascading serif fallbacks */
 .hero .hero-cta, .hero .hero-cta *, .hero .hero-cta .cta-pill{
   font-family: "Neue Haas Unica","NeueHaasUnica", system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important;
-  font-weight: 500 !important;
+  font-weight: 400 !important;
 }
 
 /* Focus/hover */
@@ -133,7 +133,7 @@
   font-size: 20px;                /* mock is slightly larger than 18 */
   line-height: 1.5;
   max-width: 640px;
-  margin-bottom: 12px;
+  margin-bottom: 2px;             /* reduce orange padding by 10px */
 }
 
 .btn-cta {
@@ -298,7 +298,7 @@
 
 /* Kicker tone + spacing */
 .hero .hero-kicker{
-  margin-top: 2px;
+  margin-top: 12px;               /* add 10px below CTA */
   font-size: 16px;
   font-family: "Neue Haas Unica","NeueHaasUnica",-apple-system,system-ui,"Segoe UI",Roboto,Helvetica,Arial,sans-serif !important;
 }
