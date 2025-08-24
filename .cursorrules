@@ -1,0 +1,5 @@
+- Always use Curated’s DS tokens (bg-cream, brand-navy, 18px card radius), serif headings + sans body.
+- Seasonal language is OK (“Seasonal Guide”).
+- MVP: no fit/sizing collection; exemplar-only.
+- Card actions = Favorite, Replace (3x per tile + global tokens), Why this.
+- A11y: 44px targets, visible focus (#0A7AFF), alt text on swatches.
