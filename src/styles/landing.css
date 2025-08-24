@@ -43,8 +43,8 @@
 }
 
 .hero-title {
-  font-family: var(--serif);
-  font-weight: var(--weight-bold);
+  font-family: "Canela Deck", Georgia, ui-serif, "Times New Roman", Times, serif;
+  font-weight: 700;
   letter-spacing: -0.02em;
   font-size: clamp(40px, 6vw, 72px);
   line-height: 1.05;
