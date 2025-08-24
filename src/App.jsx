@@ -9,10 +9,16 @@ import Results from './pages/Results'
 import Account from './pages/Account'
 
 export default function App() {
+  const location = useLocation();
+  const isMarketingHome = location.pathname === '/';
+  if (typeof document !== 'undefined') {
+    document.documentElement.setAttribute('data-landing', isMarketingHome ? 'true' : 'false');
+  }
   return (
     <UserStoreProvider>
       <div className="flex flex-col min-h-screen">
-        <Header />
+        <LegalModal />
+        {!isMarketingHome && <Header />}
         <main className="flex-grow">
           <Routes>
             <Route path="/" element={<Home />} />
@@ -23,7 +29,6 @@ export default function App() {
           </Routes>
         </main>
         <Footer />
-        <LegalModal />
       </div>
     </UserStoreProvider>
   )
