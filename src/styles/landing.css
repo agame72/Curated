@@ -221,5 +221,5 @@
   font-family: "Neue Haas Unica","NeueHaasUnica",-apple-system,system-ui,"Segoe UI",Roboto,Helvetica,Arial,sans-serif !important;
   font-weight: 500 !important;
 }
-.hero .hero-kicker .bolt{ display:inline-block; width:18px; height:18px; margin-right:8px; vertical-align:middle; }
-.hero .hero-kicker .muted{ color:#9AA1AD; }
+.hero .hero-kicker .bolt{ display:inline-block; width:21px; height:21px; margin-right:6px; vertical-align:middle; position:relative; top:-2px; }
+.hero .hero-kicker .muted{ color:#9AA1AD; margin-left:6px; }
