@@ -26,8 +26,7 @@ export default function Hero() {
           <a
             className="hero-cta"
             data-cta="hero"
-            href="/checkout?plan=style_guide"
-            style={{ backgroundColor: 'var(--brand-navy)', color: '#fff' }}
+            href="/checkout?plan=starter"
           >
             Get Seasonal Guide
           </a>

@@ -1,8 +1,8 @@
 /* ===== Hero (marketing) ===== */
 
 .hero {
-  background: var(--bg);          /* #F7F4EE */
-  color: var(--ink);              /* #15202B */
+  background: var(--bg-cream-fg);
+  color: var(--ink-fg);
   margin-top: 0;                  /* flush to top */
   font-synthesis-weight: none;    /* prevent synthetic bold */
 }
@@ -173,8 +173,7 @@
   background-image: none !important;
   color: #fff !important;
 
-  font-family: "Neue Haas Unica","NeueHaasUnica",
-               -apple-system,system-ui,"Segoe UI",Roboto,Helvetica,Arial,sans-serif !important;
+  font-family: "Neue Haas Unica","NeueHaasUnica", var(--sans);
   font-weight: 500;
   font-size: 18px;
   letter-spacing: .2px;
@@ -185,14 +184,7 @@
   mix-blend-mode: normal;
 }
 .hero .hero-cta::before,
-.hero [data-cta="hero"]::before{
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: 100px;
-  background: var(--brand-navy);       /* #102652 */
-  z-index: -1;                         /* sits behind text, inside anchor */
-}
+.hero [data-cta="hero"]::before{ content: none !important; }
 .hero .hero-cta:link,
 .hero .hero-cta:visited,
 .hero .hero-cta:active,
@@ -207,47 +199,14 @@
   transition: transform .05s ease;
 }
 .hero .hero-cta:focus-visible,
-.hero [data-cta="hero"]:focus-visible{
-  outline: 3px solid var(--focus);
-  outline-offset: 2px;
-}
+.hero [data-cta="hero"]:focus-visible{ outline: 2px solid var(--focus-blue); outline-offset: 2px; }
 
 /* Keep images behind and center content above them */
 .hero-pane{ position: relative; z-index: 0; }
 .hero-center{ position: relative; z-index: 2; isolation: isolate; }
 
 /* Solid navy CTA with white text; block theme overrides */
-.hero .hero-cta{
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 54px;
-  padding: 18px 40px !important;
-
-  background: #102652 !important;                 /* direct fallback */
-  background-color: #102652 !important;
-  background-image: none !important;
-  background-color: var(--brand-navy) !important; /* prefer token */
-  color: #fff !important;
-  border: 0 !important;
-  border-radius: 100px !important;
-  box-shadow: none !important;
-  text-decoration: none !important;
-
-  font-family: "Neue Haas Unica","NeueHaasUnica",
-               -apple-system,system-ui,"Segoe UI",Roboto,Helvetica,Arial,sans-serif !important;
-  font-weight: 500;
-  font-size: 18px;
-  letter-spacing: .2px;
-  line-height: 1;
-
-  position: relative;
-  z-index: 3;                    /* sits above photos */
-  opacity: 1;
-  background-clip: padding-box;
-
-  transition: background-color .15s ease, transform .05s ease;
-}
+.hero .hero-cta{ all: unset; display:inline-flex; align-items:center; justify-content:center; min-height:54px; padding:18px 40px; border-radius:100px; background-color:var(--brand-navy-fg) !important; background-image:none !important; color:#fff !important; text-decoration:none !important; font-family:"Neue Haas Unica","NeueHaasUnica", var(--sans); font-weight:500; font-size:18px; line-height:1; box-shadow:none !important; mix-blend-mode:normal; }
 .hero .hero-cta:hover{ transform: translateY(-1px); }
 .hero .hero-cta:focus-visible{
   outline: 3px solid var(--focus);
