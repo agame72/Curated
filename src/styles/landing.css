@@ -1,3 +1,57 @@
+/* ===== Hero CTA (child-painted pill) ===== */
+.hero .hero-cta{
+  /* The link itself carries only layout, not the visual fill */
+  display: inline-block;
+  text-decoration: none !important;
+  position: relative;
+  z-index: 3; /* above side images */
+}
+
+/* Paint the pill on the child span so global link resets can't wipe it */
+.hero .hero-cta .cta-pill{
+  --cta-bg: var(--brand-navy, #102652);
+  --cta-fg: #fff;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  min-height: 54px;
+  padding: 18px 40px;
+  border: 0;
+  border-radius: 100px;
+
+  background: var(--cta-bg);          /* <- actual paint happens here */
+  color: var(--cta-fg);
+
+  font-family: "Neue Haas Unica","NeueHaasUnica", var(--sans);
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 1;
+
+  box-shadow: none;
+  text-decoration: none;
+}
+
+/* Focus/hover */
+.hero .hero-cta:focus-visible .cta-pill{
+  outline: 2px solid var(--focus-blue, #0A7AFF);
+  outline-offset: 3px;
+}
+
+.hero .hero-cta:hover .cta-pill{
+  filter: brightness(0.96);
+}
+
+/* Ensure any remaining global link rules can’t override the text color */
+.hero .hero-cta:link .cta-pill,
+.hero .hero-cta:visited .cta-pill,
+.hero .hero-cta:active .cta-pill{
+  color: #fff !important;
+}
+
+/* If you still have older hero CTA rules, keep this guard to neutralize them */
+.hero .hero-cta::before { content: none !important; } /* disable any old paint layers */
 /* ===== Hero (marketing) ===== */
 
 .hero {

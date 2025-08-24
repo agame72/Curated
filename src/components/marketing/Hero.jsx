@@ -28,7 +28,7 @@ export default function Hero() {
             data-cta="hero"
             href="/checkout?plan=starter"
           >
-            Get Seasonal Guide
+            <span className="cta-pill">Get Seasonal Guide</span>
           </a>
           <p className="hero-kicker">
             <img src="/icons/bolt.svg" alt="" className="bolt" />
