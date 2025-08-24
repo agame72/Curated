@@ -13,10 +13,10 @@
 }
 
 html, body { margin: 0; }
-body{ background: var(--bg-cream); font-family: var(--sans); }
+body{ background: var(--bg-cream); font-family: var(--sans) !important; }
 .h-serif{ font-family: var(--serif); font-weight: var(--weight-bold); letter-spacing:-0.02em; }
-h1,h2{ font-family: var(--serif); font-weight: var(--weight-bold); letter-spacing:-0.02em; }
-p, a, li, button, input, textarea, span, small, label { font-family: var(--sans); }
+h1,h2{ font-family: var(--serif) !important; font-weight: var(--weight-bold); letter-spacing:-0.02em; }
+p, a, li, button, input, textarea, span, small, label { font-family: var(--sans) !important; }
 .subhead{ font-family: var(--serif); font-weight: var(--weight-medium); }
 
 .btn-primary{ height:44px; padding:0 24px; border-radius:9999px; background:var(--brand-navy); color:#fff; font-weight:600; display:inline-flex; align-items:center; justify-content:center; }

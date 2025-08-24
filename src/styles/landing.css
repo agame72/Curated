@@ -100,7 +100,7 @@
 .hero .hero-sub,
 .hero .btn-cta,
 .hero .hero-kicker,
-.hero .hero-kicker span { font-family: "Neue Haas Unica", var(--sans); }
+.hero .hero-kicker span { font-family: "Neue Haas Unica", var(--sans) !important; }
 
 /* “Curated” wordmark footer in hero */
 .hero-brand {
