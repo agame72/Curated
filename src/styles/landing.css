@@ -16,16 +16,16 @@
   align-items: center;
   justify-content: center;
 
-  min-height: 54px;
-  padding: 18px 40px;
+  min-height: 36px;
+  padding: 12px 32px;
   border: 0;
   border-radius: 100px;
 
   background: var(--cta-bg);          /* <- actual paint happens here */
   color: var(--cta-fg);
 
-  font-family: "Neue Haas Unica","NeueHaasUnica", var(--sans);
-  font-weight: 500;
+  font-family: "Neue Haas Unica","NeueHaasUnica", var(--sans) !important;
+  font-weight: 500 !important;
   font-size: 18px;
   line-height: 1;
 
@@ -292,7 +292,7 @@
 
 /* Kicker tone + spacing */
 .hero .hero-kicker{
-  margin-top: 10px;
+  margin-top: 6px;
   font-size: 16px;
   font-family: "Neue Haas Unica","NeueHaasUnica",-apple-system,system-ui,"Segoe UI",Roboto,Helvetica,Arial,sans-serif !important;
 }
