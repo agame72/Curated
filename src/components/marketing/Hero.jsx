@@ -27,7 +27,7 @@ export default function Hero() {
             Get Seasonal Guide
           </a>
           <p className="hero-kicker">
-            <span className="bolt" aria-hidden="true">⚡</span>
+            <img className="bolt" src="/icons/bolt.svg" alt="" width="18" height="18" aria-hidden="true" />
             Check your Palette <span className="muted">30 sec</span>
           </p>
         </div>
