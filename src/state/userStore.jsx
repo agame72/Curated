@@ -79,6 +79,9 @@ function reducer(state, action) {
       delete next[action.family]
       return { ...state, session: { ...state.session, exclusions: { ...state.session.exclusions, colors: next } } }
     }
+    case 'clearAllHiddenColors': {
+      return { ...state, session: { ...state.session, exclusions: { ...state.session.exclusions, colors: {} } } }
+    }
     // E-003 optionals
     case 'toggleCategory': {
       const exists = state.answers.categories.includes(action.category)

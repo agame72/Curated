@@ -16,8 +16,8 @@ export default function ItemCard({ item }) {
   const mltRef = useRef(null)
 
   useEffect(() => {
-    function onKey(e){ if (e.key === 'Escape') setOpen(false) }
-    function onClick(e){ if (open && panelRef.current && !panelRef.current.contains(e.target) && !btnRef.current.contains(e.target)) setOpen(false) }
+    function onKey(e){ if (e.key === 'Escape') { setOpen(false); setMltOpen(false) } }
+    function onClick(e){ if (open && panelRef.current && !panelRef.current.contains(e.target) && !btnRef.current.contains(e.target)) setOpen(false); if (mltOpen && mltRef.current && !mltRef.current.contains(e.target)) setMltOpen(false) }
     document.addEventListener('keydown', onKey)
     document.addEventListener('mousedown', onClick)
     return () => { document.removeEventListener('keydown', onKey); document.removeEventListener('mousedown', onClick) }

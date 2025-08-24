@@ -57,6 +57,9 @@ export default function Results() {
     console.log('app_view', { items_shown: toShow.length })
   }, [])
 
+  const excluded = state.session?.exclusions?.colors || {}
+  const hasHidden = Object.keys(excluded).length > 0
+
   return (
     <div className="max-w-6xl mx-auto py-8 px-4">
       <div className="flex items-center justify-between mb-4">
@@ -66,10 +69,22 @@ export default function Results() {
           <div className="text-sm text-gray-600">{toShow.length}/{filtered.length || ranked.length}</div>
         </div>
       </div>
+      {hasHidden && (
+        <div className="mb-3 flex flex-wrap items-center gap-2">
+          <span className="text-sm text-gray-700">Hidden:</span>
+          {Object.keys(excluded).map(f => (
+            <button key={f} className="chip" onClick={() => dispatch({ type:'clearColorFamily', family:f })}>{f} ×</button>
+          ))}
+          <button className="chip" onClick={() => dispatch({ type:'clearAllHiddenColors' })}>Clear hidden colors</button>
+        </div>
+      )}
       <Filters value={filters} onChange={setFilters} />
-      {filters.favoritesOnly && filtered.length === 0 ? (
+      {filtered.length === 0 ? (
         <div className="text-center text-gray-600 py-20">
-          No favorites yet. <button className="btn-primary ml-2" onClick={() => setFilters(f => ({ ...f, favoritesOnly:false }))}>Show all</button>
+          {filters.favoritesOnly
+            ? <>No favorites yet. <button className="btn-primary ml-2" onClick={() => setFilters(f => ({ ...f, favoritesOnly:false }))}>Show all</button></>
+            : <>Nothing here. <button className="btn-primary ml-2" onClick={() => { setFilters({ categories:[], color:null, favoritesOnly:false }); dispatch({ type:'clearAllHiddenColors' }) }}>Reset filters</button></>
+          }
         </div>
       ) : (
         <Grid items={toShow} onLoadMore={loadMore} />
