@@ -47,7 +47,7 @@ export default function Hero() {
         </div>
       </div>
 
-      <div className="hero-brand">Curated</div>
+      <img className="hero-brand" src="/brand/Curated_Logo_Grey.svg" alt="Curated wordmark" />
     </section>
   )
 }

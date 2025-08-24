@@ -171,14 +171,7 @@
 .hero .hero-kicker span { font-family: "Neue Haas Unica", var(--sans) !important; }
 
 /* "Curated" wordmark footer in hero */
-.hero-brand {
-  text-align: center;
-  font-family: "Canela Deck", Georgia, ui-serif, "Times New Roman", Times, serif;
-  color: #9A9A9A;
-  font-size: 32px;
-  letter-spacing: .06em;
-  padding: 24px 0 16px;
-}
+.hero-brand { display:block; margin: 24px auto 16px; height: 40px; }
 
 /* ===== Responsive ===== */
 @media (max-width: 1200px) {
