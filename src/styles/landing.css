@@ -145,7 +145,7 @@
 /* === Hardening: ensure hero type/color and CTA match mock exactly === */
 .hero .hero-title {
   font-family: "Canela Deck", Georgia, ui-serif, "Times New Roman", Times, serif;
-  font-weight: 500;                 /* load actual CanelaDeck-Medium face */
+  font-weight: 400;                 /* Regular – more elegant */
   color: #102652 !important;        /* target brand navy */
   font-size: clamp(44px, 5.2vw, 72px);
   line-height: 1.06;
@@ -171,6 +171,9 @@
   line-height: 1;
   transition: background-color .15s ease, transform .05s ease;
   opacity: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 .hero .btn-cta[disabled] {
   background-color: rgba(14,42,82,.55) !important;
@@ -198,6 +201,13 @@
 }
 
 /* Kicker tone + spacing */
-.hero .hero-kicker{ margin-top: 10px; font-size: 16px; }
+.hero .hero-kicker{
+  margin-top: 10px;
+  font-size: 16px;
+  font-family: "Neue Haas Unica","NeueHaasUnica",-apple-system,system-ui,"Segoe UI",Roboto,Helvetica,Arial,sans-serif !important;
+}
+.hero .hero-kicker span{
+  font-family: "Neue Haas Unica","NeueHaasUnica",-apple-system,system-ui,"Segoe UI",Roboto,Helvetica,Arial,sans-serif !important;
+}
 .hero .hero-kicker .bolt{ color:#C99B2B; margin-right:8px; }
 .hero .hero-kicker .muted{ color:#9AA1AD; }
