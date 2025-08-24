@@ -40,6 +40,9 @@
   gap: 8px;
 }
 
+/* Utility: force Canela Deck where applied */
+.canela { font-family: "Canela Deck", Georgia, ui-serif, "Times New Roman", Times, serif !important; }
+
 .label-new {
   color: #C9A44C;                 /* gold */
   font-family: "Neue Haas Unica","NeueHaasUnica",
@@ -87,12 +90,13 @@
   box-shadow: none;
   transition: transform .05s ease, box-shadow .2s ease, background .2s ease;
 }
-.btn-cta:hover { transform: translateY(-1px); box-shadow: 0 14px 32px rgba(14,42,82,0.28); }
+.btn-cta:hover { transform: translateY(-1px); box-shadow: none !important; }
 .btn-cta:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
 
 .hero-kicker {
   margin-top: 12px;
-  font-family: var(--sans);
+  font-family: "Neue Haas Unica","NeueHaasUnica",
+               -apple-system,system-ui,"Segoe UI",Roboto,Helvetica,Arial,sans-serif !important;
   font-size: 16px;
 }
 .hero-kicker .bolt { margin-right: 8px; }
