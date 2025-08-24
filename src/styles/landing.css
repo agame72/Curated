@@ -8,8 +8,8 @@
 
 .hero-grid {
   display: grid;
-  /* Side panels full-bleed, center column fixed to mock width */
-  grid-template-columns: 1fr minmax(560px, 640px) 1fr;
+  /* Narrow the bleeds: slightly smaller side panes */
+  grid-template-columns: minmax(260px, 0.8fr) minmax(520px, 600px) minmax(260px, 0.8fr);
   column-gap: 0;                  /* no gutters in mock */
   min-height: 92vh;               /* generous height */
 }
@@ -107,12 +107,12 @@
 
 /* ===== Responsive ===== */
 @media (max-width: 1200px) {
-  .hero-grid { grid-template-columns: 1fr minmax(520px, 600px) 1fr; min-height: 88vh; }
+  .hero-grid { grid-template-columns: minmax(240px, 0.8fr) minmax(500px, 580px) minmax(240px, 0.8fr); min-height: 88vh; }
   .hero-title { font-size: clamp(44px, 7.5vw, 80px); }
 }
 @media (max-width: 900px) {
   /* Hide right image on medium screens to preserve composition */
-  .hero-grid { grid-template-columns: 1fr minmax(520px, 600px); }
+  .hero-grid { grid-template-columns: minmax(240px, 1fr) minmax(500px, 580px); }
   .hero-grid > .hero-pane:last-child { display: none; }
 }
 @media (max-width: 640px) {
