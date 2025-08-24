@@ -303,6 +303,6 @@
   display: inline-block;
   vertical-align: text-bottom;
   margin-right: 4px;              /* tighter to text */
-  position: relative; top: -2px;  /* nudge up */
+  position: relative; top: 2px;   /* nudge down */
 }
 .hero .hero-kicker .muted{ color:#9AA1AD; margin-left:6px; }
