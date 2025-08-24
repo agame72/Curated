@@ -169,8 +169,7 @@
   border: 0 !important;
   border-radius: 100px !important;
 
-  /* If a later shorthand sets background: none, our ::before still paints */
-  background: none !important;
+  /* Prevent theme sprites/gradients; allow inline background-color fallback */
   background-image: none !important;
   color: #fff !important;
 
