@@ -131,7 +131,7 @@
 /* === Hardening: ensure hero type/color and CTA match mock exactly === */
 .hero .hero-title {
   font-family: "Canela Deck", Georgia, ui-serif, "Times New Roman", Times, serif;
-  font-weight: 700;                 /* keep bold, we reduced size instead */
+  font-weight: 500;                 /* lighter (Medium) to avoid overpowering */
   color: #102652 !important;        /* target brand navy */
   font-size: clamp(44px, 5.2vw, 72px);
   line-height: 1.06;
@@ -174,10 +174,10 @@
 .hero .hero-sub{
   font-family: var(--sans);
   color: #4A4A4A !important;
-  font-size: 50px;                  /* as requested */
-  line-height: 65px;                /* as requested (≈130%) */
-  max-width: 883px;                 /* as requested */
-  margin: 0 0 24px;
+  font-size: 20px;                  /* reduce from huge */
+  line-height: 32px;                /* ~160% for readability */
+  max-width: 640px;                 /* closer to mock */
+  margin: 8px 0 24px;
   text-align: center;
 }
 
