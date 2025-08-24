@@ -3,7 +3,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useUserStore } from '../state/userStore.jsx'
 import { track } from '../lib/analytics'
-import { GOALS, VIBES, NEUTRALS, ACCENTS, isStepValid } from '../state/answersSchema'
+import { GOALS, VIBES, NEUTRALS, ACCENTS, CATEGORIES, CONTEXTS, BANS, isStepValid, answersSchema } from '../state/answersSchema'
 
 function Chip({ pressed, children, ...props }) {
   return (
@@ -34,7 +34,7 @@ export default function OnboardingWizard() {
   const { state, dispatch } = useUserStore()
   const navigate = useNavigate()
   const [step, setStep] = useState(1)
-  const total = 4
+  const total = 5
 
   useEffect(() => {
     const map = {1:'goal',2:'vibe',3:'neutrals',4:'accent'}
@@ -45,16 +45,31 @@ export default function OnboardingWizard() {
 
   function next() {
     if (step < total) setStep(step + 1)
-    else finish()
+    else finishOptionals('completed')
   }
 
   function back() {
     if (step > 1) setStep(step - 1)
   }
 
-  function finish() {
+  function finishRequired() {
     dispatch({ type: 'markRequiredComplete' })
     track('onboarding_completed', { answers_count: 4 })
+    // stay to optionals (step 5)
+    setStep(5)
+  }
+
+  function finishOptionals(mode) {
+    if (mode === 'skipped') {
+      track('onboarding_optionals_skipped', {})
+    } else {
+      track('onboarding_optionals_completed', {
+        selected_counts: {
+          categories: state.answers.categories.length,
+          bans: state.answers.bans.length,
+        },
+      })
+    }
     navigate('/app')
   }
 
@@ -110,18 +125,63 @@ export default function OnboardingWizard() {
               <Chip key={a} pressed={state.answers.accent === a} onClick={() => dispatch({ type: 'setAccent', accent: a })}>{a}</Chip>
             ))}
           </div>
+          <div className="mt-6 flex items-center justify-end">
+            <button type="button" className="btn-primary" onClick={finishRequired}>Continue</button>
+          </div>
         </section>
       )}
 
-      <div className="mt-8 flex items-center justify-between">
-        <button type="button" className="btn-primary" onClick={back} aria-disabled={step===1? 'true':'false'} disabled={step===1}>Back</button>
-        <div className="flex items-center gap-3">
-          {step === total && (
-            <button type="button" className="btn-primary" onClick={finish}>Skip optionals</button>
-          )}
-          <button type="button" className="btn-primary" onClick={next} aria-disabled={canContinue? 'false':'true'} disabled={!canContinue}>Continue</button>
+      {step === 5 && (
+        <section>
+          <h2 className="text-xl font-semibold mb-2">Tune details</h2>
+          <p className="text-sm text-gray-600 mb-4">Optional</p>
+          <div className="space-y-6">
+            <div>
+              <h3 className="font-medium mb-2">Category emphasis</h3>
+              <p className="text-sm text-gray-600 mb-3">Pick up to three ({state.answers.categories.length}/{answersSchema.categoriesMax})</p>
+              <div className="flex flex-wrap gap-2">
+                {CATEGORIES.map(c => (
+                  <Chip key={c} pressed={state.answers.categories.includes(c)} onClick={() => dispatch({ type: 'toggleCategory', category: c })}>{c}</Chip>
+                ))}
+              </div>
+            </div>
+            <div>
+              <h3 className="font-medium mb-2">Context</h3>
+              <p className="text-sm text-gray-600 mb-3">Pick one</p>
+              <div className="flex flex-wrap gap-2">
+                {CONTEXTS.map(c => (
+                  <Chip key={c} pressed={state.answers.context === c} onClick={() => dispatch({ type: 'setContext', context: c })}>{c}</Chip>
+                ))}
+              </div>
+            </div>
+            <div>
+              <h3 className="font-medium mb-2">No thanks list</h3>
+              <div className="flex flex-wrap gap-2">
+                {BANS.map(b => (
+                  <Chip key={b} pressed={state.answers.bans.includes(b)} onClick={() => dispatch({ type: 'toggleBan', ban: b })}>{b}</Chip>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-8 flex items-center justify-between">
+            <button type="button" className="btn-primary" onClick={() => setStep(4)}>Back</button>
+            <div className="flex items-center gap-3">
+              <button type="button" className="btn-primary" onClick={() => finishOptionals('skipped')}>Skip for now</button>
+              <button type="button" className="btn-primary" onClick={() => finishOptionals('completed')}>Finish</button>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {step < 4 && (
+        <div className="mt-8 flex items-center justify-between">
+          <button type="button" className="btn-primary" onClick={back} aria-disabled={step===1? 'true':'false'} disabled={step===1}>Back</button>
+          <div className="flex items-center gap-3">
+            <button type="button" className="btn-primary" onClick={next} aria-disabled={canContinue? 'false':'true'} disabled={!canContinue}>Continue</button>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   )
 }

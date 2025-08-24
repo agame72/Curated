@@ -4,10 +4,14 @@ export const GOALS = ['Everyday polish','Work-smart casual','Trip','Capsule refr
 export const VIBES = ['Minimal','Classic','Soft','Sporty','Edgy','Preppy','Relaxed Tailored']
 export const NEUTRALS = ['Black','Charcoal-Grey','Navy','Stone-Beige','Cream-Ivory','Brown']
 export const ACCENTS = ['Keep it neutral','Small accents okay','Color-curious']
+export const CATEGORIES = ['Outerwear','Mid-layer','Tops','Bottoms','Shoes','Accessories']
+export const CONTEXTS = ['Cooler','Warmer','Mixed']
+export const BANS = ['Leather looks','Heels','Logos','Distressed denim']
 
 export const answersSchema = {
   vibesMax: 2,
   neutralsMax: 2,
+  categoriesMax: 3,
 }
 
 export function isStepValid(step, answers) {

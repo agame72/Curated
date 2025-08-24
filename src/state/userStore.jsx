@@ -7,7 +7,10 @@ const initialState = {
     vibes: [],
     neutrals: [],
     accent: null,
-    // E-003 fields will be added later
+    // E-003 optionals
+    categories: [],
+    context: null,
+    bans: [],
   },
   flags: {
     requiredOnboardingComplete: false,
@@ -42,6 +45,26 @@ function reducer(state, action) {
       return { ...state, flags: { ...state.flags, requiredOnboardingComplete: true } }
     case 'hydrate':
       return action.state
+    // E-003 optionals
+    case 'toggleCategory': {
+      const exists = state.answers.categories.includes(action.category)
+      const max = 3
+      const next = exists
+        ? state.answers.categories.filter(c => c !== action.category)
+        : state.answers.categories.length < max
+          ? [...state.answers.categories, action.category]
+          : state.answers.categories
+      return { ...state, answers: { ...state.answers, categories: next } }
+    }
+    case 'setContext':
+      return { ...state, answers: { ...state.answers, context: action.context } }
+    case 'toggleBan': {
+      const exists = state.answers.bans.includes(action.ban)
+      const next = exists
+        ? state.answers.bans.filter(b => b !== action.ban)
+        : [...state.answers.bans, action.ban]
+      return { ...state, answers: { ...state.answers, bans: next } }
+    }
     default:
       return state
   }
