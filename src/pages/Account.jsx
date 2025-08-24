@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useUserStore } from '../state/userStore.jsx'
+import Modal from '../components/Modal'
 import { GOALS, VIBES, NEUTRALS, ACCENTS, CATEGORIES, CONTEXTS, BANS } from '../state/answersSchema'
 import { getPaletteById } from '../data/palettes'
 import { track } from '../lib/analytics'
@@ -15,6 +16,7 @@ export default function Account() {
   const { state, dispatch } = useUserStore()
   const navigate = useNavigate()
   const [draft, setDraft] = useState(state.answers)
+  const [showDel, setShowDel] = useState(false)
 
   useEffect(() => setDraft(state.answers), [state.answers])
 
@@ -141,10 +143,19 @@ export default function Account() {
           <div className="flex flex-wrap gap-2">
             <button className="btn-primary" onClick={onSave} aria-disabled={limitReached? 'true':'false'} disabled={limitReached}>Save</button>
             <button className="btn-primary" onClick={() => setDraft(state.answers)}>Cancel</button>
-            <button className="btn-primary" aria-label="Delete account…">Delete account…</button>
+            <button className="btn-primary" aria-label="Delete account…" onClick={() => setShowDel(true)}>Delete account…</button>
           </div>
         </section>
       </div>
+
+      <Modal open={showDel} onClose={() => setShowDel(false)} labelledBy="del-title" describedBy="del-desc">
+        <h2 id="del-title" className="text-xl font-semibold mb-2">Delete your account?</h2>
+        <p id="del-desc" className="text-sm text-gray-700 mb-4">This clears your palette, answers, and local data.</p>
+        <div className="flex items-center gap-2 justify-end">
+          <button className="btn-primary" onClick={() => setShowDel(false)}>Cancel</button>
+          <button className="btn-primary" onClick={() => { track('delete_account', {}); clearSession(); clearAll(); navigate('/') }}>Delete</button>
+        </div>
+      </Modal>
     </div>
   )
 }

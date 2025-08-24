@@ -148,7 +148,20 @@ export function useUserStore() {
   const isFavorited = (id) => Boolean(state.favorites[id])
   const toggleFavorite = (id) => dispatch({ type: 'toggleFavorite', id })
   const favoriteIds = () => Object.keys(state.favorites)
-  return { state, dispatch, isFavorited, toggleFavorite, favoriteIds }
+  // Clear helpers for G-003
+  const clearSession = () => {
+    try {
+      sessionStorage.removeItem('curated_session')
+    } catch {}
+    // Also clear session data held in memory
+    dispatch({ type: 'clearAllHiddenColors' })
+  }
+  const clearAll = () => {
+    try { localStorage.removeItem('curated_user_state') } catch {}
+    // Reset to initial state by replacing with parsed initialState
+    dispatch({ type: 'hydrate', state: JSON.parse(JSON.stringify(initialState)) })
+  }
+  return { state, dispatch, isFavorited, toggleFavorite, favoriteIds, clearAll, clearSession }
 }
 
 
