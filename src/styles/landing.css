@@ -160,6 +160,7 @@
   padding: 18px 40px;
   font-size: 18px;
   font-weight: 700;
+  font-family: "Neue Haas Unica", "NeueHaasUnica", var(--sans) !important;
   letter-spacing: .2px;
   line-height: 1;
   transition: background-color .15s ease, transform .05s ease;
