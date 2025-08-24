@@ -12,7 +12,8 @@
   --radius-card:18px;
 }
 
-body{ background: var(--bg-cream); }
+html, body { margin: 0; }
+body{ background: var(--bg-cream); font-family: var(--sans); }
 .h-serif{ font-family: var(--serif); font-weight: var(--weight-bold); letter-spacing:-0.02em; }
 h1,h2{ font-family: var(--serif); font-weight: var(--weight-bold); letter-spacing:-0.02em; }
 .subhead{ font-family: var(--serif); font-weight: var(--weight-medium); }
