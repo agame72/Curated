@@ -2,6 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
+@import './styles/tokens.css';
+
 :root{
   --brand-navy:#0F2A52;
   --bg-cream:#F6F0E6;

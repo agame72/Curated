@@ -1,0 +1,118 @@
+/* ===== Hero (marketing) ===== */
+
+.hero {
+  background: var(--bg);
+  color: var(--ink);
+  position: relative;
+}
+
+.hero-grid {
+  display: grid;
+  grid-template-columns: minmax(300px, 1fr) minmax(560px, 640px) minmax(300px, 1fr);
+  min-height: 88vh;
+}
+
+.hero-pane {
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-pane img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hero-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: var(--space-12) var(--space-6);
+  gap: var(--space-3);
+}
+
+.label-new {
+  color: var(--accent-gold);
+  font-weight: 700;
+  letter-spacing: .18em;
+  font-size: 12px;
+}
+
+.hero-title {
+  font-family: var(--serif);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  font-size: clamp(40px, 6vw, 72px);
+  line-height: 1.05;
+  color: var(--brand);
+  margin: var(--space-2) 0 var(--space-2);
+}
+
+.hero-sub {
+  font-family: var(--sans);
+  font-size: 18px;
+  line-height: 1.5;
+  color: var(--ink);
+  max-width: 540px;
+  margin-bottom: var(--space-6);
+}
+
+.btn-cta {
+  display: inline-block;
+  font-family: var(--sans);
+  background: var(--brand);
+  color: #fff;
+  text-decoration: none;
+  font-weight: 700;
+  padding: 16px 28px;
+  border-radius: var(--radius-pill);
+  box-shadow: 0 8px 24px rgba(14, 42, 82, 0.18);
+  transition: transform .05s ease, box-shadow .2s ease, background .2s ease;
+}
+.btn-cta:hover { transform: translateY(-1px); box-shadow: 0 12px 28px rgba(14,42,82,0.24); }
+.btn-cta:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+
+.hero-kicker {
+  margin-top: var(--space-4);
+  font-family: var(--sans);
+  font-size: 16px;
+}
+.hero-kicker .muted { color: #8A8F98; }
+.hero-kicker .bolt { margin-right: 8px; }
+
+/* “Curated” wordmark footer in hero */
+.hero-brand {
+  text-align: center;
+  font-family: var(--serif);
+  color: #8A8A8A;
+  font-size: 32px;
+  letter-spacing: .06em;
+  padding: var(--space-10) 0 var(--space-6);
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 1100px) {
+  .hero-grid {
+    grid-template-columns: 1fr minmax(520px, 640px) 1fr;
+    min-height: 82vh;
+  }
+}
+@media (max-width: 900px) {
+  /* Hide right image on medium screens to preserve composition */
+  .hero-grid { grid-template-columns: 1fr minmax(520px, 640px); }
+  .hero-grid > .hero-pane:last-child { display: none; }
+}
+@media (max-width: 640px) {
+  .hero-grid {
+    grid-template-columns: 1fr;
+    min-height: auto;
+  }
+  .hero-pane:first-child { height: 38vh; }
+  .hero-center { padding: var(--space-10) var(--space-6); }
+  .hero-title { font-size: clamp(36px, 9vw, 48px); }
+  .hero-brand { font-size: 24px; padding: var(--space-8) 0 var(--space-4); }
+}
