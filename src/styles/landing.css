@@ -176,7 +176,7 @@
   color: #4A4A4A !important;
   font-size: 20px;                  /* reduce from huge */
   line-height: 32px;                /* ~160% for readability */
-  max-width: 640px;                 /* closer to mock */
+  max-width: 560px;                 /* wraps to ~2 lines on desktop */
   margin: 8px 0 24px;
   text-align: center;
 }
