@@ -20,6 +20,7 @@ export default function Account() {
 
   const palette = useMemo(() => getPaletteById(state.answers?.palette_id || '11'), [state.answers?.palette_id])
   const editsLeft = Math.max(0, 10 - state.editCount)
+  const limitReached = state.editCount >= 10
 
   function toggleArray(field, value, max) {
     setDraft(d => {
@@ -35,9 +36,15 @@ export default function Account() {
   }
 
   function onSave() {
+    if (limitReached) return
+    const nextCount = state.editCount + 1
     dispatch({ type:'setAnswers', answers: draft })
     dispatch({ type:'incrementEditCount' })
-    track('answers_updated', { count_used: state.editCount + 1, count_remaining: Math.max(0, 9 - state.editCount) })
+    track('answers_updated', { count_used: nextCount, count_remaining: Math.max(0, 10 - nextCount) })
+    if (nextCount >= 10 && !state.flags.rateLimitAnswersFired) {
+      track('rate_limit_reached', { feature:'answers' })
+      dispatch({ type:'setRateLimitFired' })
+    }
     navigate('/app')
   }
 
@@ -45,6 +52,14 @@ export default function Account() {
     <div className="max-w-5xl mx-auto py-10 px-4">
       <h1 className="text-3xl font-serif mb-2">Account</h1>
       <p className="text-sm text-gray-600 mb-6">Edits left: {editsLeft}</p>
+
+      {limitReached && (
+        <div className="card p-4 mb-4" role="alert" aria-live="polite">
+          <h2 className="text-lg font-semibold mb-1">You’ve used your 10 edits</h2>
+          <p className="text-sm text-gray-700 mb-2">Need a change? Email our CEO.</p>
+          <a href="mailto:ryan@curated.style" className="btn-primary inline-flex">Email CEO</a>
+        </div>
+      )}
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <section className="card p-4">
@@ -63,7 +78,7 @@ export default function Account() {
             <div className="text-sm text-gray-600 mb-2">Goal</div>
             <div className="flex flex-wrap gap-2">
               {GOALS.map(g => (
-                <Chip key={g} pressed={draft.goal === g} onClick={() => setSingle('goal', g)}>{g}</Chip>
+                <Chip key={g} pressed={draft.goal === g} onClick={() => setSingle('goal', g)} disabled={limitReached}>{g}</Chip>
               ))}
             </div>
           </div>
@@ -71,7 +86,7 @@ export default function Account() {
             <div className="text-sm text-gray-600 mb-2">Vibe (up to 2)</div>
             <div className="flex flex-wrap gap-2">
               {VIBES.map(v => (
-                <Chip key={v} pressed={draft.vibes.includes(v)} onClick={() => toggleArray('vibes', v, 2)}>{v}</Chip>
+                <Chip key={v} pressed={draft.vibes.includes(v)} onClick={() => toggleArray('vibes', v, 2)} disabled={limitReached}>{v}</Chip>
               ))}
             </div>
           </div>
@@ -79,7 +94,7 @@ export default function Account() {
             <div className="text-sm text-gray-600 mb-2">Neutrals (up to 2)</div>
             <div className="flex flex-wrap gap-2">
               {NEUTRALS.map(n => (
-                <Chip key={n} pressed={draft.neutrals.includes(n)} onClick={() => toggleArray('neutrals', n, 2)}>{n}</Chip>
+                <Chip key={n} pressed={draft.neutrals.includes(n)} onClick={() => toggleArray('neutrals', n, 2)} disabled={limitReached}>{n}</Chip>
               ))}
             </div>
           </div>
@@ -87,7 +102,7 @@ export default function Account() {
             <div className="text-sm text-gray-600 mb-2">Accent appetite</div>
             <div className="flex flex-wrap gap-2">
               {ACCENTS.map(a => (
-                <Chip key={a} pressed={draft.accent === a} onClick={() => setSingle('accent', a)}>{a}</Chip>
+                <Chip key={a} pressed={draft.accent === a} onClick={() => setSingle('accent', a)} disabled={limitReached}>{a}</Chip>
               ))}
             </div>
           </div>
@@ -99,7 +114,7 @@ export default function Account() {
             <div className="text-sm text-gray-600 mb-2">Category emphasis (up to 3)</div>
             <div className="flex flex-wrap gap-2">
               {CATEGORIES.map(c => (
-                <Chip key={c} pressed={draft.categories?.includes(c)} onClick={() => toggleArray('categories', c, 3)}>{c}</Chip>
+                <Chip key={c} pressed={draft.categories?.includes(c)} onClick={() => toggleArray('categories', c, 3)} disabled={limitReached}>{c}</Chip>
               ))}
             </div>
           </div>
@@ -107,7 +122,7 @@ export default function Account() {
             <div className="text-sm text-gray-600 mb-2">Context</div>
             <div className="flex flex-wrap gap-2">
               {CONTEXTS.map(c => (
-                <Chip key={c} pressed={draft.context === c} onClick={() => setSingle('context', c)}>{c}</Chip>
+                <Chip key={c} pressed={draft.context === c} onClick={() => setSingle('context', c)} disabled={limitReached}>{c}</Chip>
               ))}
             </div>
           </div>
@@ -115,7 +130,7 @@ export default function Account() {
             <div className="text-sm text-gray-600 mb-2">No thanks</div>
             <div className="flex flex-wrap gap-2">
               {BANS.map(b => (
-                <Chip key={b} pressed={draft.bans?.includes(b)} onClick={() => toggleArray('bans', b)}>{b}</Chip>
+                <Chip key={b} pressed={draft.bans?.includes(b)} onClick={() => toggleArray('bans', b)} disabled={limitReached}>{b}</Chip>
               ))}
             </div>
           </div>
@@ -124,7 +139,7 @@ export default function Account() {
         <section className="card p-4">
           <h2 className="text-xl font-semibold mb-2">Actions</h2>
           <div className="flex flex-wrap gap-2">
-            <button className="btn-primary" onClick={onSave}>Save</button>
+            <button className="btn-primary" onClick={onSave} aria-disabled={limitReached? 'true':'false'} disabled={limitReached}>Save</button>
             <button className="btn-primary" onClick={() => setDraft(state.answers)}>Cancel</button>
             <button className="btn-primary" aria-label="Delete account…">Delete account…</button>
           </div>

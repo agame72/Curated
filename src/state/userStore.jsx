@@ -1,5 +1,6 @@
 // E-002 user store (answers + flags)
-import { createContext, useContext, useReducer, useEffect } from 'react'
+import { createContext, useContext, useReducer, useEffect, useRef } from 'react'
+import { track } from '../lib/analytics'
 
 const initialState = {
   answers: {
@@ -30,6 +31,7 @@ const initialState = {
   editCount: 0,
   flags: {
     requiredOnboardingComplete: false,
+    rateLimitAnswersFired: false,
   },
 }
 
@@ -73,8 +75,12 @@ function reducer(state, action) {
       return { ...state, entitlements: { ...state.entitlements, ...action.entitlements } }
     case 'setAnswers':
       return { ...state, answers: { ...state.answers, ...action.answers } }
-    case 'incrementEditCount':
+    case 'incrementEditCount': {
+      if (state.editCount >= 10) return state
       return { ...state, editCount: state.editCount + 1 }
+    }
+    case 'setRateLimitFired':
+      return { ...state, flags: { ...state.flags, rateLimitAnswersFired: true } }
     case 'excludeColorFamily': {
       const fam = action.family
       return { ...state, session: { ...state.session, exclusions: { ...state.session.exclusions, colors: { ...state.session.exclusions.colors, [fam]: true } } } }
