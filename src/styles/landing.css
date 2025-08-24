@@ -156,7 +156,7 @@
 
 /* Normalize blending/opacity from any parent utilities */
 .hero, .hero * { mix-blend-mode: normal; }
-.hero .hero-cta,
+.hero .hero-cta, 
 .hero [data-cta="hero"]{
   position: relative;
   z-index: 3;                          /* paint above images */
@@ -206,16 +206,10 @@
 .hero-center{ position: relative; z-index: 2; isolation: isolate; }
 
 /* Solid navy CTA with white text; block theme overrides */
-.hero .hero-cta{ all: unset; display:inline-flex; align-items:center; justify-content:center; min-height:54px; padding:18px 40px; border-radius:100px; background-color:var(--brand-navy-fg) !important; background-image:none !important; color:#fff !important; text-decoration:none !important; font-family:"Neue Haas Unica","NeueHaasUnica", var(--sans); font-weight:500; font-size:18px; line-height:1; box-shadow:none !important; mix-blend-mode:normal; }
-.hero .hero-cta:hover{ transform: translateY(-1px); }
-.hero .hero-cta:focus-visible{
-  outline: 3px solid var(--focus);
-  outline-offset: 2px;
-}
-/* keep text white on visited, prevent theme overrides */
-.hero .hero-cta:link,
-.hero .hero-cta:visited,
-.hero .hero-cta:active { color: #fff !important; }
+.hero .hero-cta{ appearance:none; display:inline-flex; align-items:center; justify-content:center; min-height:54px; padding:18px 40px; border:0; border-radius:100px; background-color:var(--brand-navy-fg) !important; color:#fff !important; text-decoration:none !important; font-family:"Neue Haas Unica","NeueHaasUnica", var(--sans); font-size:18px; font-weight:500; line-height:1; position:relative; z-index:3; }
+.hero .hero-cta:hover{ filter:brightness(1.05); }
+.hero .hero-cta:focus-visible{ outline:2px solid #0A7AFF; outline-offset:3px; }
+.hero .hero-cta:link, .hero .hero-cta:visited, .hero .hero-cta:active{ color:#fff !important; }
 
 .hero .btn-cta[disabled] {
   background-color: rgba(14,42,82,.55) !important;
