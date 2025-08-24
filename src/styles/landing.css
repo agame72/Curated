@@ -127,3 +127,32 @@
   padding-top: 0 !important;
   margin-top: 0 !important;
 }
+
+/* === Hardening: ensure hero type/color and CTA match mock exactly === */
+.hero .hero-title {
+  font-family: "Canela Deck", Georgia, ui-serif, "Times New Roman", Times, serif;
+  font-weight: 700;
+  color: var(--brand) !important;        /* force brand navy */
+}
+
+/* Normalize blending/opacity from any parent utilities */
+.hero, .hero * { mix-blend-mode: normal; }
+
+/* Solid navy CTA with white text; block theme overrides */
+.hero .btn-cta {
+  background-color: var(--brand) !important;
+  color: #fff !important;
+  border: 0;
+  opacity: 1;
+}
+.hero .btn-cta[disabled] {
+  background-color: rgba(14,42,82,.55) !important;
+  color: rgba(255,255,255,.9) !important;
+}
+
+/* Remove any global rounding on the hero photos */
+.hero-pane img { border-radius: 0 !important; }
+
+/* Keep focal points */
+.hero-grid > .hero-pane[data-pane="left"]  img { object-position: 35% 50%; }
+.hero-grid > .hero-pane[data-pane="right"] img { object-position: 50% 50%; }
