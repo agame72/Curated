@@ -156,6 +156,62 @@
 
 /* Normalize blending/opacity from any parent utilities */
 .hero, .hero * { mix-blend-mode: normal; }
+.hero .hero-cta,
+.hero [data-cta="hero"]{
+  position: relative;
+  z-index: 3;                          /* paint above images */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  min-height: 54px;
+  padding: 18px 40px !important;
+  border: 0 !important;
+  border-radius: 100px !important;
+
+  /* If a later shorthand sets background: none, our ::before still paints */
+  background: none !important;
+  background-image: none !important;
+  color: #fff !important;
+
+  font-family: "Neue Haas Unica","NeueHaasUnica",
+               -apple-system,system-ui,"Segoe UI",Roboto,Helvetica,Arial,sans-serif !important;
+  font-weight: 500;
+  font-size: 18px;
+  letter-spacing: .2px;
+  line-height: 1;
+
+  text-decoration: none !important;
+  box-shadow: none !important;
+  mix-blend-mode: normal;
+}
+.hero .hero-cta::before,
+.hero [data-cta="hero"]::before{
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 100px;
+  background: var(--brand-navy);       /* #102652 */
+  z-index: -1;                         /* sits behind text, inside anchor */
+}
+.hero .hero-cta:link,
+.hero .hero-cta:visited,
+.hero .hero-cta:active,
+.hero [data-cta="hero"]:link,
+.hero [data-cta="hero"]:visited,
+.hero [data-cta="hero"]:active{
+  color: #fff !important;
+}
+.hero .hero-cta:hover,
+.hero [data-cta="hero"]:hover{
+  transform: translateY(-1px);
+  transition: transform .05s ease;
+}
+.hero .hero-cta:focus-visible,
+.hero [data-cta="hero"]:focus-visible{
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
 
 /* Keep images behind and center content above them */
 .hero-pane{ position: relative; z-index: 0; }

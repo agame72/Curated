@@ -23,7 +23,12 @@ export default function Hero() {
           <p className="hero-sub">
             Share a few photos and we’ll curate a shopping guide for your style.
           </p>
-          <a className="hero-cta" href="/checkout?plan=style_guide">
+          <a
+            className="hero-cta"
+            data-cta="hero"
+            href="/checkout?plan=style_guide"
+            style={{ backgroundColor: 'var(--brand-navy)', color: '#fff' }}
+          >
             Get Seasonal Guide
           </a>
           <p className="hero-kicker">
