@@ -23,11 +23,11 @@ export default function Hero() {
           <p className="hero-sub">
             Share a few photos and we’ll curate a shopping guide for your style.
           </p>
-          <a className="btn-cta" href="/checkout?plan=style_guide">
+          <a className="hero-cta" href="/checkout?plan=style_guide">
             Get Seasonal Guide
           </a>
           <p className="hero-kicker">
-            <img className="bolt" src="/icons/bolt.svg" alt="" width="18" height="18" aria-hidden="true" />
+            <img src="/icons/bolt.svg" alt="" className="bolt" />
             Check your Palette <span className="muted">30 sec</span>
           </p>
         </div>
