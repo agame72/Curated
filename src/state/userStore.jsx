@@ -12,6 +12,15 @@ const initialState = {
     context: null,
     bans: [],
   },
+  entitlements: {
+    // Plan defaults; update via setEntitlements action when checkout wires in
+    maxRecommendations: 50,
+    maxAccessories: 0,
+  },
+  usage: {
+    recommendationsUsed: 0,
+    accessoriesUsed: 0,
+  },
   flags: {
     requiredOnboardingComplete: false,
   },
@@ -45,6 +54,8 @@ function reducer(state, action) {
       return { ...state, flags: { ...state.flags, requiredOnboardingComplete: true } }
     case 'hydrate':
       return action.state
+    case 'setEntitlements':
+      return { ...state, entitlements: { ...state.entitlements, ...action.entitlements } }
     // E-003 optionals
     case 'toggleCategory': {
       const exists = state.answers.categories.includes(action.category)

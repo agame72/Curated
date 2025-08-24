@@ -5,6 +5,7 @@ import { useUserStore } from '../state/userStore.jsx'
 import Filters from '../components/Filters'
 import Grid from '../components/Grid'
 import { rankItems } from '../lib/ranker'
+import Counters from '../components/Counters'
 import itemsData from '../data/items.sample.json'
 
 export default function Results() {
@@ -48,7 +49,10 @@ export default function Results() {
     <div className="max-w-6xl mx-auto py-8 px-4">
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-2xl font-semibold">Here’s your Curated Closet</h2>
-        <div className="text-sm text-gray-600">{toShow.length}/{filtered.length || ranked.length}</div>
+        <div className="flex items-center gap-3">
+          <Counters />
+          <div className="text-sm text-gray-600">{toShow.length}/{filtered.length || ranked.length}</div>
+        </div>
       </div>
       <Filters value={filters} onChange={setFilters} />
       <Grid items={toShow} onLoadMore={loadMore} />
