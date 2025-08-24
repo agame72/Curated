@@ -131,8 +131,13 @@
 /* === Hardening: ensure hero type/color and CTA match mock exactly === */
 .hero .hero-title {
   font-family: "Canela Deck", Georgia, ui-serif, "Times New Roman", Times, serif;
-  font-weight: 700;
-  color: var(--brand) !important;        /* force brand navy */
+  font-weight: 700;                 /* keep bold, we reduced size instead */
+  color: #102652 !important;        /* target brand navy */
+  font-size: clamp(44px, 5.2vw, 72px);
+  line-height: 1.06;
+  letter-spacing: -0.01em;
+  margin: 6px 0 10px;
+  max-width: 720px;
 }
 
 /* Normalize blending/opacity from any parent utilities */
@@ -140,9 +145,17 @@
 
 /* Solid navy CTA with white text; block theme overrides */
 .hero .btn-cta {
-  background-color: var(--brand) !important;
+  background-color: #102652 !important; /* flat navy pill */
   color: #fff !important;
   border: 0;
+  border-radius: 100px;
+  box-shadow: none !important;
+  padding: 18px 40px;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: .2px;
+  line-height: 1;
+  transition: background-color .15s ease, transform .05s ease;
   opacity: 1;
 }
 .hero .btn-cta[disabled] {
@@ -156,3 +169,19 @@
 /* Keep focal points */
 .hero-grid > .hero-pane[data-pane="left"]  img { object-position: 35% 50%; }
 .hero-grid > .hero-pane[data-pane="right"] img { object-position: 50% 50%; }
+
+/* Body copy under H1 — exact target values */
+.hero .hero-sub{
+  font-family: var(--sans);
+  color: #4A4A4A !important;
+  font-size: 50px;                  /* as requested */
+  line-height: 65px;                /* as requested (≈130%) */
+  max-width: 883px;                 /* as requested */
+  margin: 0 0 24px;
+  text-align: center;
+}
+
+/* Kicker tone + spacing */
+.hero .hero-kicker{ margin-top: 10px; font-size: 16px; }
+.hero .hero-kicker .bolt{ color:#C99B2B; margin-right:8px; }
+.hero .hero-kicker .muted{ color:#9AA1AD; }
