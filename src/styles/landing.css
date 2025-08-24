@@ -46,6 +46,7 @@
 }
 
 .hero .hero-cta:hover .cta-pill{ filter:none; }
+.hero .hero-cta:active .cta-pill{ filter: brightness(0.9); }
 
 /* Ensure any remaining global link rules can’t override the text color */
 .hero .hero-cta:link .cta-pill,
@@ -169,7 +170,7 @@
 .hero .hero-kicker span { font-family: "Neue Haas Unica", var(--sans) !important; }
 
 /* "Curated" wordmark footer in hero */
-.hero-brand { display:block; margin: 24px auto 16px; height: 40px; }
+.hero-brand { display:block; margin: -65px auto 16px; height: 26px; }
 
 /* ===== Responsive ===== */
 @media (max-width: 1200px) {
@@ -204,6 +205,12 @@
   letter-spacing: -0.01em;
   margin: 6px 0 10px;
   max-width: 440px;                /* much tighter lock for desktop-wide wrap */
+  animation: heroFloatUp 0.8s ease-out both;
+}
+
+@keyframes heroFloatUp {
+  from { transform: translateY(25px); opacity: 0.0; }
+  to   { transform: translateY(0); opacity: 1; }
 }
 
 /* Normalize blending/opacity from any parent utilities */
@@ -279,7 +286,7 @@
   color: #4A4A4A !important;
   font-size: 18px;                  /* tighter, more elegant */
   line-height: 28px;
-  max-width: 420px;                 /* wrap more aggressively */
+  max-width: 360px;                 /* narrower to wrap more */
   margin: 10px 0 24px;
   text-align: center;
   font-weight: 400;
