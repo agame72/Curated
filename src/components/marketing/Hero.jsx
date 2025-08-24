@@ -17,7 +17,7 @@ export default function Hero() {
 
         <div className="hero-center">
           <span className="label-new">NEW</span>
-          <h1 className="hero-title">
+          <h1 className="hero-title canela">
             Selfies to a<br/>Shopping List
           </h1>
           <p className="hero-sub">

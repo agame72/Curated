@@ -3,6 +3,7 @@
 @tailwind utilities;
 
 @import './styles/tokens.css';
+@import './styles/fonts.css';
 
 :root{
   --brand-navy:#0F2A52;
@@ -12,6 +13,9 @@
 }
 
 body{ background: var(--bg-cream); }
+.h-serif{ font-family: var(--serif); font-weight: var(--weight-bold); letter-spacing:-0.02em; }
+h1,h2{ font-family: var(--serif); font-weight: var(--weight-bold); letter-spacing:-0.02em; }
+.subhead{ font-family: var(--serif); font-weight: var(--weight-medium); }
 
 .btn-primary{ height:44px; padding:0 24px; border-radius:9999px; background:var(--brand-navy); color:#fff; font-weight:600; display:inline-flex; align-items:center; justify-content:center; }
 .btn-primary[aria-disabled="true"]{ opacity:.5; cursor:not-allowed; }
