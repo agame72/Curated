@@ -7,7 +7,7 @@ export default function Hero() {
       <div className="hero-grid">
         <div className="hero-pane" data-pane="left">
           <img
-            src="/marketing/hero/hero-portrait.webp"
+            src="/marketing/hero/hero-portrait_taller.webp"
             alt="Portrait in neutral blazer—clean, natural light."
             loading="eager"
             width="1200"
@@ -34,7 +34,7 @@ export default function Hero() {
 
         <div className="hero-pane" data-pane="right">
           <img
-            src="/marketing/hero/hero-closet.webp"
+            src="/marketing/hero/hero-closet_taller.webp"
             alt="Neat rail of camel, cream, and navy pieces."
             loading="eager"
             width="1200"
