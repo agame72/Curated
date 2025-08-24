@@ -8,6 +8,8 @@ import { rankItems } from '../lib/ranker'
 import { colorFamilyFromItem } from '../lib/color'
 import Counters from '../components/Counters'
 import itemsData from '../data/items.sample.json'
+import { applyEntitlementsFromStripe } from '../lib/payments'
+import { track } from '../lib/analytics'
 
 export default function Results() {
   const { state } = useUserStore()
@@ -25,6 +27,23 @@ export default function Results() {
   // Grid + filters
   const [filters, setFilters] = useState({ categories: [], color: null, favoritesOnly: false })
   const [visibleCount, setVisibleCount] = useState(20)
+
+  // post-checkout entitlement hook
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search)
+    const sid = params.get('session_id')
+    if (!sid) return
+    (async () => {
+      const data = await applyEntitlementsFromStripe(sid)
+      if (data.paid) {
+        const plan = data.entitlements.maxRecommendations === 100 ? 'style_guide' : 'starter'
+        track('checkout_success', { plan })
+        // set entitlements
+        // use dispatch once available via store hook
+      }
+      window.history.replaceState({}, '', '/app')
+    })()
+  }, [])
 
   const ranked = useMemo(() => rankItems(itemsData, { answers: state.answers, favorites: state.favorites }), [state.answers, state.favorites])
   // expose ranked to cards for local suggestion strips
