@@ -1,317 +1,184 @@
-/* ===== Hero CTA (child-painted pill) ===== */
-.hero .hero-cta{
-  /* The link itself carries only layout, not the visual fill */
-  display: inline-block;
-  text-decoration: none !important;
-  position: relative;
-  z-index: 3; /* above side images */
+/* Full‑bleed utility for hero */
+.fullbleed { margin-inline: calc(50% - 50vw); width: 100vw; }
+
+/* ===== Vars ===== */
+:root {
+  --side-min: 200px;
+  --side-max: 480px;
+  --gutter: clamp(16px, 3vw, 48px);
+  --content-max: 720px;
+  --content-min: 520px;
+  /* Type rhythm */
+  --h1-max: 64px;
+  --h1-vw: 4.6vw;
 }
 
-/* Paint the pill on the child span so global link resets can't wipe it */
-.hero .hero-cta .cta-pill{
-  --cta-bg: var(--brand-navy, #102652);
-  --cta-fg: #fff;
-
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-
-  min-height: 36px;
-  padding: 12px 72px;
-  border: 0;
-  border-radius: 100px;
-
-  background: var(--cta-bg);          /* <- actual paint happens here */
-  color: var(--cta-fg);
-
-  font-family: "Neue Haas Unica","NeueHaasUnica", var(--sans) !important;
-  font-weight: 400 !important;
-  font-size: 18px;
-  line-height: 1;
-
-  box-shadow: none;
-  text-decoration: none;
-}
-
-/* Hard-lock Unica across CTA subtree to defeat any cascading serif fallbacks */
-.hero .hero-cta, .hero .hero-cta *, .hero .hero-cta .cta-pill{
-  font-family: "Neue Haas Unica","NeueHaasUnica", system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important;
-  font-weight: 400 !important;
-}
-
-/* Focus/hover */
-.hero .hero-cta:focus-visible .cta-pill{
-  outline: 2px solid var(--focus-blue, #0A7AFF);
-  outline-offset: 3px;
-}
-
-.hero .hero-cta:hover .cta-pill{ filter:none; }
-.hero .hero-cta:active .cta-pill{ filter: brightness(0.9); }
-
-/* Ensure any remaining global link rules can’t override the text color */
-.hero .hero-cta:link .cta-pill,
-.hero .hero-cta:visited .cta-pill,
-.hero .hero-cta:active .cta-pill{
-  color: #fff !important;
-}
-
-/* If you still have older hero CTA rules, keep this guard to neutralize them */
-.hero .hero-cta::before { content: none !important; } /* disable any old paint layers */
-/* ===== Hero (marketing) ===== */
-
+/* ===== Hero container ===== */
 .hero {
+  position: relative;
+  height: 100svh;
+  height: 100dvh;
+  overflow: clip;
+  isolation: isolate;
   background: var(--bg-cream-fg);
   color: var(--ink-fg);
-  margin-top: 0;                  /* flush to top */
-  font-synthesis-weight: none;    /* prevent synthetic bold */
+  display: block;
+
+  /* Fallback ARs so math never breaks if inline vars are missing */
+  --left-ar: .6667;
+  --right-ar: .6667;
+
+  /* Optional focal knobs for stack/duo modes */
+  --face-x: 50%;
+  --face-y: 35%;
+  --closet-x: 50%;
+  --closet-y: 65%;
 }
 
-.hero-grid {
-  display: grid;
-  /* Ensure images flush to viewport edges */
-  grid-template-columns: minmax(0, 1fr) minmax(520px, 600px) minmax(0, 1fr);
-  column-gap: 0;                  /* no gutters in mock */
-  min-height: 92vh;               /* generous height */
+/* Compute pillar widths from height & available width; never below side-min */
+.hero {
+  /* space left for each pillar after content + gutters are protected */
+  --available-half: calc((100vw - var(--content-min) - 2 * var(--gutter)) / 2);
+
+  /* each pillar = max(min(height-driven, side-max, available-half), side-min) */
+  --left-w: max(
+    var(--side-min),
+    min(
+      calc(100dvh * var(--left-ar, .6667)),
+      var(--side-max),
+      var(--available-half)
+    )
+  );
+  --right-w: max(
+    var(--side-min),
+    min(
+      calc(100dvh * var(--right-ar, .6667)),
+      var(--side-max),
+      var(--available-half)
+    )
+  );
 }
 
-.hero-pane {
-  position: relative;
-  overflow: hidden;
-}
-
-.hero-pane img {
-  position: absolute;
-  inset: 0;
+/* ===== Side media panels ===== */
+.hero__media { position: absolute; inset-block: 0; height: 100%; z-index: 0; pointer-events: none; margin: 0; }
+.hero__media--left { left: 0; width: var(--left-w); }
+.hero__media--right { right: 0; width: var(--right-w); }
+.hero__media > img {
+  display: block;
   width: 100%;
   height: 100%;
-  object-fit: cover;
-}
-.hero-grid > .hero-pane[data-pane="left"]  img { object-position: 35% 50%; } /* face stays in frame */
-.hero-grid > .hero-pane[data-pane="right"] img { object-position: 50% 50%; } /* rails centered */
-
-.hero-center {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 12px 24px 12px;   /* tighter top/bottom */
-  gap: 8px;
-  margin-top: -45px;         /* lift middle block up */
+  object-fit: contain;
+  object-position: center bottom;
 }
 
-/* Utility: force Canela Deck where applied */
-.canela { font-family: "Canela Deck", Georgia, ui-serif, "Times New Roman", Times, serif !important; }
-
-.label-new {
-  color: #C9A44C;                 /* gold */
-  font-family: "Neue Haas Unica","NeueHaasUnica",
-               -apple-system,system-ui,"Segoe UI",Roboto,Helvetica,Arial,sans-serif !important;
-  font-weight: 500;
-  letter-spacing: .18em;
-  font-size: 14px;
-  margin-bottom: 10px;
-  text-transform: uppercase;
+/* ===== Center content safe area ===== */
+.hero__content { position: relative; z-index: 1; height: 100%; display: grid; align-content: center; justify-items: start; gap: 20px; box-sizing: border-box; padding-left: calc(var(--left-w) + var(--gutter)); padding-right: calc(var(--right-w) + var(--gutter)); max-width: min(100%, 1800px); margin: 0 auto; }
+.hero__content .eyebrow {
+  letter-spacing: 0.12em;
+  font-size: clamp(12px, 1.2vw, 14px);
+  color: #b18f35;
+  font-family: var(--sans);
 }
-
-.hero-title {
-  /* Canela Deck */
-  font-family: "Canela Deck", Georgia, ui-serif, "Times New Roman", Times, serif;
-  font-weight: 700;               /* bold — mock is heavy */
-  color: var(--brand);            /* #0E2A52 */
-  /* Two-line lock: 72–88 desktop, scales down on mobile */
-  font-size: clamp(48px, 6.8vw, 88px);
+.hero__content h1 {
+  font-family: var(--serif);
+  text-wrap: balance;
+  font-size: clamp(36px, var(--h1-vw), var(--h1-max));
   line-height: 1.05;
+  max-width: var(--content-max);
+  color: var(--brand-navy-fg);
+  margin: 0 0 8px;
   letter-spacing: -0.01em;
-  margin: 4px 0 6px;
-  max-width: 720px;
 }
-
-.hero-sub {
-  font-family: var(--sans);
-  color: var(--ink);
-  font-size: 20px;                /* mock is slightly larger than 18 */
-  line-height: 1.5;
-  max-width: 640px;
-  margin-bottom: 2px;             /* reduce orange padding by 10px */
-}
-
-.btn-cta {
-  position: relative;
-  z-index: 1;                     /* ensure not blending with images */
+.hero__content .lede { max-width: var(--content-min); margin-bottom: 12px; font-size: clamp(16px, 1.5vw, 20px); color: #4b5563; font-family: var(--sans); }
+.btn.btn--primary {
   display: inline-block;
-  font-family: var(--sans);
-  background: var(--brand-navy);  /* solid navy */
+  min-height: 44px;
+  border-radius: 999px;
+  background: var(--brand-navy-fg);
   color: #fff;
   text-decoration: none;
-  font-weight: 700;
-  padding: 18px 36px;             /* big, pill-like */
-  border-radius: 9999px;
-  box-shadow: none;
-  transition: transform .05s ease, box-shadow .2s ease, background .2s ease;
+  font-weight: 600;
+  font-family: var(--sans);
+  font-size: clamp(14px, 1.05vw, 16px);
+  padding-block: clamp(10px, 0.9vw, 14px);
+  padding-inline: clamp(16px, 1.3vw, 22px);
 }
-/* Remove any side effects from other .btn-cta rules */
-.hero .btn-cta{ all: unset; }
-
-.hero-kicker {
-  margin-top: 12px;
-  font-family: "Neue Haas Unica","NeueHaasUnica",
-               -apple-system,system-ui,"Segoe UI",Roboto,Helvetica,Arial,sans-serif !important;
-  font-size: 16px;
+.btn.btn--primary:focus-visible { outline: 2px solid var(--focus-blue); outline-offset: 3px; }
+.linkish {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  color: #374151;
+  cursor: pointer;
+  font-family: var(--sans);
 }
-.hero-kicker .bolt { margin-right: 8px; }
-.hero-kicker .muted { color: #9AA1AD; } /* “30 sec” lighter like the comp */
-
-/* Ensure all non-headline hero UI uses Neue Haas Unica */
-.hero .label-new,
-.hero .hero-sub,
-.hero .btn-cta,
-.hero .hero-kicker,
-.hero .hero-kicker span { font-family: "Neue Haas Unica", var(--sans) !important; }
-
-/* "Curated" wordmark footer in hero */
-.hero-brand { display:block; margin: -65px auto 16px; height: 26px; }
-
-/* ===== Responsive ===== */
-@media (max-width: 1200px) {
-  .hero-grid { grid-template-columns: minmax(0, 1fr) minmax(500px, 580px) minmax(0, 1fr); min-height: 88vh; }
-  .hero-title { font-size: clamp(44px, 7.5vw, 80px); }
-}
-@media (max-width: 900px) {
-  /* Hide right image on medium screens to preserve composition */
-  .hero-grid { grid-template-columns: minmax(0, 1fr) minmax(500px, 580px); }
-  .hero-grid > .hero-pane:last-child { display: none; }
-}
-@media (max-width: 640px) {
-  .hero-grid { grid-template-columns: 1fr; min-height: auto; }
-  .hero-pane:first-child { height: 36vh; }
-  .hero-center { padding: 56px 20px; }
-  .hero-title { font-size: clamp(36px, 9vw, 48px); }
-  .hero-brand { font-size: 24px; padding: 36px 0 20px; }
+/* Palette CTA (custom bolt icon) */
+.palette-cta { display: inline-flex; align-items: center; gap: 10px; background: transparent; border: 0; padding: 0; color: #374151; cursor: pointer; font-family: var(--sans); }
+.palette-cta .icon-bolt { display: inline-flex; }
+.palette-cta .icon-bolt img { display:block; width:1em; height:1em; }
+.palette-cta .muted { color: #9aa3af; }
+.brandmark {
+  opacity: 0.6;
+  font-size: clamp(20px, 3vw, 36px);
+  margin-top: 24px;
+  font-family: var(--serif);
 }
 
-:root[data-landing="true"] body {
-  padding-top: 0 !important;
-  margin-top: 0 !important;
+/* ===== Cross-fade scaffolding ===== */
+.hero__sentinel {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 1px;
+  height: 1px;
+  pointer-events: none;
 }
 
-/* === Hardening: ensure hero type/color and CTA match mock exactly === */
-.hero .hero-title {
-  font-family: "Canela Deck", Georgia, ui-serif, "Times New Roman", Times, serif;
-  font-weight: 500;                 /* Medium per spec */
-  color: #102652 !important;        /* target brand navy */
-  font-size: clamp(44px, 5.2vw, 72px);
-  line-height: 1.06;
-  letter-spacing: -0.01em;
-  margin: 6px 0 10px;
-  max-width: 440px;                /* much tighter lock for desktop-wide wrap */
-  animation: heroFloatUp 0.8s ease-out both;
+.hero,
+.next-section {
+  transition: opacity 300ms ease, transform 300ms ease;
+  will-change: opacity, transform;
 }
-
-@keyframes heroFloatUp {
-  from { transform: translateY(25px); opacity: 0.0; }
-  to   { transform: translateY(0); opacity: 1; }
+.next-section {
+  opacity: 0;
+  transform: translateY(12px);
 }
+html.after-hero .hero { opacity: 0; transform: translateY(-12px); pointer-events: none; }
+html.after-hero .next-section { opacity: 1; transform: translateY(0); pointer-events: auto; }
 
-/* Normalize blending/opacity from any parent utilities */
-.hero, .hero * { mix-blend-mode: normal; }
-.hero .hero-cta, 
-.hero [data-cta="hero"]{
-  position: relative;
-  z-index: 3;                          /* paint above images */
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+/* ===== STACK MODE (phone-ish or when physics demands) ===== */
+.hero--stack { height: auto; display: grid; grid-template-rows: auto auto auto; grid-template-columns: 1fr; row-gap: clamp(20px, 4vh, 40px); padding-left: var(--gutter); padding-right: var(--gutter); }
+.hero--stack .hero__content { padding: 0; align-content: start; }
+.hero--stack .hero__media { position: relative; inset: unset; width: 100%; height: auto; pointer-events: none; }
+.hero--stack .hero__media--left, .hero--stack .hero__media--right { aspect-ratio: 1 / 1; }
+.hero--stack .hero__media > img { width: 100%; height: 100%; object-fit: cover; object-position: center; }
 
-  min-height: 0;
-  padding: 0 !important;
-  border: 0 !important;
-  border-radius: 100px !important;
-
-  /* Prevent theme sprites/gradients; allow inline background-color fallback */
-  background-image: none !important;
-  color: #fff !important;
-
-  font-family: "Neue Haas Unica","NeueHaasUnica", var(--sans);
-  font-weight: 500;
-  font-size: 18px;
-  letter-spacing: .2px;
-  line-height: 1;
-
-  text-decoration: none !important;
-  box-shadow: none !important;
-  mix-blend-mode: normal;
+/* ===== Breakpoints ===== */
+@media (max-width: 1279.98px) {
+  :root { --gutter: clamp(16px, 2.2vw, 36px); }
 }
-.hero .hero-cta::before,
-.hero [data-cta="hero"]::before{ content: none !important; }
-.hero .hero-cta:link,
-.hero .hero-cta:visited,
-.hero .hero-cta:active,
-.hero [data-cta="hero"]:link,
-.hero [data-cta="hero"]:visited,
-.hero [data-cta="hero"]:active{
-  color: #fff !important;
+@media (min-width: 1600px) {
+  :root { --side-max: 560px; --content-min: 640px; --gutter: 64px; --h1-max: 72px; }
 }
-.hero .hero-cta:hover,
-.hero [data-cta="hero"]:hover{ transform:none; transition:none; }
-.hero .hero-cta:focus-visible,
-.hero [data-cta="hero"]:focus-visible{ outline: 2px solid var(--focus-blue); outline-offset: 2px; }
-
-/* Keep images behind and center content above them */
-.hero-pane{ position: relative; z-index: 0; }
-.hero-center{ position: relative; z-index: 2; isolation: isolate; }
-
-/* Solid navy CTA with white text; block theme overrides */
-.hero .hero-cta{ appearance:none; display:inline-flex; align-items:center; justify-content:center; min-height:54px; padding:18px 40px; border:0; border-radius:100px; background-color:var(--brand-navy-fg) !important; color:#fff !important; text-decoration:none !important; font-family:"Neue Haas Unica","NeueHaasUnica", var(--sans); font-size:18px; font-weight:500; line-height:1; position:relative; z-index:3; }
-.hero .hero-cta:hover{ filter:brightness(1.05); }
-.hero .hero-cta:focus-visible{ outline:2px solid #0A7AFF; outline-offset:3px; }
-.hero .hero-cta:link, .hero .hero-cta:visited, .hero .hero-cta:active{ color:#fff !important; }
-
-.hero .btn-cta[disabled] {
-  background-color: rgba(14,42,82,.55) !important;
-  color: rgba(255,255,255,.9) !important;
+@media (min-width: 1400px) and (max-width: 1439.98px) {
+  :root { --side-max: 520px; --content-min: 600px; --gutter: 64px; --h1-max: 68px; }
 }
-
-/* Remove any global rounding on the hero photos */
-.hero-pane img { border-radius: 0 !important; }
-
-/* Keep focal points */
-.hero-grid > .hero-pane[data-pane="left"]  img { object-position: 35% 50%; }
-.hero-grid > .hero-pane[data-pane="right"] img { object-position: 50% 50%; }
-
-/* Body copy under H1 — exact target values */
-.hero .hero-sub{
-  font-family: "Neue Haas Unica","NeueHaasUnica",
-               -apple-system,system-ui,"Segoe UI",Roboto,Helvetica,Arial,sans-serif !important;
-  color: #4A4A4A !important;
-  font-size: 18px;                  /* tighter, more elegant */
-  line-height: 28px;
-  max-width: 360px;                 /* narrower to wrap more */
-  margin: 10px 0 24px;
-  text-align: center;
-  font-weight: 400;
+@media (min-width: 1440px) and (max-width: 1599.98px) {
+  :root { --side-max: 560px; --content-min: 640px; --gutter: 64px; --h1-max: 68px; }
 }
-
-/* Kicker tone + spacing */
-.hero .hero-kicker{
-  margin-top: 12px;               /* add 10px below CTA */
-  font-size: 16px;
-  font-family: "Neue Haas Unica","NeueHaasUnica",-apple-system,system-ui,"Segoe UI",Roboto,Helvetica,Arial,sans-serif !important;
+@media (min-width: 1440px) {
+  .hero__content { justify-items: center; text-align: center; max-width: 680px; }
 }
-.hero .hero-kicker span{
-  font-family: "Neue Haas Unica","NeueHaasUnica",-apple-system,system-ui,"Segoe UI",Roboto,Helvetica,Arial,sans-serif !important;
+@media (min-width: 1200px) and (max-width: 1439.98px) {
+  :root { --side-max: 480px; --content-min: 560px; --gutter: 56px; --h1-max: 64px; }
 }
-
-/* Explicit override: ensure the "NEW" chip uses Unica and not Times */
-.hero .label-new{
-  font-family: "Neue Haas Unica","NeueHaasUnica",-apple-system,system-ui,"Segoe UI",Roboto,Helvetica,Arial,sans-serif !important;
-  font-weight: 500 !important;
+@media (min-width: 1400px) {
+  .hero__content { max-width: 680px; justify-items: start; text-align: left; }
 }
-.hero .hero-kicker .bolt{
-  width: 21px; height: 21px;     /* ~15% larger */
-  display: inline-block;
-  vertical-align: text-bottom;
-  margin-right: 4px;              /* tighter to text */
-  position: relative; top: 2px;   /* nudge down */
+@media (min-width: 1200px) {
+  .hero__content { max-width: 640px; justify-items: start; text-align: left; }
 }
-.hero .hero-kicker .muted{ color:#9AA1AD; margin-left:6px; }
+@media (min-width: 1024px) and (max-width: 1199.98px) {
+  :root { --side-max: 420px; --content-min: 520px; --gutter: 48px; }
+}
+/* (Left-Stack and Duo breakpoints will be reintroduced later; removed to avoid interference) */

@@ -7,7 +7,11 @@ export default function Home() {
   return (
     <>
       <Hero />
-      <HowItWorks />
+      <div className="container px-8 md:px-12">
+        <div className="next-section">
+          <HowItWorks />
+        </div>
+      </div>
       <WhatWeConsider />
       <ProductPreview />
     </>
