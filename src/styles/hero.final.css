@@ -1,0 +1,115 @@
+/* ===== PILLARS (≥1200) — FINAL TYPE LOCK (NO GEOMETRY CHANGES) ===== */
+@media (min-width: 1200px) {
+  /* keep the middle column centered (insurance only) */
+  #hero.hero .hero__content {
+    justify-self: center !important;
+    margin-inline: auto !important;
+    text-align: center !important;
+    max-inline-size: 880px !important; /* keeps H1 to two lines */
+  }
+
+  /* NEW — small & classy */
+  #hero.hero .hero__content .hero__eyebrow {
+    font-size: 21px !important; /* was 14px; +50% */
+    font-weight: 600 !important;
+    letter-spacing: 0.16em !important;
+    text-transform: uppercase !important;
+    margin-block-end: 14px !important;
+    opacity: 0.9 !important;
+  }
+
+  /* LEDE — calm, clearly smaller than H1 */
+  #hero.hero .hero__content .hero__lede,
+  #hero.hero .hero__content .hero__lede p {
+    font-size: 18px !important;          /* 1280–1600 target */
+    line-height: 1.5 !important;
+    font-weight: 400 !important;
+    color: #4A4A4A !important;
+    max-inline-size: 48ch !important;
+    margin: 0 auto 18px !important;
+    opacity: 0.92 !important;
+  }
+
+  /* CTA — lighter 500 label, wider pill, white arrow */
+  #hero.hero .hero__content .btn.btn--primary.hero__cta-btn {
+    font-size: 16px !important;
+    font-weight: 500 !important;            /* lighter */
+    min-height: 56px !important;
+    padding: 14px 56px !important;           /* wider on both sides */
+    width: max-content !important;
+    max-inline-size: 560px !important;
+    gap: 12px !important;
+    color: #fff !important;                  /* arrow inherits white */
+    border-radius: 9999px !important;
+  }
+  #hero.hero .hero__content .hero__cta-btn .btn__label {
+    font-weight: 500 !important;
+    letter-spacing: 0 !important;
+    white-space: nowrap !important;
+  }
+  /* mask arrow icon (span) so it renders white */
+  #hero.hero .hero__content .hero__cta-btn .icon--arrow {
+    display: inline-block !important;
+    inline-size: 18px !important;
+    block-size: 18px !important;
+    background-color: currentColor !important; /* #fff from .btn */
+    -webkit-mask: url("/icons/RightArrow.svg") center / contain no-repeat !important;
+            mask: url("/icons/RightArrow.svg") center / contain no-repeat !important;
+  }
+
+  /* Palette row — smaller than lede; label > meta; tidy spacing */
+  #hero.hero .hero__content .palette-cta,
+  #hero.hero .hero__content [class*="palette"] {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+    margin-block-start: 12px !important;
+    opacity: 0.92 !important;
+  }
+  #hero.hero .hero__content .palette-cta .label,
+  #hero.hero .hero__content [class*="palette"] .label {
+    font-size: 16px !important;
+    font-weight: 500 !important;
+    color: #2A2A2A !important;
+  }
+  #hero.hero .hero__content .palette-cta .meta,
+  #hero.hero .hero__content [class*="palette"] .meta {
+    font-size: 14px !important;
+    font-weight: 400 !important;
+    color: #74726E !important;
+  }
+  #hero.hero .hero__content .palette-cta .icon--bolt,
+  #hero.hero .hero__content [class*="palette"] .icon--bolt {
+    inline-size: 16px !important;
+    block-size: 16px !important;
+  }
+  #hero.hero .hero__content .palette-cta .sep,
+  #hero.hero .hero__content [class*="palette"] .sep {
+    opacity: .55 !important;
+    margin-inline: 4px !important;
+  }
+}
+
+/* Exact pins to eliminate any drift at these two sizes */
+@media (width: 1600px) and (height: 900px) {
+  #hero.hero .hero__content .hero__eyebrow { font-size: 14px !important; }
+  #hero.hero .hero__content .hero__lede,
+  #hero.hero .hero__content .hero__lede p   { font-size: 23.6px !important; }
+  #hero.hero .hero__content .hero__cta-btn  { font-size: 16px !important; padding: 14px 56px !important; }
+  #hero.hero .hero__content .palette-cta .label { font-size: 16px !important; }
+  #hero.hero .hero__content .palette-cta .meta  { font-size: 14px !important; }
+}
+@media (width: 1280px) and (height: 800px) {
+  #hero.hero .hero__content .hero__eyebrow { font-size: 14px !important; }
+  #hero.hero .hero__content .hero__lede,
+  #hero.hero .hero__content .hero__lede p   { font-size: 17px !important; }
+  #hero.hero .hero__content .hero__cta-btn  { font-size: 16px !important; padding: 14px 56px !important; }
+  #hero.hero .hero__content .palette-cta .label { font-size: 16px !important; }
+  #hero.hero .hero__content .palette-cta .meta  { font-size: 14px !important; }
+}
+
+
+/* === Eyebrow immediate tune (≥1200): +35% size, move up 20px === */
+@media (min-width: 1200px){
+  #hero.hero [data-hero="eyebrow"]{ font-size: 19px !important; margin-top: -20px !important; }
+}
