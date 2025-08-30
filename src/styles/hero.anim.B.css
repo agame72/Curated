@@ -57,8 +57,9 @@
 
 [data-anim="B"][data-anim-state="in"] .hero__eyebrow {
   opacity: 1; transform: translateY(0);
-  transition: transform var(--anim-fast) var(--anim-ease),
-              opacity   var(--anim-fast) var(--anim-ease);
+  /* Fade/rise WITH the H1 */
+  transition: transform var(--anim-med) var(--anim-ease),
+              opacity   var(--anim-med) var(--anim-ease);
 }
 [data-anim="B"][data-anim-state="in"] .hero__lede,
 [data-anim="B"][data-anim-state="in"] .hero__cta-wrap,
@@ -67,7 +68,7 @@
   opacity: 1 !important;
   transition: opacity var(--group-dur) var(--anim-ease);
 }
-[data-anim="B"][data-anim-state="in"] .hero__eyebrow  { transition-delay: calc(var(--h1-delay,120ms) + 1*var(--anim-stagger)); }
+[data-anim="B"][data-anim-state="in"] .hero__eyebrow  { transition-delay: var(--h1-delay, 400ms); }
 /* Group fade: start after H1 completes (no stagger) */
 [data-anim="B"][data-anim-state="in"] .hero__lede,
 [data-anim="B"][data-anim-state="in"] .hero__cta-wrap,
