@@ -383,6 +383,12 @@ export default function Hero() {
       if (brandRef.current) {
         setImp(brandRef.current, 'margin-inline', t.curatedAlign === 'center' ? 'auto' : '0')
         setImp(brandRef.current, 'text-align', t.curatedAlign)
+        // Global color lock: ensure watermark is always quiet gray
+        setImp(brandRef.current, 'color', 'var(--curated-logo, #9C9C9C)')
+        setImp(brandRef.current, 'fill',  '#9C9C9C')
+        setImp(brandRef.current, 'opacity', '1')
+        setImp(brandRef.current, 'mix-blend-mode', 'normal')
+        setImp(brandRef.current, 'filter', 'none')
       }
 
       // ===== Adaptive snap bands & gentle scaling (non-neurotic) =====
@@ -484,6 +490,9 @@ export default function Hero() {
           if (paletteRowRef.current) {
             setImp(paletteRowRef.current, 'display', 'flex')
             setImp(paletteRowRef.current, 'white-space', 'nowrap')
+            setImp(paletteRowRef.current, 'gap', '14px')
+            const sep = paletteRowRef.current.querySelector('.sep')
+            if (sep) sep.style.setProperty('display', 'none', 'important')
           }
           if (brandRef.current) {
             setImp(brandRef.current, 'color', 'var(--curated-logo, #9C9C9C)')
@@ -520,22 +529,53 @@ export default function Hero() {
             setImp(brandRef.current, 'align-self', 'auto')
           }
         }
-        // Optional media clipping in S-CLIP
+        // Optional media clipping in S-CLIP; ensure both images render identical widths
         if (Tband.SHOULD_CLIP_MEDIA && heroRef.current) {
-          const tclip = pct(Wnow, 900, 1099)
-          const clipRight = Math.round(lerp(25, 15, tclip))
           const heroEl = heroRef.current
-          const mediaCol = heroEl.querySelector('[data-hero-media]') || heroEl.querySelector('.hero__pillar--left, .hero__tile') || heroEl
+          const mediaCol = heroEl?.querySelector('[data-hero-media]') || heroEl?.querySelector('.media, .left, .heroMedia, .hero__pillar--left')
           if (mediaCol) {
+            // 0) Normalize column and its children
+            setImp(mediaCol, 'display', 'grid')
+            setImp(mediaCol, 'grid-auto-rows', 'auto')
+            setImp(mediaCol, 'gap', '0')
+            setImp(mediaCol, 'padding', '0')
+            setImp(mediaCol, 'margin', '0')
+            setImp(mediaCol, 'box-sizing', 'border-box')
             setImp(mediaCol, 'overflow', 'hidden')
+            Array.from(mediaCol.children).forEach(node => {
+              if (!(node instanceof HTMLElement)) return
+              node.style.setProperty('margin', '0', 'important')
+              node.style.setProperty('padding', '0', 'important')
+              node.style.setProperty('inline-size', '100%', 'important')
+              node.style.setProperty('width', '100%', 'important')
+              node.style.setProperty('box-sizing', 'border-box', 'important')
+              node.style.setProperty('display', 'block', 'important')
+            })
+
+            // 1) Clip the column (not each image) so both crop identically
+            const t = Math.min(1, Math.max(0, (Wnow - 900) / (1099 - 900)))
+            const clipRight = Math.round(25 + (18 - 25) * t)
+            setImp(mediaCol, 'clip-path', `inset(0 ${clipRight}% 0 0)`)
+            setImp(mediaCol, '-webkit-clip-path', `inset(0 ${clipRight}% 0 0)`)
+
+            // 2) Images fill the column; no per-image clip
             mediaCol.querySelectorAll('img').forEach(img => {
+              img.style.setProperty('display', 'block', 'important')
+              img.style.setProperty('width', '100%', 'important')
+              img.style.setProperty('height', 'auto', 'important')
+              img.style.setProperty('max-width', 'none', 'important')
               img.style.setProperty('object-fit', 'cover', 'important')
               img.style.setProperty('object-position', 'left center', 'important')
-              img.style.setProperty('clip-path', `inset(0 ${clipRight}% 0 0)`, 'important')
-              img.style.setProperty('-webkit-clip-path', `inset(0 ${clipRight}% 0 0)`, 'important')
-              img.style.setProperty('max-width', 'none', 'important')
-              img.style.setProperty('width', '100%', 'important')
+              img.style.setProperty('clip-path', 'none', 'important')
+              img.style.setProperty('-webkit-clip-path', 'none', 'important')
             })
+
+            // 3) Debug widths while QA
+            try {
+              const dims = [...mediaCol.querySelectorAll('img')].map(i => Math.round(i.getBoundingClientRect().width))
+              // eslint-disable-next-line no-console
+              console.table({ band: 'S-CLIP', w: Wnow, h: Hnow, mediaColW: Math.round(mediaCol.getBoundingClientRect().width), imgWidths: dims })
+            } catch (e) { /* noop */ }
           }
         }
         // eslint-disable-next-line no-console
