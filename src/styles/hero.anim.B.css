@@ -1,88 +1,78 @@
 :root{
-  --anim-ease: cubic-bezier(.21,.61,.35,1);
-  --anim-fast: 600ms;
-  --anim-med:  1200ms;
-  --anim-slow: 1800ms;
-  --anim-stagger: 200ms;
-  --group-delay: 500ms;   /* start group 500ms after H1 completes */
-  --group-dur:   800ms;   /* fade duration for group */
+  --ease: cubic-bezier(.21,.61,.35,1);
+  --h1-dur: 420ms;
+  --h1-delay: 120ms;
+  --group-gap: 500ms;  /* start group after H1 completes */
+  --group-dur: 800ms;  /* fade duration for group */
+  --stagger: 0ms;      /* no stagger inside group */
 }
 @media (prefers-reduced-motion: reduce) {
-  [data-anim] { animation: none !important; transition: none !important; }
+  [data-anim="B"] { opacity: 1 !important; }
+  [data-anim="B"] .h1,
+  [data-anim="B"] .lede,
+  [data-anim="B"] .ctaWrap,
+  [data-anim="B"] .paletteRow,
+  [data-anim="B"] .logo,
+  [data-anim="B"] [data-hero-media] img {
+    opacity: 1 !important; transform: none !important; filter: none !important;
+  }
 }
 
-[data-anim="B"]               { opacity: 0 !important; }
-[data-anim="B"][data-anim-state="in"] { opacity: 1 !important; transition: opacity var(--anim-med) var(--anim-ease); }
+[data-anim="B"] { opacity: 0; }
+[data-anim="B"][data-anim-state="in"] { opacity: 1; transition: opacity var(--h1-dur) var(--ease); }
 
-/* H1 micro-scale + rise */
-[data-anim="B"] .hero__heading { opacity: 0 !important; transform: translateY(10px) scale(.985); }
-[data-anim="B"][data-anim-state="in"] .hero__heading {
-  opacity: 1 !important; transform: translateY(0) scale(1);
-  transition: transform var(--anim-med) var(--anim-ease),
-              opacity   var(--anim-med) var(--anim-ease);
-  transition-delay: var(--h1-delay, 120ms);
-}
-
-/* Media parallax + de-blur */
-[data-anim="B"] [data-hero-media] img { opacity: 0; filter: blur(6px); }
+/* BEAT 1: Photos first */
+[data-anim="B"] [data-hero-media] img { opacity: 0; filter: blur(8px); }
 [data-anim="B"] [data-hero-media] img.is-left  { transform: translateX(-12px); }
 [data-anim="B"] [data-hero-media] img.is-right { transform: translateX( 12px); }
 [data-anim="B"][data-anim-state="in"] [data-hero-media] img {
-  opacity: 1 !important; transform: translateX(0); filter: blur(0);
-  transition: transform var(--anim-slow) var(--anim-ease),
-              opacity   var(--anim-slow) var(--anim-ease),
-              filter    calc(var(--anim-slow) + 80ms) ease;
+  opacity: 1; transform: translateX(0); filter: blur(0);
+  transition: transform 560ms var(--ease), opacity 560ms var(--ease), filter 640ms ease;
+  transition-delay: 0ms;
 }
+
 /* Fallback for pillar/tile images outside data-hero-media container */
 [data-anim="B"] .hero__pillar img,
-[data-anim="B"] .hero__tile img { opacity: 0 !important; filter: blur(6px); }
+[data-anim="B"] .hero__tile img { opacity: 0; filter: blur(8px); }
 [data-anim="B"] .hero__pillar--left img.is-left,
 [data-anim="B"] .hero__tile--a img.is-left { transform: translateX(-12px); }
 [data-anim="B"] .hero__pillar--right img.is-right,
 [data-anim="B"] .hero__tile--b img.is-right { transform: translateX(12px); }
 [data-anim="B"][data-anim-state="in"] .hero__pillar img,
 [data-anim="B"][data-anim-state="in"] .hero__tile img {
-  opacity: 1 !important; transform: translateX(0); filter: blur(0);
-  transition: transform var(--anim-slow) var(--anim-ease),
-              opacity   var(--anim-slow) var(--anim-ease),
-              filter    calc(var(--anim-slow) + 80ms) ease;
+  opacity: 1; transform: translateX(0); filter: blur(0);
+  transition: transform 560ms var(--ease), opacity 560ms var(--ease), filter 640ms ease;
+  transition-delay: 0ms;
 }
 
-/* Copy / CTA / rows (post-H1): eyebrow keeps slight rise; the rest fade only */
-[data-anim="B"] .hero__eyebrow { opacity: 0 !important; transform: translateY(6px); }
-[data-anim="B"] .hero__lede,
-[data-anim="B"] .hero__cta-wrap,
-[data-anim="B"] .palette-cta,
-[data-anim="B"] .hero__brand { opacity: 0 !important; }
-
-[data-anim="B"][data-anim-state="in"] .hero__eyebrow {
-  opacity: 1; transform: translateY(0);
-  /* Fade/rise WITH the H1 */
-  transition: transform var(--anim-med) var(--anim-ease),
-              opacity   var(--anim-med) var(--anim-ease);
+/* BEAT 2: NEW + H1 together */
+[data-anim="B"] .h1,
+[data-anim="B"] .eyebrow {
+  opacity: 0; transform: translateY(10px) scale(.985);
 }
-[data-anim="B"][data-anim-state="in"] .hero__lede,
-[data-anim="B"][data-anim-state="in"] .hero__cta-wrap,
-[data-anim="B"][data-anim-state="in"] .palette-cta,
-[data-anim="B"][data-anim-state="in"] .hero__brand {
-  opacity: 1 !important;
-  transition: opacity var(--group-dur) var(--anim-ease);
-}
-[data-anim="B"][data-anim-state="in"] .hero__eyebrow  { transition-delay: var(--h1-delay, 400ms); }
-/* Group fade: start after H1 completes (no stagger) */
-[data-anim="B"][data-anim-state="in"] .hero__lede,
-[data-anim="B"][data-anim-state="in"] .hero__cta-wrap,
-[data-anim="B"][data-anim-state="in"] .palette-cta,
-[data-anim="B"][data-anim-state="in"] .hero__brand {
-  transition-delay: calc(var(--h1-delay, 400ms) + var(--anim-med) + var(--group-delay));
+[data-anim="B"][data-anim-state="in"] .h1,
+[data-anim="B"][data-anim-state="in"] .eyebrow {
+  opacity: 1; transform: translateY(0) scale(1);
+  transition: transform var(--h1-dur) var(--ease), opacity var(--h1-dur) var(--ease);
+  transition-delay: var(--h1-delay);
 }
 
-/* Bolt comes in last with palette row; add a touch more delay for emphasis */
+/* BEAT 3: One unified group (no motion) */
+[data-anim="B"] .lede,
+[data-anim="B"] .ctaWrap,
+[data-anim="B"] .paletteRow,
+[data-anim="B"] .logo { opacity: 0; transform: none; }
+[data-anim="B"][data-anim-state="in"] .lede,
+[data-anim="B"][data-anim-state="in"] .ctaWrap,
+[data-anim="B"][data-anim-state="in"] .paletteRow,
+[data-anim="B"][data-anim-state="in"] .logo {
+  opacity: 1;
+  transition: opacity var(--group-dur) var(--ease);
+  transition-delay: calc(var(--h1-delay) + var(--h1-dur) + var(--group-gap));
+}
+
+/* Icon follows paletteRow container (no separate timing) */
 [data-anim="B"] .icon--bolt { opacity: 0; }
-[data-anim="B"][data-anim-state="in"] .icon--bolt {
-  opacity: 1 !important;
-  transition: opacity var(--group-dur) var(--anim-ease);
-  transition-delay: calc(var(--h1-delay, 400ms) + var(--anim-med) + var(--group-delay));
-}
+[data-anim="B"][data-anim-state="in"] .icon--bolt { opacity: 1; transition: opacity var(--group-dur) var(--ease); }
 
 

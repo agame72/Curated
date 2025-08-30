@@ -45,18 +45,21 @@ export default function Hero() {
 
   // LEDE lock using useLayoutEffect to apply before paint
   useLayoutEffect(() => {
-    // === Animation (Option B) =======================================
+    // === INTRO ANIMATION: Variant B (three-beat) ====================
     try {
-      const ANIM_VARIANT = 'B' // 'B' | 'OFF'
-      const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
       const root = heroRef.current
+      const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
       if (root && !root.dataset.animDone) {
-        if (!reduce && ANIM_VARIANT === 'B') {
+        if (reduce) {
+          root.removeAttribute('data-anim-state')
+          root.dataset.animDone = '1'
+        } else {
+          // Attributes are on markup; set tokens
           root.setAttribute('data-anim','B')
-          root.setAttribute('data-anim-state','ready')
-          root.style.setProperty('--h1-delay','400ms')
+          root.style.setProperty('--h1-delay','120ms')
+          root.style.setProperty('--group-gap','500ms')
 
-          // Tag media images for left/right parallax
+          // Tag media images for parallax
           const heroEl = contentRef.current?.closest('section')
           const mediaCol = heroEl?.querySelector('[data-hero-media]') || heroEl?.querySelector('.media, .left, .heroMedia')
           const imgs = mediaCol?.querySelectorAll('img')
@@ -67,10 +70,6 @@ export default function Hero() {
             root.setAttribute('data-anim-state','in')
             root.dataset.animDone = '1'
           })
-        } else {
-          root.removeAttribute('data-anim')
-          root.removeAttribute('data-anim-state')
-          root.dataset.animDone = '1'
         }
       }
     } catch (e) { /* noop */ }
@@ -929,7 +928,14 @@ export default function Hero() {
   }, [])
 
   return (
-    <section ref={heroRef} id="hero" className="hero" data-hero="root">
+    <section
+      ref={heroRef}
+      id="hero"
+      className="hero"
+      data-hero="root"
+      data-anim="B"
+      data-anim-state="ready"
+    >
       {/* Left stack tiles (900–1199) */}
       <figure className="hero__tile hero__tile--a">
         <picture>
@@ -967,21 +973,21 @@ export default function Hero() {
         <div className="hero__stack" ref={stackRef}>
           <span
             ref={eyebrowRef}
-            className="hero__eyebrow"
+            className="hero__eyebrow eyebrow"
             data-hero="eyebrow"
           >
             NEW
           </span>
-          <h1 ref={h1Ref} className="hero__heading">Selfies to a Shopping Guide</h1>
+          <h1 ref={h1Ref} className="hero__heading h1">Selfies to a Shopping Guide</h1>
           <p
             ref={ledeRef}
-            className="lede hero__lede"
+            className="lede hero__lede lede"
             data-hero="lede"
           >
             Share a few photos and we’ll curate a seasonal guide based on your appearance and preferences.
           </p>
         </div>
-        <div ref={ctaWrapRef} className="hero__cta-wrap" data-hero="cta-wrap">
+        <div ref={ctaWrapRef} className="hero__cta-wrap ctaWrap" data-hero="cta-wrap">
           <a ref={ctaRef} className="btn btn--primary hero__cta-btn" data-hero="cta" href="/guide" aria-label="Get your seasonal shopping guide">
             <span className="btn__label" data-hero="cta-label">Get Seasonal Guide</span>
             <span
@@ -1009,7 +1015,7 @@ export default function Hero() {
         </div>
         {/* Palette row (predictable hooks; paintable icon) */}
         <div
-          className="palette-cta"
+          className="palette-cta paletteRow"
           data-hero="palette"
           aria-label="Check your palette, about thirty seconds"
           ref={paletteRowRef}
@@ -1023,7 +1029,7 @@ export default function Hero() {
             30 sec
           </span>
         </div>
-        <div className="brandmark hero__brand" data-hero="wordmark" ref={brandRef}>Curated</div>
+        <div className="brandmark hero__brand logo" data-hero="wordmark" ref={brandRef}>Curated</div>
       </div>
 
       {/* Right pillar (≥1200) */}
