@@ -1,9 +1,9 @@
 :root{
   --anim-ease: cubic-bezier(.21,.61,.35,1);
-  --anim-fast: 300ms;
-  --anim-med:  560ms;
-  --anim-slow: 900ms;
-  --anim-stagger: 120ms;
+  --anim-fast: 600ms;
+  --anim-med:  1200ms;
+  --anim-slow: 1800ms;
+  --anim-stagger: 200ms;
 }
 @media (prefers-reduced-motion: reduce) {
   [data-anim] { animation: none !important; transition: none !important; }
