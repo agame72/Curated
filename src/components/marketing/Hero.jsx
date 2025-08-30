@@ -47,6 +47,7 @@ export default function Hero() {
     const apply = () => {
       const isDesktop = () => window.matchMedia('(min-width: 1200px)').matches
       const important = (el, prop, val) => el && el.style.setProperty(prop, val, 'important')
+      const setImp = (el, prop, val) => el && el.style.setProperty(prop, val, 'important')
 
       // 0) Shift entire content block up by 15px at ≥1200
       if (isDesktop() && contentRef.current) {
@@ -197,6 +198,126 @@ export default function Hero() {
           document.head.appendChild(s)
         }
       }
+
+      // ===== M0 — Mobile baseline (<=899 width) =====
+      if (window.innerWidth <= 899) {
+        if (contentRef.current) {
+          setImp(contentRef.current, 'text-align', 'center')
+          setImp(contentRef.current, 'margin-inline', 'auto')
+          setImp(contentRef.current, 'justify-items', 'center')
+          setImp(contentRef.current, 'gap', '0')
+        }
+        const heroEl = heroRef.current || contentRef.current?.closest('section')
+        const mediaCol = heroEl?.querySelector('[data-hero-media]') || heroEl?.querySelector('.media, .left, .heroMedia')
+        if (mediaCol) {
+          setImp(mediaCol, 'display', 'grid')
+          setImp(mediaCol, 'grid-template-columns', '1fr 1fr')
+          setImp(mediaCol, 'gap', '0')
+          setImp(mediaCol, 'overflow', 'hidden')
+          const kids = Array.from(mediaCol.children)
+          if (kids[0]) kids[0].style.setProperty('grid-column', '1 / 2', 'important')
+          if (kids[1]) kids[1].style.setProperty('grid-column', '2 / 3', 'important')
+          kids.forEach(k => { if (k instanceof HTMLElement) { k.style.setProperty('margin','0','important'); k.style.setProperty('padding','0','important'); k.style.setProperty('width','100%','important') } })
+          mediaCol.querySelectorAll('img').forEach((img, i) => {
+            img.style.setProperty('display', 'block', 'important')
+            img.style.setProperty('width', '100%', 'important')
+            img.style.setProperty('height', '100%', 'important')
+            img.style.setProperty('object-fit', 'cover', 'important')
+            img.style.setProperty('object-position', i === 0 ? 'left center' : 'right center', 'important')
+            img.style.setProperty('clip-path', 'none', 'important')
+            img.style.setProperty('-webkit-clip-path', 'none', 'important')
+          })
+        }
+        if (h1Ref.current) { setImp(h1Ref.current, 'font-weight', '700'); setImp(h1Ref.current, 'line-height', '1.1') }
+        if (ledeRef.current) { setImp(ledeRef.current, 'line-height', '1.5'); setImp(ledeRef.current, 'color', '#74726E') }
+        if (ctaWrapRef.current) { setImp(ctaWrapRef.current, 'margin-inline', 'auto'); setImp(ctaWrapRef.current, 'justify-self', 'center') }
+        if (ctaRef.current) { setImp(ctaRef.current, 'justify-content', 'center'); setImp(ctaRef.current, 'border-radius', '9999px') }
+        if (heroEl && brandRef.current) { setImp(heroEl, 'position', 'relative'); setImp(brandRef.current, 'position', 'absolute'); setImp(brandRef.current, 'left', '50%'); setImp(brandRef.current, 'transform', 'translateX(-50%)'); setImp(brandRef.current, 'bottom', '12px'); setImp(brandRef.current, 'color', '#9C9C9C') }
+        if (eyebrowRef.current) setImp(eyebrowRef.current, 'display', 'none')
+        if (paletteRowRef.current) setImp(paletteRowRef.current, 'display', 'none')
+      }
+
+      // ===== M1 — 834×900 (Tablet‑L) =====
+      const is834 = (window.innerWidth === 834 && window.innerHeight >= 880) || (window.innerWidth >= 820 && window.innerWidth < 860)
+      if (is834) {
+        const heroEl = heroRef.current || contentRef.current?.closest('section')
+        const mediaCol = heroEl?.querySelector('[data-hero-media]') || heroEl?.querySelector('.media, .left, .heroMedia')
+        const MEDIA_H = 320
+        if (mediaCol) { setImp(mediaCol, 'grid-auto-rows', `${MEDIA_H}px`); setImp(mediaCol, 'height', `${MEDIA_H}px`) }
+        if (contentRef.current) setImp(contentRef.current, 'max-inline-size', '600px')
+        if (ledeRef.current) { setImp(ledeRef.current, 'max-inline-size', '40ch'); setImp(ledeRef.current, 'transform', 'translateY(-6px)') }
+        const CTA_W = 440, CTA_FS = 20, CTA_MINH = 56
+        if (ctaWrapRef.current) { ['inline-size','width','max-inline-size','min-inline-size'].forEach(p => setImp(ctaWrapRef.current, p, `${CTA_W}px`)) }
+        if (ctaRef.current) { setImp(ctaRef.current, 'font-size', `${CTA_FS}px`); setImp(ctaRef.current, 'min-height', `${CTA_MINH}px`); setImp(ctaRef.current, 'padding', '14px 28px'); setImp(ctaRef.current, 'gap', '12px') }
+        if (brandRef.current) setImp(brandRef.current, 'font-size', '32px')
+      }
+
+      // ===== M2 — 768×900 (Tablet‑M) =====
+      const is768 = (window.innerWidth === 768 && window.innerHeight >= 880) || (window.innerWidth >= 740 && window.innerWidth < 800)
+      if (is768) {
+        const heroEl2 = heroRef.current || contentRef.current?.closest('section')
+        const mediaCol2 = heroEl2?.querySelector('[data-hero-media]') || heroEl2?.querySelector('.media, .left, .heroMedia')
+        const MEDIA_H2 = 300
+        if (mediaCol2) {
+          setImp(mediaCol2, 'grid-auto-rows', `${MEDIA_H2}px`)
+          setImp(mediaCol2, 'height', `${MEDIA_H2}px`)
+        }
+        if (contentRef.current) setImp(contentRef.current, 'max-inline-size', '560px')
+        if (ledeRef.current) {
+          setImp(ledeRef.current, 'max-inline-size', '38ch')
+          setImp(ledeRef.current, 'transform', 'translateY(-6px)')
+        }
+        const CTA_W2 = 420, CTA_FS2 = 20, CTA_MINH2 = 56
+        if (ctaWrapRef.current) {
+          ;['inline-size','width','max-inline-size','min-inline-size'].forEach(p => setImp(ctaWrapRef.current, p, `${CTA_W2}px`))
+        }
+        if (ctaRef.current) {
+          setImp(ctaRef.current, 'font-size', `${CTA_FS2}px`)
+          setImp(ctaRef.current, 'min-height', `${CTA_MINH2}px`)
+          setImp(ctaRef.current, 'padding', '14px 26px')
+          setImp(ctaRef.current, 'gap', '12px')
+        }
+        // Palette ON (single line), dot removed; centered on tablet
+        if (paletteRowRef.current) {
+          setImp(paletteRowRef.current, 'display', 'flex')
+          setImp(paletteRowRef.current, 'justify-content', 'center')
+          setImp(paletteRowRef.current, 'align-items', 'center')
+          setImp(paletteRowRef.current, 'gap', '12px')
+          setImp(paletteRowRef.current, 'margin-top', '18px')
+          const sep = paletteRowRef.current.querySelector('.sep')
+          if (sep) sep.style.setProperty('display', 'none', 'important')
+        }
+        if (paletteLabelRef.current) { setImp(paletteLabelRef.current, 'font-size', '22px'); setImp(paletteLabelRef.current, 'color', '#2A2A2A') }
+        if (paletteMetaRef.current) { setImp(paletteMetaRef.current, 'font-size', '18px'); setImp(paletteMetaRef.current, 'color', '#74726E'); setImp(paletteMetaRef.current, 'margin-left', '6px'); if (paletteMetaRef.current.textContent?.includes('·')) { paletteMetaRef.current.textContent = paletteMetaRef.current.textContent.replace('·','').trim() } }
+        // Eyebrow OK to show
+        if (eyebrowRef.current) {
+          setImp(eyebrowRef.current, 'display', 'block')
+          setImp(eyebrowRef.current, 'position', 'relative')
+          setImp(eyebrowRef.current, 'top', '-12px')
+          setImp(eyebrowRef.current, 'font-size', '14px')
+          setImp(eyebrowRef.current, 'font-weight', '600')
+          setImp(eyebrowRef.current, 'letter-spacing', '0.16em')
+          setImp(eyebrowRef.current, 'color', '#C99B2B')
+        }
+        if (brandRef.current) setImp(brandRef.current, 'font-size', '30px')
+      }
+
+      // ===== M3 — 428×800 (Phone‑L) =====
+      const is428 = (window.innerWidth === 428) || (window.innerWidth >= 410 && window.innerWidth <= 440)
+      if (is428) {
+        const heroEl3 = heroRef.current || contentRef.current?.closest('section')
+        const mediaCol3 = heroEl3?.querySelector('[data-hero-media]') || heroEl3?.querySelector('.media, .left, .heroMedia')
+        const MEDIA_H3 = 240
+        if (mediaCol3) { setImp(mediaCol3, 'grid-auto-rows', `${MEDIA_H3}px`); setImp(mediaCol3, 'height', `${MEDIA_H3}px`) }
+        if (contentRef.current) setImp(contentRef.current, 'max-inline-size', '360px')
+        if (ledeRef.current) { setImp(ledeRef.current, 'max-inline-size', '32ch'); setImp(ledeRef.current, 'transform', 'translateY(-4px)') }
+        if (eyebrowRef.current) setImp(eyebrowRef.current, 'display', 'none')
+        if (paletteRowRef.current) setImp(paletteRowRef.current, 'display', 'none')
+        const CTA_W3 = 320, CTA_FS3 = 18, CTA_MINH3 = 52
+        if (ctaWrapRef.current) { ['inline-size','width','max-inline-size','min-inline-size'].forEach(p => setImp(ctaWrapRef.current, p, `${CTA_W3}px`)) }
+        if (ctaRef.current) { setImp(ctaRef.current, 'font-size', `${CTA_FS3}px`); setImp(ctaRef.current, 'min-height', `${CTA_MINH3}px`); setImp(ctaRef.current, 'padding', '12px 22px'); setImp(ctaRef.current, 'gap', '10px') }
+        if (brandRef.current) setImp(brandRef.current, 'font-size', '28px')
+      }
     }
 
     // apply now and on viewport resizes; avoid observing style mutations to prevent loops
@@ -280,6 +401,8 @@ export default function Hero() {
       if (eyebrowRef.current) {
         setImp(eyebrowRef.current, 'display', t.hideEyebrow ? 'none' : 'inline-block')
         setImp(eyebrowRef.current, 'font-size', '21px')
+        // Always gold for NEW
+        setImp(eyebrowRef.current, 'color', '#C99B2B')
       }
       if (ledeRef.current) {
         setImp(ledeRef.current, 'font-size', t.ledeFS)
@@ -351,11 +474,14 @@ export default function Hero() {
         setImp(ctaArrowRef.current, 'mask', "url('/icons/RightArrow.svg') no-repeat center / 100% 100%")
       }
       if (paletteRowRef.current) {
-        setImp(paletteRowRef.current, 'display', TOKENS[key]?.showPalette === false ? 'none' : 'grid')
+        const show = TOKENS[key]?.showPalette === false ? 'none' : 'flex'
+        setImp(paletteRowRef.current, 'display', show)
         setImp(paletteRowRef.current, 'align-items', 'center')
-        setImp(paletteRowRef.current, 'justify-items', t.align === 'center' ? 'center' : 'start')
-        setImp(paletteRowRef.current, 'gap', '8px')
+        setImp(paletteRowRef.current, 'justify-content', t.align === 'center' ? 'center' : 'flex-start')
+        setImp(paletteRowRef.current, 'gap', '14px')
         setImp(paletteRowRef.current, 'margin-top', '6px')
+        setImp(paletteRowRef.current, 'flex-wrap', 'nowrap')
+        setImp(paletteRowRef.current, 'white-space', 'nowrap')
         setImp(paletteRowRef.current, 'transform', 'translateY(-5px)')
       }
       // XL-only micro nudge for palette row
@@ -373,12 +499,14 @@ export default function Hero() {
         setImp(paletteLabelRef.current, 'font-size', '24px')
         setImp(paletteLabelRef.current, 'font-weight', '400')
         setImp(paletteLabelRef.current, 'color', INK.label)
+        setImp(paletteLabelRef.current, 'white-space', 'nowrap')
       }
       if (paletteMetaRef.current) {
         setImp(paletteMetaRef.current, 'font-size', '20px')
         setImp(paletteMetaRef.current, 'font-weight', '400')
         setImp(paletteMetaRef.current, 'color', INK.meta)
         setImp(paletteMetaRef.current, 'margin-left', '4px')
+        setImp(paletteMetaRef.current, 'white-space', 'nowrap')
       }
       if (brandRef.current) {
         setImp(brandRef.current, 'margin-inline', t.curatedAlign === 'center' ? 'auto' : '0')
