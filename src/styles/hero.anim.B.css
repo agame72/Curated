@@ -62,7 +62,7 @@
 [data-anim="B"][data-anim-state="in"] .hero__cta-wrap,
 [data-anim="B"][data-anim-state="in"] .palette-cta,
 [data-anim="B"][data-anim-state="in"] .hero__brand {
-  opacity: 1;
+  opacity: 1 !important;
   transition: opacity var(--anim-fast) ease-in-out;
 }
 [data-anim="B"][data-anim-state="in"] .hero__eyebrow  { transition-delay: calc(var(--h1-delay,120ms) + 1*var(--anim-stagger)); }
@@ -77,7 +77,7 @@
 /* Bolt comes in last with palette row; add a touch more delay for emphasis */
 [data-anim="B"] .icon--bolt { opacity: 0; }
 [data-anim="B"][data-anim-state="in"] .icon--bolt {
-  opacity: 1;
+  opacity: 1 !important;
   transition: opacity var(--anim-fast) ease-in-out;
   transition-delay: calc(var(--h1-delay,120ms) + var(--anim-med) + 120ms);
 }
