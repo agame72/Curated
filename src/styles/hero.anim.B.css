@@ -1,10 +1,12 @@
 :root{
-  --ease: cubic-bezier(.21,.61,.35,1);
-  --h1-dur: 420ms;
-  --h1-delay: 120ms;
-  --group-gap: 500ms;  /* start group after H1 completes */
-  --group-dur: 800ms;  /* fade duration for group */
-  --stagger: 0ms;      /* no stagger inside group */
+  /* Apple‑y pacing */
+  --ease: cubic-bezier(.22,.61,.36,1);
+  --photo-dur: 700ms;
+  --photo-pad: 120ms; /* breathing room before the title */
+  --h1-dur:    540ms;
+  --h1-delay:  calc(var(--photo-dur) + var(--photo-pad));
+  --group-gap: 520ms;
+  --group-dur: 900ms;
 }
 @media (prefers-reduced-motion: reduce) {
   [data-anim="B"] { opacity: 1 !important; }
@@ -27,7 +29,9 @@
 [data-anim="B"] [data-hero-media] img.is-right { transform: translateX( 12px); }
 [data-anim="B"][data-anim-state="in"] [data-hero-media] img {
   opacity: 1; transform: translateX(0); filter: blur(0);
-  transition: transform 560ms var(--ease), opacity 560ms var(--ease), filter 640ms ease;
+  transition: transform var(--photo-dur) var(--ease),
+              opacity   var(--photo-dur) var(--ease),
+              filter    calc(var(--photo-dur) + 160ms) ease;
   transition-delay: 0ms;
 }
 
@@ -41,7 +45,9 @@
 [data-anim="B"][data-anim-state="in"] .hero__pillar img,
 [data-anim="B"][data-anim-state="in"] .hero__tile img {
   opacity: 1; transform: translateX(0); filter: blur(0);
-  transition: transform 560ms var(--ease), opacity 560ms var(--ease), filter 640ms ease;
+  transition: transform var(--photo-dur) var(--ease),
+              opacity   var(--photo-dur) var(--ease),
+              filter    calc(var(--photo-dur) + 160ms) ease;
   transition-delay: 0ms;
 }
 
@@ -69,6 +75,18 @@
   opacity: 1;
   transition: opacity var(--group-dur) var(--ease);
   transition-delay: calc(var(--h1-delay) + var(--h1-dur) + var(--group-gap));
+}
+
+@keyframes eyebrow-bump {
+  0%   { transform: translateY(0); }
+  45%  { transform: translateY(-3px); }
+  100% { transform: translateY(0); }
+}
+
+/* Trigger the bump when H1 starts */
+[data-anim="B"][data-anim-state="in"] .eyebrow {
+  animation: eyebrow-bump 340ms var(--ease) 1;
+  animation-delay: var(--h1-delay);
 }
 
 /* Icon follows paletteRow container (no separate timing) */
