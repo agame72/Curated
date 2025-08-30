@@ -77,6 +77,9 @@
   transition-delay: calc(var(--h1-delay) + var(--h1-dur) + var(--group-gap));
 }
 
+/* Make the palette group inseparable; children inherit the container fade */
+.paletteRow > * { opacity: inherit !important; transform: none !important; transition: none !important; }
+
 @keyframes eyebrow-bump {
   0%   { transform: translateY(0); }
   45%  { transform: translateY(-3px); }
