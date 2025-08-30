@@ -1,12 +1,12 @@
 :root{
   /* Apple‑y pacing */
   --ease: cubic-bezier(.22,.61,.36,1);
-  --photo-dur: 700ms;
-  --photo-pad: 120ms; /* breathing room before the title */
+  --photo-dur: 760ms;
+  --photo-pad: 160ms; /* breathing room before the title */
   --h1-dur:    540ms;
   --h1-delay:  calc(var(--photo-dur) + var(--photo-pad));
   --group-gap: 520ms;
-  --group-dur: 900ms;
+  --group-dur: 980ms;
 }
 @media (prefers-reduced-motion: reduce) {
   [data-anim="B"] { opacity: 1 !important; }

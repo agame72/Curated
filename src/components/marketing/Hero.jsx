@@ -85,7 +85,7 @@ export default function Hero() {
             }
             const photoNodes = Array.from(imgs || []).slice(0, 2)
             const allReady = Promise.all(photoNodes.map(waitForImg))
-            const cap = new Promise(res => setTimeout(res, 1000))
+            const cap = new Promise(res => setTimeout(res, 1200))
             Promise.race([allReady, cap]).then(kick)
           }
         }
