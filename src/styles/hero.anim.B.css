@@ -15,7 +15,7 @@
 /* H1 micro-scale + rise */
 [data-anim="B"] .hero__heading { opacity: 0 !important; transform: translateY(10px) scale(.985); }
 [data-anim="B"][data-anim-state="in"] .hero__heading {
-  opacity: 1; transform: translateY(0) scale(1);
+  opacity: 1 !important; transform: translateY(0) scale(1);
   transition: transform var(--anim-med) var(--anim-ease),
               opacity   var(--anim-med) var(--anim-ease);
   transition-delay: var(--h1-delay, 120ms);
