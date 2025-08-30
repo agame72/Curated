@@ -66,10 +66,28 @@ export default function Hero() {
           if (imgs && imgs[0]) imgs[0].classList.add('is-left')
           if (imgs && imgs[1]) imgs[1].classList.add('is-right')
 
-          requestAnimationFrame(() => {
-            root.setAttribute('data-anim-state','in')
-            root.dataset.animDone = '1'
-          })
+          // === Media-ready gate (prevents title beating the photos) ======
+          const kick = () => {
+            requestAnimationFrame(() => {
+              root.setAttribute('data-anim-state', 'in')
+              root.dataset.animDone = '1'
+            })
+          }
+
+          if (reduce) {
+            kick()
+          } else {
+            const waitForImg = (img) => {
+              if (!img) return Promise.resolve()
+              if (img.decode) return img.decode().catch(() => {})
+              if (img.complete) return Promise.resolve()
+              return new Promise(res => img.addEventListener('load', res, { once: true }))
+            }
+            const photoNodes = Array.from(imgs || []).slice(0, 2)
+            const allReady = Promise.all(photoNodes.map(waitForImg))
+            const cap = new Promise(res => setTimeout(res, 1000))
+            Promise.race([allReady, cap]).then(kick)
+          }
         }
       }
     } catch (e) { /* noop */ }
