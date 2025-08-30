@@ -54,7 +54,7 @@ export default function Hero() {
         if (!reduce && ANIM_VARIANT === 'B') {
           root.setAttribute('data-anim','B')
           root.setAttribute('data-anim-state','ready')
-          root.style.setProperty('--h1-delay','140ms')
+          root.style.setProperty('--h1-delay','220ms')
 
           // Tag media images for left/right parallax
           const heroEl = contentRef.current?.closest('section')
