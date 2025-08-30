@@ -144,7 +144,7 @@ export default function Hero() {
         // 10px inset on both sides
         important(ledeRef.current, 'padding-left', '10px')
         important(ledeRef.current, 'padding-right', '10px')
-        important(ledeRef.current, 'opacity', '.92')
+        // opacity handled via CSS; avoid inline override that disrupts intro animation
       }
 
       // ---- CTA: fixed wrapper + full-width button (≥1200)
@@ -545,7 +545,7 @@ export default function Hero() {
         // Global color lock: ensure watermark is always quiet gray
         setImp(brandRef.current, 'color', 'var(--curated-logo, #9C9C9C)')
         setImp(brandRef.current, 'fill',  '#9C9C9C')
-        setImp(brandRef.current, 'opacity', '1')
+        // opacity handled via CSS; avoid inline override that disrupts intro animation
         setImp(brandRef.current, 'mix-blend-mode', 'normal')
         setImp(brandRef.current, 'filter', 'none')
       }

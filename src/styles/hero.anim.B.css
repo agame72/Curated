@@ -9,11 +9,11 @@
   [data-anim] { animation: none !important; transition: none !important; }
 }
 
-[data-anim="B"]               { opacity: 0; }
-[data-anim="B"][data-anim-state="in"] { opacity: 1; transition: opacity var(--anim-med) var(--anim-ease); }
+[data-anim="B"]               { opacity: 0 !important; }
+[data-anim="B"][data-anim-state="in"] { opacity: 1 !important; transition: opacity var(--anim-med) var(--anim-ease); }
 
 /* H1 micro-scale + rise */
-[data-anim="B"] .hero__heading { opacity: 0; transform: translateY(10px) scale(.985); }
+[data-anim="B"] .hero__heading { opacity: 0 !important; transform: translateY(10px) scale(.985); }
 [data-anim="B"][data-anim-state="in"] .hero__heading {
   opacity: 1; transform: translateY(0) scale(1);
   transition: transform var(--anim-med) var(--anim-ease),
@@ -33,7 +33,7 @@
 }
 /* Fallback for pillar/tile images outside data-hero-media container */
 [data-anim="B"] .hero__pillar img,
-[data-anim="B"] .hero__tile img { opacity: 0; filter: blur(6px); }
+[data-anim="B"] .hero__tile img { opacity: 0 !important; filter: blur(6px); }
 [data-anim="B"] .hero__pillar--left img.is-left,
 [data-anim="B"] .hero__tile--a img.is-left { transform: translateX(-12px); }
 [data-anim="B"] .hero__pillar--right img.is-right,
@@ -47,11 +47,11 @@
 }
 
 /* Copy / CTA / rows (post-H1): eyebrow keeps slight rise; the rest fade only */
-[data-anim="B"] .hero__eyebrow { opacity: 0; transform: translateY(6px); }
+[data-anim="B"] .hero__eyebrow { opacity: 0 !important; transform: translateY(6px); }
 [data-anim="B"] .hero__lede,
 [data-anim="B"] .hero__cta-wrap,
 [data-anim="B"] .palette-cta,
-[data-anim="B"] .hero__brand { opacity: 0; }
+[data-anim="B"] .hero__brand { opacity: 0 !important; }
 
 [data-anim="B"][data-anim-state="in"] .hero__eyebrow {
   opacity: 1; transform: translateY(0);
