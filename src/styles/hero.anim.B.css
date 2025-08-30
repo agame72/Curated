@@ -1,12 +1,13 @@
 :root{
   /* Apple‑y pacing */
-  --ease: cubic-bezier(.22,.61,.36,1);
-  --photo-dur: 760ms;
-  --photo-pad: 160ms; /* breathing room before the title */
-  --h1-dur:    540ms;
+  --ease: cubic-bezier(.23,.66,.36,1);
+  --photo-dur: 900ms;
+  --photo-pad: 180ms; /* breathing room before the title */
+  --h1-dur:    600ms;
   --h1-delay:  calc(var(--photo-dur) + var(--photo-pad));
-  --group-gap: 520ms;
-  --group-dur: 980ms;
+  --new-offset: 80ms;
+  --group-gap: 600ms;
+  --group-dur: 1000ms;
 }
 @media (prefers-reduced-motion: reduce) {
   [data-anim="B"] { opacity: 1 !important; }
@@ -56,29 +57,26 @@
 [data-anim="B"] .eyebrow {
   opacity: 0; transform: translateY(10px) scale(.985);
 }
-[data-anim="B"][data-anim-state="in"] .h1,
-[data-anim="B"][data-anim-state="in"] .eyebrow {
+[data-anim="B"][data-anim-state="in"] .h1 {
   opacity: 1; transform: translateY(0) scale(1);
   transition: transform var(--h1-dur) var(--ease), opacity var(--h1-dur) var(--ease);
   transition-delay: var(--h1-delay);
 }
+[data-anim="B"][data-anim-state="in"] .eyebrow {
+  opacity: 1; transform: translateY(0) scale(1);
+  transition: transform var(--h1-dur) var(--ease), opacity var(--h1-dur) var(--ease);
+  transition-delay: calc(var(--h1-delay) + var(--new-offset));
+}
 
-/* BEAT 3: One unified group (no motion) */
-[data-anim="B"] .lede,
-[data-anim="B"] .ctaWrap,
-[data-anim="B"] .paletteRow,
-[data-anim="B"] .logo { opacity: 0; transform: none; }
-[data-anim="B"][data-anim-state="in"] .lede,
-[data-anim="B"][data-anim-state="in"] .ctaWrap,
-[data-anim="B"][data-anim-state="in"] .paletteRow,
-[data-anim="B"][data-anim-state="in"] .logo {
+/* BEAT 3: One unified group (no motion) — use data-intro hook */
+[data-anim="B"] [data-intro="group"] { opacity: 0; transform: none; }
+[data-anim="B"][data-anim-state="in"] [data-intro="group"] {
   opacity: 1;
   transition: opacity var(--group-dur) var(--ease);
   transition-delay: calc(var(--h1-delay) + var(--h1-dur) + var(--group-gap));
 }
-
-/* Make the palette group inseparable; children inherit the container fade */
-.paletteRow > * { opacity: inherit !important; transform: none !important; transition: none !important; }
+/* Children inherit — kill any rogue transitions */
+[data-intro="group"] > * { opacity: inherit !important; transform: none !important; transition: none !important; }
 
 @keyframes eyebrow-bump {
   0%   { transform: translateY(0); }
@@ -86,11 +84,8 @@
   100% { transform: translateY(0); }
 }
 
-/* Trigger the bump when H1 starts */
-[data-anim="B"][data-anim-state="in"] .eyebrow {
-  animation: eyebrow-bump 340ms var(--ease) 1;
-  animation-delay: var(--h1-delay);
-}
+/* Trigger the bump when NEW starts (slightly after H1) */
+[data-anim="B"][data-anim-state="in"] .eyebrow { animation: eyebrow-bump 360ms var(--ease) 1; animation-delay: calc(var(--h1-delay) + var(--new-offset)); }
 
 /* Icon follows paletteRow container (no separate timing) */
 [data-anim="B"] .icon--bolt { opacity: 0; }

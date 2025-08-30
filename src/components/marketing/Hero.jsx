@@ -1001,11 +1001,12 @@ export default function Hero() {
             ref={ledeRef}
             className="lede hero__lede lede"
             data-hero="lede"
+            data-intro="group"
           >
             Share a few photos and we’ll curate a seasonal guide based on your appearance and preferences.
           </p>
         </div>
-        <div ref={ctaWrapRef} className="hero__cta-wrap ctaWrap" data-hero="cta-wrap">
+        <div ref={ctaWrapRef} className="hero__cta-wrap ctaWrap" data-hero="cta-wrap" data-intro="group">
           <a ref={ctaRef} className="btn btn--primary hero__cta-btn" data-hero="cta" href="/guide" aria-label="Get your seasonal shopping guide">
             <span className="btn__label" data-hero="cta-label">Get Seasonal Guide</span>
             <span
@@ -1035,6 +1036,7 @@ export default function Hero() {
         <div
           className="palette-cta paletteRow"
           data-hero="palette"
+          data-intro="group"
           aria-label="Check your palette, about thirty seconds"
           ref={paletteRowRef}
         >
@@ -1047,7 +1049,7 @@ export default function Hero() {
             30 sec
           </span>
         </div>
-        <div className="brandmark hero__brand logo" data-hero="wordmark" ref={brandRef}>Curated</div>
+        <div className="brandmark hero__brand logo" data-hero="wordmark" data-intro="group" ref={brandRef}>Curated</div>
       </div>
 
       {/* Right pillar (≥1200) */}
