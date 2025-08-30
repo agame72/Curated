@@ -46,21 +46,19 @@
               filter    calc(var(--anim-slow) + 80ms) ease;
 }
 
-/* Copy / CTA / rows stagger fade (post-H1 order: NEW, lede, button, bolt) */
-/* Eyebrow and lede still rise slightly */
-[data-anim="B"] .hero__eyebrow,
-[data-anim="B"] .hero__lede { opacity: 0; transform: translateY(6px); }
-/* CTA, palette row, and brand fade only (no movement) */
+/* Copy / CTA / rows (post-H1): eyebrow keeps slight rise; the rest fade only */
+[data-anim="B"] .hero__eyebrow { opacity: 0; transform: translateY(6px); }
+[data-anim="B"] .hero__lede,
 [data-anim="B"] .hero__cta-wrap,
 [data-anim="B"] .palette-cta,
 [data-anim="B"] .hero__brand { opacity: 0; }
 
-[data-anim="B"][data-anim-state="in"] .hero__eyebrow,
-[data-anim="B"][data-anim-state="in"] .hero__lede {
+[data-anim="B"][data-anim-state="in"] .hero__eyebrow {
   opacity: 1; transform: translateY(0);
   transition: transform var(--anim-fast) var(--anim-ease),
               opacity   var(--anim-fast) var(--anim-ease);
 }
+[data-anim="B"][data-anim-state="in"] .hero__lede,
 [data-anim="B"][data-anim-state="in"] .hero__cta-wrap,
 [data-anim="B"][data-anim-state="in"] .palette-cta,
 [data-anim="B"][data-anim-state="in"] .hero__brand {
@@ -68,17 +66,20 @@
   transition: opacity var(--anim-fast) ease-in-out;
 }
 [data-anim="B"][data-anim-state="in"] .hero__eyebrow  { transition-delay: calc(var(--h1-delay,120ms) + 1*var(--anim-stagger)); }
-[data-anim="B"][data-anim-state="in"] .hero__lede     { transition-delay: calc(var(--h1-delay,120ms) + 2*var(--anim-stagger)); }
-[data-anim="B"][data-anim-state="in"] .hero__cta-wrap { transition-delay: calc(var(--h1-delay,120ms) + 3*var(--anim-stagger)); }
-[data-anim="B"][data-anim-state="in"] .palette-cta    { transition-delay: calc(var(--h1-delay,120ms) + 4*var(--anim-stagger)); }
-[data-anim="B"][data-anim-state="in"] .hero__brand    { transition-delay: calc(var(--h1-delay,120ms) + 5*var(--anim-stagger)); }
+/* Group fade: start after H1 completes (no stagger) */
+[data-anim="B"][data-anim-state="in"] .hero__lede,
+[data-anim="B"][data-anim-state="in"] .hero__cta-wrap,
+[data-anim="B"][data-anim-state="in"] .palette-cta,
+[data-anim="B"][data-anim-state="in"] .hero__brand {
+  transition-delay: calc(var(--h1-delay,120ms) + var(--anim-med) + 120ms);
+}
 
 /* Bolt comes in last with palette row; add a touch more delay for emphasis */
 [data-anim="B"] .icon--bolt { opacity: 0; }
 [data-anim="B"][data-anim-state="in"] .icon--bolt {
   opacity: 1;
   transition: opacity var(--anim-fast) ease-in-out;
-  transition-delay: calc(var(--h1-delay,120ms) + 4*var(--anim-stagger) + 40ms);
+  transition-delay: calc(var(--h1-delay,120ms) + var(--anim-med) + 120ms);
 }
 
 
