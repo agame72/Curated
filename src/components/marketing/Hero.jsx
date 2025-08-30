@@ -44,6 +44,19 @@ export default function Hero() {
 
   // LEDE lock using useLayoutEffect to apply before paint
   useLayoutEffect(() => {
+    // One-shot intro animation trigger (reduced-motion aware)
+    try {
+      const root = heroRef.current
+      const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)')
+      if (root && !prefersReduced.matches && !root.dataset.introPlayed) {
+        root.setAttribute('data-intro', 'ready')
+        requestAnimationFrame(() => {
+          root.setAttribute('data-intro', 'play')
+          root.dataset.introPlayed = '1'
+        })
+      }
+    } catch (e) { /* noop */ }
+
     const apply = () => {
       const isDesktop = () => window.matchMedia('(min-width: 1200px)').matches
       const important = (el, prop, val) => el && el.style.setProperty(prop, val, 'important')

@@ -2818,6 +2818,36 @@ html.after-hero .next-section { opacity: 1; transform: translateY(0); pointer-ev
   #hero.hero .hero__content .palette-cta .meta  { font-size: 14px !important; }
 }
 
+/* ===== Intro animation (accessible, subtle) ===== */
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes heroIntroFadeUp {
+    0%   { opacity: 0; transform: translateY(8px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes heroIntroFade {
+    0%   { opacity: 0; }
+    100% { opacity: 1; }
+  }
+  /* staged elements */
+  #hero[data-intro="ready"] .hero__stack,
+  #hero[data-intro="ready"] .hero__cta-wrap,
+  #hero[data-intro="ready"] .palette-cta,
+  #hero[data-intro="ready"] .hero__brand { opacity: 0; }
+
+  #hero[data-intro="play"] .hero__stack {
+    animation: heroIntroFadeUp .6s ease-out both .02s;
+  }
+  #hero[data-intro="play"] .hero__cta-wrap {
+    animation: heroIntroFadeUp .55s ease-out both .10s;
+  }
+  #hero[data-intro="play"] .palette-cta {
+    animation: heroIntroFade .45s ease-out both .18s;
+  }
+  #hero[data-intro="play"] .hero__brand {
+    animation: heroIntroFade .45s ease-out both .24s;
+  }
+}
+
 /* Exact pins so your reference sizes are guaranteed (no style drift) */
 @media (width: 1600px) and (height: 900px) {
   #hero.hero .hero__content .hero__eyebrow{ font-size: 14px !important; }
