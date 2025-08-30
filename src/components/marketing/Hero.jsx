@@ -67,7 +67,16 @@ export default function Hero() {
           if (imgs && imgs[1]) imgs[1].classList.add('is-right')
 
           // === Media-ready gate (prevents title beating the photos) ======
+          const imp = (el, prop, val) => el?.style?.setProperty(prop, val, 'important')
           const kick = () => {
+            // Pre-size CTA to avoid late "pop"
+            try {
+              const cw = contentRef.current?.getBoundingClientRect?.().width ?? 480
+              const wish = parseInt(ctaWrapRef.current?.style?.width || '0', 10) || 480
+              const finalW = Math.max(260, Math.min(wish, Math.floor(cw - 40)))
+              ;['inline-size','width','max-inline-size','min-inline-size'].forEach(p => imp(ctaWrapRef.current, p, `${finalW}px`))
+              imp(ctaWrapRef.current, 'flex', `0 0 ${finalW}px`)
+            } catch (e) { /* noop */ }
             requestAnimationFrame(() => {
               root.setAttribute('data-anim-state', 'in')
               root.dataset.animDone = '1'
