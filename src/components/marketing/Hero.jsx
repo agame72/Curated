@@ -1,5 +1,6 @@
 import React, { useLayoutEffect, useRef, useEffect } from 'react'
 import '../../styles/landing.css'
+import '../../styles/hero.anim.B.css'
 import { initHeroCrossfade } from '../../scripts/hero-crossfade'
 
 export default function Hero() {
@@ -44,16 +45,33 @@ export default function Hero() {
 
   // LEDE lock using useLayoutEffect to apply before paint
   useLayoutEffect(() => {
-    // One-shot intro animation trigger (reduced-motion aware)
+    // === Animation (Option B) =======================================
     try {
+      const ANIM_VARIANT = 'B' // 'B' | 'OFF'
+      const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
       const root = heroRef.current
-      const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)')
-      if (root && !prefersReduced.matches && !root.dataset.introPlayed) {
-        root.setAttribute('data-intro', 'ready')
-        requestAnimationFrame(() => {
-          root.setAttribute('data-intro', 'play')
-          root.dataset.introPlayed = '1'
-        })
+      if (root && !root.dataset.animDone) {
+        if (!reduce && ANIM_VARIANT === 'B') {
+          root.setAttribute('data-anim','B')
+          root.setAttribute('data-anim-state','ready')
+          root.style.setProperty('--h1-delay','140ms')
+
+          // Tag media images for left/right parallax
+          const heroEl = contentRef.current?.closest('section')
+          const mediaCol = heroEl?.querySelector('[data-hero-media]') || heroEl?.querySelector('.media, .left, .heroMedia')
+          const imgs = mediaCol?.querySelectorAll('img')
+          if (imgs && imgs[0]) imgs[0].classList.add('is-left')
+          if (imgs && imgs[1]) imgs[1].classList.add('is-right')
+
+          requestAnimationFrame(() => {
+            root.setAttribute('data-anim-state','in')
+            root.dataset.animDone = '1'
+          })
+        } else {
+          root.removeAttribute('data-anim')
+          root.removeAttribute('data-anim-state')
+          root.dataset.animDone = '1'
+        }
       }
     } catch (e) { /* noop */ }
 
