@@ -7,6 +7,7 @@ export default function Hero() {
   const eyebrowRef = useRef(null)
   const h1Ref = useRef(null)
   const ledeRef = useRef(null)
+  const stackRef = useRef(null)
   const ctaRef = useRef(null)
   const ctaWrapRef = useRef(null)
   const ctaArrowRef = useRef(null)
@@ -23,8 +24,8 @@ export default function Hero() {
     initHeroCrossfade()
   }, [])
 
-  // Lock eyebrow at ≥1200 via inline !important declarations (leave as-is)
-  useEffect(() => {
+  // Lock eyebrow at ≥1200 before paint to avoid initial jump
+  useLayoutEffect(() => {
     const isDesktop = () => window.matchMedia('(min-width: 1200px)').matches
     if (eyebrowRef.current && isDesktop()) {
       const s = eyebrowRef.current.style
@@ -117,7 +118,8 @@ export default function Hero() {
       // ---- CTA: fixed wrapper + full-width button (≥1200)
       const wrap = ctaWrapRef.current
       const btn = ctaRef.current
-      if (wrap && btn && window.innerWidth >= 1200) {
+      // Disabled here for ≥1200; newer tokenized effect below handles ≥1200 sizing/centering
+      if (wrap && btn && window.innerWidth < 1200) {
         const WIDTH = 530
         const FONT = 20
         const set = (el, p, v) => el.style.setProperty(p, v, 'important')
@@ -157,7 +159,7 @@ export default function Hero() {
         const arrow = btn?.querySelector('.icon--arrow, .icon.icon--arrow')
         if (btn && arrow) {
           const fontPx = parseFloat(getComputedStyle(btn).fontSize || '22')
-          const SCALE = 1.55
+          const SCALE = 1.35
           const sizePx = Math.round(fontPx * SCALE)
           const aset = (p, v) => arrow.style.setProperty(p, v, 'important')
           aset('display', 'inline-block')
@@ -209,8 +211,184 @@ export default function Hero() {
 
   // Layout is CSS-driven across breakpoints; no JS geometry required
 
+  // Breakpoint-aware token map for sizing/alignment (non-structural)
+  useLayoutEffect(() => {
+    const setImp = (el, prop, val) => el?.style?.setProperty(prop, val, 'important')
+    const W = () => window.innerWidth
+    const H = () => window.innerHeight
+
+    const bpKey = () => {
+      const w = W(), h = H()
+      if (w >= 1600 && h >= 870) return 'xl'
+      if (w >= 1200) return 'l'
+      if (w === 900 && h === 900) return 'm2'
+      if (w >= 1100) return 'm1'
+      if (w >= 800) return 's'
+      return 'xs'
+    }
+
+    const INK = { label: '#2A2A2A', meta: '#74726E' }
+    const TOKENS = {
+      xl: { align: 'center', hideEyebrow: false, ledeFS: '23.6px', ctaFS: '22px', ctaW: '560px', showPalette: true, curatedAlign: 'center' },
+      l:  { align: 'center', hideEyebrow: false, ledeFS: '23.6px', ctaFS: '22px', ctaW: '540px', showPalette: true, curatedAlign: 'center' },
+      m1: { align: 'left',   hideEyebrow: false, ledeFS: '22px',   ctaFS: '21px', ctaW: '520px', showPalette: true, curatedAlign: 'left' },
+      m2: { align: 'left',   hideEyebrow: false, ledeFS: '21px',   ctaFS: '20px', ctaW: '500px', showPalette: true, curatedAlign: 'left' },
+      s:  { align: 'center', hideEyebrow: true,  ledeFS: '21px',   ctaFS: '20px', ctaW: '480px', showPalette: false, curatedAlign: 'center' },
+    }
+
+    const ARROW_EM = 1.30
+    const ARROW_NUDGE = '-1px'
+    const CTA_GAP = '10px'
+    const CTA_HEIGHT = '60px'
+    const CTA_WEIGHT = 400
+
+    const apply = () => {
+      const key = bpKey()
+      const t = TOKENS[key] ?? TOKENS.l
+
+      // ====== 1600×788 WIDE-SHORT PIN + TOKENS (drop-in) ======
+      const isLG = window.innerWidth >= 1200 && window.innerWidth < 1500
+      const T_XL = { CONTENT_MAX: 880, LEDE_CH: 48, CTA_W: 520, CTA_FS: 24, CTA_MINH: 72, CTA_PADV: 20, CTA_PADH: 32, CTA_GAP: 14, ARROW_EM: 1.35 }
+      const T_WS = { CONTENT_MAX: 820, LEDE_CH: 44, CTA_W: 450, CTA_FS: 24, CTA_MINH: 70, CTA_PADV: 20, CTA_PADH: 32, CTA_GAP: 10, ARROW_EM: 1.35 }
+
+      const mqExactWS = window.matchMedia('(width:1600px) and (height:788px)').matches
+      const mqWideShort = window.matchMedia('(min-width:1500px) and (max-height:820px)').matches
+      const TOK = (mqExactWS || mqWideShort) ? T_WS : T_XL
+
+      // Debug once
+      // eslint-disable-next-line no-console
+      console.table({ w: window.innerWidth, h: window.innerHeight, branch: TOK === T_WS ? 'WIDE-SHORT' : 'XL' })
+
+      if (contentRef.current) {
+        setImp(contentRef.current, 'text-align', t.align)
+        setImp(contentRef.current, 'margin-inline', t.align === 'center' ? 'auto' : '0')
+        setImp(contentRef.current, 'max-inline-size', `${TOK.CONTENT_MAX}px`)
+        // Create a centering context so children can use place-self
+        setImp(contentRef.current, 'display', 'grid')
+        setImp(contentRef.current, 'justify-items', 'center')
+      }
+      if (eyebrowRef.current) {
+        setImp(eyebrowRef.current, 'display', t.hideEyebrow ? 'none' : 'inline-block')
+        setImp(eyebrowRef.current, 'font-size', '21px')
+      }
+      if (ledeRef.current) {
+        setImp(ledeRef.current, 'font-size', t.ledeFS)
+        setImp(ledeRef.current, 'line-height', '1.5')
+        setImp(ledeRef.current, 'transform', 'translateY(-5px)')
+        setImp(ledeRef.current, 'margin-bottom', '4px')
+        setImp(ledeRef.current, 'color', INK.meta)
+        setImp(ledeRef.current, 'font-weight', '400')
+        // Line length tuned per wide‑short vs xl
+        setImp(ledeRef.current, 'max-inline-size', `${TOK.LEDE_CH}ch`)
+      }
+      // XL-only micro nudge for lede
+      if (!isLG && ledeRef.current) {
+        setImp(ledeRef.current, 'transform', 'translateY(-5px)')
+      }
+      if (ctaWrapRef.current) {
+        const W = `${TOK.CTA_W}px`
+        setImp(ctaWrapRef.current, 'box-sizing', 'border-box')
+        setImp(ctaWrapRef.current, 'inline-size', W)
+        setImp(ctaWrapRef.current, 'width', W)
+        setImp(ctaWrapRef.current, 'max-inline-size', W)
+        setImp(ctaWrapRef.current, 'min-inline-size', W)
+        setImp(ctaWrapRef.current, 'flex', `0 0 ${W}`)
+        // Math-center within a grid container
+        setImp(ctaWrapRef.current, 'margin-inline', '0')
+        setImp(ctaWrapRef.current, 'justify-self', 'center')
+        setImp(ctaWrapRef.current, 'place-self', 'center')
+        setImp(ctaWrapRef.current, 'align-self', 'center')
+        setImp(ctaWrapRef.current, 'outline', '0')
+        setImp(ctaWrapRef.current, 'box-shadow', 'none')
+      }
+      if (ctaRef.current) {
+        setImp(ctaRef.current, 'display', 'flex')
+        setImp(ctaRef.current, 'box-sizing', 'border-box')
+        setImp(ctaRef.current, 'align-items', 'center')
+        setImp(ctaRef.current, 'justify-content', 'center')
+        setImp(ctaRef.current, 'width', '100%')
+        setImp(ctaRef.current, 'inline-size', '100%')
+        setImp(ctaRef.current, 'min-width', '100%')
+        setImp(ctaRef.current, 'max-width', '100%')
+        setImp(ctaRef.current, 'gap', `${TOK.CTA_GAP}px`)
+        setImp(ctaRef.current, 'min-height', `${TOK.CTA_MINH}px`)
+        setImp(ctaRef.current, 'height', `${TOK.CTA_MINH}px`)
+        setImp(ctaRef.current, 'padding', `${TOK.CTA_PADV}px ${TOK.CTA_PADH}px`)
+        setImp(ctaRef.current, 'font-size', `${TOK.CTA_FS}px`)
+        setImp(ctaRef.current, 'font-weight', CTA_WEIGHT)
+        setImp(ctaRef.current, 'line-height', '1')
+        setImp(ctaRef.current, 'white-space', 'nowrap')
+        setImp(ctaRef.current, 'outline', '0')
+        const labelEl = ctaRef.current.querySelector('.btn__label,[data-hero="cta-label"]')
+        if (labelEl) {
+          setImp(labelEl, 'font-weight', CTA_WEIGHT)
+        }
+      }
+      if (ctaArrowRef.current && ctaRef.current) {
+        const fontPx = parseFloat(getComputedStyle(ctaRef.current).fontSize || '22')
+        const sizePx = Math.round(fontPx * 1.5) // reduce arrow ~25% from previous 2.0x
+        setImp(ctaArrowRef.current, 'display', 'inline-block')
+        setImp(ctaArrowRef.current, 'flex', '0 0 auto')
+        setImp(ctaArrowRef.current, 'width', `${sizePx}px`)
+        setImp(ctaArrowRef.current, 'height', `${sizePx}px`)
+        setImp(ctaArrowRef.current, 'inline-size', `${sizePx}px`)
+        setImp(ctaArrowRef.current, 'block-size', `${sizePx}px`)
+        setImp(ctaArrowRef.current, 'transform', 'translateY(-1px)')
+        setImp(ctaArrowRef.current, 'background-color', 'currentColor')
+        setImp(ctaArrowRef.current, '-webkit-mask', "url('/icons/RightArrow.svg') no-repeat center / 100% 100%")
+        setImp(ctaArrowRef.current, 'mask', "url('/icons/RightArrow.svg') no-repeat center / 100% 100%")
+      }
+      if (paletteRowRef.current) {
+        setImp(paletteRowRef.current, 'display', TOKENS[key]?.showPalette === false ? 'none' : 'grid')
+        setImp(paletteRowRef.current, 'align-items', 'center')
+        setImp(paletteRowRef.current, 'justify-items', t.align === 'center' ? 'center' : 'start')
+        setImp(paletteRowRef.current, 'gap', '8px')
+        setImp(paletteRowRef.current, 'margin-top', '6px')
+        setImp(paletteRowRef.current, 'transform', 'translateY(-5px)')
+      }
+      // XL-only micro nudge for palette row
+      if (!isLG && paletteRowRef.current) {
+        setImp(paletteRowRef.current, 'margin-top', '14px')
+        setImp(paletteRowRef.current, 'transform', 'translateY(-5px)')
+      }
+      if (boltRef.current) {
+        setImp(boltRef.current, 'width', '26px')
+        setImp(boltRef.current, 'height', '26px')
+        setImp(boltRef.current, 'background', 'none')
+        setImp(boltRef.current, 'transform', 'translateY(-1px)')
+      }
+      if (paletteLabelRef.current) {
+        setImp(paletteLabelRef.current, 'font-size', '24px')
+        setImp(paletteLabelRef.current, 'font-weight', '400')
+        setImp(paletteLabelRef.current, 'color', INK.label)
+      }
+      if (paletteMetaRef.current) {
+        setImp(paletteMetaRef.current, 'font-size', '20px')
+        setImp(paletteMetaRef.current, 'font-weight', '400')
+        setImp(paletteMetaRef.current, 'color', INK.meta)
+        setImp(paletteMetaRef.current, 'margin-left', '4px')
+      }
+      if (brandRef.current) {
+        setImp(brandRef.current, 'margin-inline', t.curatedAlign === 'center' ? 'auto' : '0')
+        setImp(brandRef.current, 'text-align', t.curatedAlign)
+      }
+
+      // === Exact 1600×900: nudge stack + CTA + palette up by 15px (brand stays put) ===
+      if (window.matchMedia('(width:1600px) and (height:900px)').matches) {
+        if (stackRef.current) setImp(stackRef.current, 'transform', 'translateY(-15px)')
+        if (ctaWrapRef.current) setImp(ctaWrapRef.current, 'transform', 'translateY(-15px)')
+        if (paletteRowRef.current) setImp(paletteRowRef.current, 'transform', 'translateY(-20px)')
+      }
+    }
+
+    apply()
+    const onR = () => apply()
+    window.addEventListener('resize', onR)
+    return () => window.removeEventListener('resize', onR)
+  }, [])
+
   return (
-    <section ref={heroRef} id="hero" className="hero">
+    <section ref={heroRef} id="hero" className="hero" data-hero="root">
       {/* Left stack tiles (900–1199) */}
       <figure className="hero__tile hero__tile--a">
         <picture>
@@ -229,7 +407,7 @@ export default function Hero() {
       </figure>
 
       {/* Left pillar (≥1200) */}
-      <figure className="hero__pillar hero__pillar--left" aria-hidden="true">
+      <figure className="hero__pillar hero__pillar--left" data-hero="pillar-left" aria-hidden="true">
         <picture>
           <source
             type="image/webp"
@@ -245,7 +423,7 @@ export default function Hero() {
 
       {/* Center content (safe area) */}
       <div className="hero__content" data-hero="content" ref={contentRef}>
-        <div className="hero__stack">
+        <div className="hero__stack" ref={stackRef}>
           <span
             ref={eyebrowRef}
             className="hero__eyebrow"
@@ -265,7 +443,27 @@ export default function Hero() {
         <div ref={ctaWrapRef} className="hero__cta-wrap" data-hero="cta-wrap">
           <a ref={ctaRef} className="btn btn--primary hero__cta-btn" data-hero="cta" href="/guide" aria-label="Get your seasonal shopping guide">
             <span className="btn__label" data-hero="cta-label">Get Seasonal Guide</span>
-            <img ref={ctaArrowRef} className="icon icon--arrow" src="/icons/RightArrow.svg" alt="" aria-hidden="true" />
+            <span
+              ref={ctaArrowRef}
+              className="icon icon--arrow"
+              aria-hidden="true"
+              style={{
+                display: 'inline-block',
+                width: '1.3em',
+                height: '1.3em',
+                transform: 'translateY(-1px)',
+                background: 'none',
+                WebkitMaskImage: 'url(/icons/RightArrow.svg)',
+                maskImage: 'url(/icons/RightArrow.svg)',
+                WebkitMaskRepeat: 'no-repeat',
+                maskRepeat: 'no-repeat',
+                WebkitMaskPosition: 'center',
+                maskPosition: 'center',
+                WebkitMaskSize: 'contain',
+                maskSize: 'contain',
+                backgroundColor: 'currentColor',
+              }}
+            />
           </a>
         </div>
         {/* Palette row (predictable hooks; paintable icon) */}
@@ -279,16 +477,16 @@ export default function Hero() {
           <span ref={paletteLabelRef} className="label"> 
             Check your Palette
           </span>
-          <span className="sep" aria-hidden="true">·</span>
+          <span className="sep" aria-hidden="true" data-hero="palette-sep">·</span>
           <span ref={paletteMetaRef} className="meta" data-hero="palette-meta">
             30 sec
           </span>
         </div>
-        <div className="brandmark hero__brand" ref={brandRef}>Curated</div>
+        <div className="brandmark hero__brand" data-hero="wordmark" ref={brandRef}>Curated</div>
       </div>
 
       {/* Right pillar (≥1200) */}
-      <figure className="hero__pillar hero__pillar--right" aria-hidden="true">
+      <figure className="hero__pillar hero__pillar--right" data-hero="pillar-right" aria-hidden="true">
         <picture>
           <source
             type="image/webp"

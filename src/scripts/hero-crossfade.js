@@ -1,11 +1,21 @@
 export function initHeroCrossfade() {
   const root = document.documentElement
-  const hero = document.querySelector('[data-hero]')
+  const hero = document.querySelector('#hero')
   if (!hero) return
 
   const apply = () => {
+    // Disable crossfade for sub‑desktop or if hero has no measurable height
+    if (window.innerWidth < 1200) {
+      root.classList.remove('after-hero')
+      return
+    }
     const r = hero.getBoundingClientRect()
-    const midpoint = r.height * 0.5
+    const h = r.height || 0
+    if (h <= 1) {
+      root.classList.remove('after-hero')
+      return
+    }
+    const midpoint = h * 0.5
     const passed = r.top <= -midpoint
     root.classList.toggle('after-hero', passed)
   }

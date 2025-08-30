@@ -108,6 +108,16 @@
   #hero.hero .hero__content .palette-cta .meta  { font-size: 14px !important; }
 }
 
+/* Palette row: ensure the old dot separator is never shown */
+@media (min-width: 800px) {
+  #hero .palette-cta .meta::before { content: none !important; }
+}
+
+/* Curated wordmark: force neutral gray across breakpoints */
+#hero .curated, #hero [data-hero="curated"], #hero .curated-wordmark {
+  color: #B0B0B0 !important;
+}
+
 
 /* === Eyebrow immediate tune (≥1200): +35% size, move up 20px === */
 @media (min-width: 1200px){
