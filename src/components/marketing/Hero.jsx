@@ -385,6 +385,163 @@ export default function Hero() {
         setImp(brandRef.current, 'text-align', t.curatedAlign)
       }
 
+      // ===== Adaptive snap bands & gentle scaling (non-neurotic) =====
+      const bandFor = (W, H) => {
+        if (W >= 1500 && H >= 860) return 'XL'
+        if (W >= 1500 && H < 820) return 'WS'
+        if (W >= 1200 && W < 1500 && H >= 860) return 'M'
+        // Treat 1100–1199 widths as left-aligned 1170 clone across a wider height band
+        if (W >= 1100 && W < 1200 && H >= 640 && H <= 920) return 'S-LEFT'
+        if (W >= 1100 && W < 1200 && H >= 760 && H <= 820) return 'S'
+        if (W >= 900 && W < 1100 && H >= 860) return 'S-CLIP'
+        return 'STACKED'
+      }
+      const clampNum = (v, lo, hi) => Math.min(hi, Math.max(lo, v))
+      const lerp = (a, b, tt) => a + (b - a) * tt
+      const pct = (v, a, b) => clampNum((v - a) / (b - a), 0, 1)
+      const scaleFrom = (anchor, W, range, opts = {}) => {
+        const tfrac = pct(W, range[0], range[1])
+        const Tanchor = { ...anchor }
+        const contentMin = opts.CONTENT_MIN ?? (anchor.CONTENT_MAX - 120)
+        const contentMax = anchor.CONTENT_MAX
+        const ledeMin = opts.LEDE_MIN ?? (anchor.LEDE_CH - 4)
+        const ledeMax = anchor.LEDE_CH
+        const ctaMin = opts.CTA_MIN ?? (anchor.CTA_W - 80)
+        const ctaMax = anchor.CTA_W
+        Tanchor.CONTENT_MAX = Math.round(lerp(contentMin, contentMax, tfrac))
+        Tanchor.LEDE_CH = Math.round(lerp(ledeMin, ledeMax, tfrac))
+        Tanchor.CTA_W = Math.round(lerp(ctaMin, ctaMax, tfrac) / 10) * 10
+        return Tanchor
+      }
+
+      // Anchor presets (re-using existing values)
+      const TOKA_XL = { BRANCH: 'XL', CONTENT_MAX: T_XL.CONTENT_MAX, LEDE_CH: T_XL.LEDE_CH, CTA_W: T_XL.CTA_W }
+      const TOKA_WS = { BRANCH: 'WS', CONTENT_MAX: T_WS.CONTENT_MAX, LEDE_CH: T_WS.LEDE_CH, CTA_W: T_WS.CTA_W }
+      const TOKA_1200 = { BRANCH: '1200', CONTENT_MAX: 720, LEDE_CH: 48, CTA_W: 520 }
+      const TOKA_1170 = { BRANCH: '1170x788 PILLARS', CONTENT_MAX: 820, LEDE_CH: 44, CTA_W: 340 }
+
+      const Wnow = window.innerWidth
+      const Hnow = window.innerHeight
+      const band = bandFor(Wnow, Hnow)
+
+      let Tband = null
+      if (band === 'M') {
+        Tband = scaleFrom(TOKA_1200, Wnow, [1200, 1499])
+        // 1201–1439 × 900: encourage an extra wrap by narrowing column/lede a bit more
+        if (Hnow >= 860 && Math.round(Hnow) === 900 && Wnow >= 1201 && Wnow <= 1439) {
+          const Tstrong = scaleFrom(TOKA_1200, Wnow, [1201, 1439], {
+            CONTENT_MIN: TOKA_1200.CONTENT_MAX - 180, // allow ~3rd-line wrap on H1
+            LEDE_MIN:    TOKA_1200.LEDE_CH - 6,       // slightly narrower lede measure
+            CTA_MIN:     Math.max(420, TOKA_1200.CTA_W - 80),
+          })
+          Tband = { ...Tband, ...Tstrong }
+        }
+      } else if (band === 'S-LEFT') {
+        // Scale from 1170 anchor gently across 1100–1199
+        Tband = scaleFrom(TOKA_1170, Wnow, [1100, 1199], {
+          CONTENT_MIN: TOKA_1170.CONTENT_MAX - 80,
+          LEDE_MIN: TOKA_1170.LEDE_CH - 2,
+          CTA_MIN: Math.max(420, TOKA_1170.CTA_W - 60),
+        })
+      } else if (band === 'S-CLIP') {
+        Tband = scaleFrom(TOKA_1170, Wnow, [900, 1099], {
+          CONTENT_MIN: TOKA_1170.CONTENT_MAX - 80,
+          LEDE_MIN: TOKA_1170.LEDE_CH - 2,
+          CTA_MIN: 440,
+        })
+        Tband.SHOULD_CLIP_MEDIA = true
+      } else if (band === 'XL') {
+        Tband = TOKA_XL
+      } else if (band === 'WS') {
+        Tband = TOKA_WS
+      }
+
+      // Apply scaled widths for M and S-CLIP bands only (avoid overriding exact pinned sizes)
+      if (Tband && !mqExactWS && !mqExact900 && !is1170x788) {
+        if (contentRef.current) setImp(contentRef.current, 'max-inline-size', `${Tband.CONTENT_MAX}px`)
+        if (ledeRef.current) setImp(ledeRef.current, 'max-inline-size', `${Tband.LEDE_CH}ch`)
+        // CTA fit‑guard
+        if (ctaWrapRef.current) {
+          const cw = contentRef.current?.getBoundingClientRect?.().width ?? Tband.CONTENT_MAX
+          const maxCta = Math.max(420, Math.min(Tband.CTA_W, Math.floor(cw - 80)))
+          const Wpx = `${maxCta}px`
+          ;['inline-size', 'width', 'max-inline-size', 'min-inline-size'].forEach(p => setImp(ctaWrapRef.current, p, Wpx))
+          setImp(ctaWrapRef.current, 'flex', `0 0 ${Wpx}`)
+          if (band === 'S-LEFT') {
+            setImp(ctaWrapRef.current, 'margin-inline', '0')
+            setImp(ctaWrapRef.current, 'justify-self', 'start')
+            setImp(ctaWrapRef.current, 'place-self', 'start')
+          }
+        }
+        // Left-aligned preset rules for S-LEFT band
+        if (band === 'S-LEFT') {
+          if (contentRef.current) {
+            setImp(contentRef.current, 'text-align', 'left')
+            setImp(contentRef.current, 'margin-inline', '0')
+            setImp(contentRef.current, 'justify-items', 'start')
+          }
+          if (eyebrowRef.current) setImp(eyebrowRef.current, 'display', 'block')
+          if (paletteRowRef.current) {
+            setImp(paletteRowRef.current, 'display', 'flex')
+            setImp(paletteRowRef.current, 'white-space', 'nowrap')
+          }
+          if (brandRef.current) {
+            setImp(brandRef.current, 'color', 'var(--curated-logo, #9C9C9C)')
+            setImp(brandRef.current, 'align-self', 'start')
+            setImp(brandRef.current, 'margin-inline', '0')
+            setImp(brandRef.current, 'position', 'static')
+            setImp(brandRef.current, 'transform', 'none')
+            setImp(brandRef.current, 'left', 'auto')
+            setImp(brandRef.current, 'bottom', 'auto')
+            setImp(brandRef.current, 'font-size', '34px')
+            setImp(brandRef.current, 'margin-top', '28px')
+          }
+          if (ctaRef.current) setImp(ctaRef.current, 'justify-content', 'center')
+          if (Wnow <= 1130 && Hnow >= 880 && paletteRowRef.current) setImp(paletteRowRef.current, 'margin-top', '22px')
+
+          // Special bottom logo cases: 1120×900 and 1170×848
+          const isBottomLogoCase = (Wnow === 1120 && Hnow === 900) || (Wnow === 1170 && Hnow === 848)
+          if (isBottomLogoCase && brandRef.current && contentRef.current) {
+            // Anchor to the content column directly to avoid offset drift
+            setImp(contentRef.current, 'position', 'relative')
+            setImp(brandRef.current, 'position', 'absolute')
+            try {
+              const padL = parseInt(getComputedStyle(contentRef.current).paddingLeft || '0', 10) || 0
+              setImp(brandRef.current, 'left', `${padL}px`)
+            } catch (e) {
+              setImp(brandRef.current, 'left', '24px')
+            }
+            setImp(brandRef.current, 'right', 'auto')
+            setImp(brandRef.current, 'bottom', '47px')
+            setImp(brandRef.current, 'transform', 'none')
+            setImp(brandRef.current, 'color', 'var(--curated-logo, #9C9C9C)')
+            setImp(brandRef.current, 'font-size', '34px')
+            setImp(brandRef.current, 'margin', '0')
+            setImp(brandRef.current, 'align-self', 'auto')
+          }
+        }
+        // Optional media clipping in S-CLIP
+        if (Tband.SHOULD_CLIP_MEDIA && heroRef.current) {
+          const tclip = pct(Wnow, 900, 1099)
+          const clipRight = Math.round(lerp(25, 15, tclip))
+          const heroEl = heroRef.current
+          const mediaCol = heroEl.querySelector('[data-hero-media]') || heroEl.querySelector('.hero__pillar--left, .hero__tile') || heroEl
+          if (mediaCol) {
+            setImp(mediaCol, 'overflow', 'hidden')
+            mediaCol.querySelectorAll('img').forEach(img => {
+              img.style.setProperty('object-fit', 'cover', 'important')
+              img.style.setProperty('object-position', 'left center', 'important')
+              img.style.setProperty('clip-path', `inset(0 ${clipRight}% 0 0)`, 'important')
+              img.style.setProperty('-webkit-clip-path', `inset(0 ${clipRight}% 0 0)`, 'important')
+              img.style.setProperty('max-width', 'none', 'important')
+              img.style.setProperty('width', '100%', 'important')
+            })
+          }
+        }
+        // eslint-disable-next-line no-console
+        console.table({ w: Wnow, h: Hnow, band, using: Tband.BRANCH })
+      }
+
       // === Exact 1600×900: nudge stack + CTA + palette up by 15px (brand stays put) ===
       if (window.matchMedia('(width:1600px) and (height:900px)').matches) {
         if (stackRef.current) setImp(stackRef.current, 'transform', 'translateY(-15px)')
@@ -416,11 +573,7 @@ export default function Hero() {
         if (paletteRowRef.current) setImp(paletteRowRef.current, 'transform', 'translateY(-10px)')
       }
       // === Exact 1170×788 — left-align pillars with tighter tokens ===
-      if (
-        window.matchMedia('(width:1170px) and (height:788px)').matches ||
-        (window.matchMedia('(min-width:1100px) and (max-width:1220px)').matches &&
-         window.matchMedia('(min-height:760px) and (max-height:820px)').matches)
-      ) {
+      if (window.matchMedia('(width:1170px) and (height:788px)').matches) {
         const T = {
           BRANCH: '1170x788 PILLARS',
           CONTENT_MAX: 820,
@@ -445,6 +598,10 @@ export default function Hero() {
           setImp(contentRef.current, 'text-align', T.TEXT_ALIGN)
           setImp(contentRef.current, 'justify-items', 'start')
           setImp(contentRef.current, 'position', 'relative')
+        }
+        // Move stack (eyebrow + H1 + lede) up together by 15px
+        if (stackRef.current) {
+          setImp(stackRef.current, 'transform', 'translateY(-15px)')
         }
         if (eyebrowRef.current && T.SHOW_EYEBROW) {
           setImp(eyebrowRef.current, 'display', 'block')
@@ -544,15 +701,15 @@ export default function Hero() {
           setImp(contentRef.current, 'row-gap', '0px')
           setImp(contentRef.current, 'gap', '0px')
         }
-        // 2) Button: adjust vertical spacing (downward from previous lift)
+        // 2) Button: follow the group lift (up 15px)
         if (ctaWrapRef.current) {
-          setImp(ctaWrapRef.current, 'transform', 'translateY(0)')
+          setImp(ctaWrapRef.current, 'transform', 'translateY(-15px)')
           setImp(ctaWrapRef.current, 'margin-top', '10px')
         }
-        // 3) Palette row: right 5, slightly more room, follow button position
+        // 3) Palette row: right 5, follow lift (up 15px), keep room
         if (paletteRowRef.current) {
           setImp(paletteRowRef.current, 'margin-top', '24px')
-          setImp(paletteRowRef.current, 'transform', 'translate(5px, 0)')
+          setImp(paletteRowRef.current, 'transform', 'translate(5px, -15px)')
           setImp(paletteRowRef.current, 'display', 'flex')
           setImp(paletteRowRef.current, 'align-items', 'center')
           setImp(paletteRowRef.current, 'flex-wrap', 'nowrap')
