@@ -1,5 +1,5 @@
 /* Prevent CTA pill from animating width/height during intro */
-.ctaWrap a { transition-property: background-color, color, box-shadow, transform; }
+.ctaWrap a { transition-property: opacity, background-color, color, box-shadow, transform; }
 /* === Pillars ≥1200 — reduce NEW & lede by 50%, grow CTA pill (no geometry) === */
 @media (width >= 1200px) {
   /* NEW — ~50% of the doubled size (≈ back to ~14px) */
