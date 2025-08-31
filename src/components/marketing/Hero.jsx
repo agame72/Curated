@@ -66,17 +66,16 @@ export default function Hero() {
           if (imgs && imgs[0]) imgs[0].classList.add('is-left')
           if (imgs && imgs[1]) imgs[1].classList.add('is-right')
 
-          // === Media-ready gate (prevents title beating the photos) ======
+          // === Media-ready gate (wait for both, with cap) ================
           const imp = (el, prop, val) => el?.style?.setProperty(prop, val, 'important')
-          const kick = () => {
-            // Pre-size CTA to avoid late "pop"
+          const start = () => {
+            // Pre-size + lock CTA before reveal
             try {
               const cw = contentRef.current?.getBoundingClientRect?.().width ?? 480
               const wish = parseInt(ctaWrapRef.current?.style?.width || '0', 10) || 480
               const finalW = Math.max(260, Math.min(wish, Math.floor(cw - 40)))
               ;['inline-size','width','max-inline-size','min-inline-size'].forEach(p => imp(ctaWrapRef.current, p, `${finalW}px`))
               imp(ctaWrapRef.current, 'flex', `0 0 ${finalW}px`)
-              // === CTA size lock for intro ===================================
               const btn = ctaRef.current
               const wrap = ctaWrapRef.current
               if (btn && wrap && !wrap.dataset.locked) {
@@ -89,7 +88,6 @@ export default function Hero() {
                 btn.style.transitionDuration = '140ms'
                 imp(btn, 'will-change', 'opacity')
                 imp(btn, 'contain', 'layout paint')
-                // derive unlock from CSS var --group-dur (ms) with small pad
                 let unlockMs = 1050
                 try {
                   const gd = getComputedStyle(document.documentElement).getPropertyValue('--group-dur') || '1000ms'
@@ -105,24 +103,24 @@ export default function Hero() {
               }
             } catch (e) { /* noop */ }
             requestAnimationFrame(() => {
-              root.setAttribute('data-anim-state', 'in')
-              root.dataset.animDone = '1'
+              root?.setAttribute('data-anim-state', 'in')
+              if (root) root.dataset.animDone = '1'
             })
           }
 
           if (reduce) {
-            kick()
+            start()
           } else {
-            const waitForImg = (img) => {
+            const waitFor = (img) => {
               if (!img) return Promise.resolve()
               if (img.decode) return img.decode().catch(() => {})
               if (img.complete) return Promise.resolve()
               return new Promise(res => img.addEventListener('load', res, { once: true }))
             }
             const photoNodes = Array.from(imgs || []).slice(0, 2)
-            const allReady = Promise.all(photoNodes.map(waitForImg))
-            const cap = new Promise(res => setTimeout(res, 1200))
-            Promise.race([allReady, cap]).then(kick)
+            const both = Promise.all(photoNodes.map(waitFor))
+            const cap = new Promise(res => setTimeout(res, 1800))
+            Promise.race([Promise.all([both, cap])]).then(start)
           }
         }
       }
