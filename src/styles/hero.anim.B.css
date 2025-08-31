@@ -1,13 +1,13 @@
 :root{
   /* Apple‑y pacing */
   --ease: cubic-bezier(.23,.66,.36,1);
-  --photo-dur: 1125ms; /* +25% */
-  --photo-pad: 225ms;  /* +25% */
-  --h1-dur:    750ms;  /* +25% */
+  --photo-dur: 1000ms;  /* slower, premium */
+  --photo-pad: 200ms;   /* breathing room before title */
+  --h1-dur:    650ms;
   --h1-delay:  calc(var(--photo-dur) + var(--photo-pad));
   --new-offset: 80ms;
-  --group-gap: 180ms;  /* start group even sooner */
-  --group-dur: 520ms;  /* quicker, simple fade */
+  --group-gap: 420ms;   /* shorter pause */
+  --group-dur: 900ms;   /* creamy fade */
 }
 @media (prefers-reduced-motion: reduce) {
   [data-anim="B"] { opacity:1 !important; }
@@ -51,21 +51,22 @@
   transition-delay: 0ms;
 }
 
-/* BEAT 2: NEW + H1 together */
+/* BEAT 2: H1 + NEW (H1 first, NEW 80ms later, no recoil) */
 [data-anim="B"] .h1,
-[data-anim="B"] .eyebrow {
-  opacity: 0; transform: translateY(8px) scale(.985);
-}
-[data-anim="B"][data-anim-state="in"] .h1 {
-  opacity: 1; transform: translateY(0) scale(1);
-  transition: transform var(--h1-dur) var(--ease), opacity var(--h1-dur) var(--ease);
+[data-anim="B"] .eyebrow { opacity:0; visibility:hidden; transform:translateY(10px) scale(.985); }
+[data-anim="B"][data-anim-state="in"] .h1{
+  opacity:1; visibility:visible; transform:translateY(0) scale(1);
+  transition: transform var(--h1-dur) var(--ease),
+              opacity   var(--h1-dur) var(--ease),
+              visibility 0s linear 0s;
   transition-delay: var(--h1-delay);
 }
-/* the “bump” */
-@keyframes eyebrow-bump{ 0%{transform:translateY(8px) scale(.985)}45%{transform:translateY(-3px) scale(1)}100%{transform:translateY(-2px) scale(1)} }
 [data-anim="B"][data-anim-state="in"] .eyebrow{
-  animation: eyebrow-bump 360ms var(--ease) 1 forwards;
-  animation-delay: calc(var(--h1-delay) + var(--new-offset));
+  opacity:1; visibility:visible; transform:translateY(-3px) scale(1);
+  transition: transform var(--h1-dur) var(--ease),
+              opacity   var(--h1-dur) var(--ease),
+              visibility 0s linear 0s;
+  transition-delay: calc(var(--h1-delay) + var(--new-offset));
 }
 
 /* ==== BEAT 3: One unified group (opacity only) ==== */
