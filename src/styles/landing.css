@@ -1,3 +1,236 @@
+/* 1200×900 exact band — tokenized gaps */
+@media (min-width: 1188px) and (max-width: 1212px) and (min-height: 888px) {
+  .hero__content { display:grid; align-content:start; justify-items:center; padding-block: 40px 44px; }
+  .hero__content{ --gap-h1-lede: 28px; --gap-lede-cta: 28px; }
+  .hero__content .paletteRow{ display:grid; }
+  .hero__content [data-intro-group]{ justify-items:center; row-gap: var(--gap-lede-cta); }
+  .hero__content .ctaWrap,
+  .hero__content .paletteRow,
+  .hero__content .logo{ margin-top:0 !important; }
+}
+
+/* 1200 × 900 — spacing polish (overrides) */
+@media (min-width:1180px) and (max-width:1225px) and (min-height:880px){
+  .paletteRow{ margin-top: calc(20px - 28px) !important; }
+  .hero__brand, .logo{ margin-top: 56px !important; place-self: center !important; }
+  .hero__content{ --pad-bottom: 48px; }
+}
+
+/* 1200×900 band — pull stack up, give palette room, pin wordmark */
+@media (min-width:1188px) and (max-width:1212px) and (min-height:880px) and (max-height:920px) {
+  /* 0) Content block as positioning context */
+  #hero .hero__content { position: relative; padding-block: 18px 48px !important; }
+
+  /* 1) Sole vertical rhythm under the H1 */
+  #hero .lede { margin-top: 20px !important; max-width: 36ch !important; margin-inline: auto !important; text-align: center !important; transform: none !important; }
+  #hero .hero__content [data-intro-group] { width: 100% !important; justify-items: center !important; row-gap: 20px !important; }
+
+  /* 2) CTA → palette gets more air: 20 (gap) + 8 = 28 */
+  #hero .paletteRow { margin-top: 8px !important; margin-block-start: 8px !important; transform: none !important; }
+  #hero .ctaWrap, #hero .paletteRow { translate: none !important; scale: 1 !important; }
+
+  /* 3) Pin Curated near bottom, perfectly centered */
+  #hero .hero__brand { position: absolute !important; left: 50% !important; transform: translateX(-50%) !important; bottom: 35px !important; margin: 0 !important; place-self: auto !important; text-align: center !important; }
+}
+
+/* 834×900 exact band — stack, center, higher */
+@media (min-width: 830px) and (max-width: 838px) and (min-height: 888px) {
+  .hero__content { display:grid; align-content:start; justify-items:center; padding-block: 26px 32px; }
+  .hero__content{ --gap-h1-lede: 22px; --gap-lede-cta: 32px; }
+  .hero__content .eyebrow{ display:block; }
+  .hero__content .paletteRow{ display:none !important; }
+  .hero__content .lede{ text-align:center !important; margin-inline:auto; }
+  .hero__content [data-intro-group]{ justify-items:center; row-gap: var(--gap-lede-cta); }
+  .hero__content .logo{ place-self:center; margin-top:28px; }
+}
+
+/* Broader 834×900 stack band tokens */
+@media (min-width:820px) and (max-width:846px) and (min-height:880px){
+  .hero__content{ --pad-top: 0px; --pad-bottom: 28px; }
+  .eyebrow{ --gap-eyebrow: 8px; }
+  .lede{ --gap-h1-lede: 26px; --lede-max: 36ch; max-width: var(--lede-max, 46ch); }
+  [data-intro-group]{ --gap-lede-cta: 32px; }
+  .paletteRow{ display:none !important; }
+  .hero__brand{ --gap-brand: 22px; }
+}
+/* ====== Hero content grid + spacing (drop-in) ====== */
+.hero__content {
+  display: grid;
+  grid-auto-rows: auto;
+  --gap-h1-lede: 16px;
+  --gap-lede-cta: 28px;
+  row-gap: 0 !important;
+  justify-items: center;
+  align-content: start;
+  text-align: center;
+  margin-inline: auto;
+  max-width: 660px;
+  padding-inline: 32px;
+  padding-block: var(--pad-top, 24px) var(--pad-bottom, 32px);
+}
+
+/* Ensure inner intro group uses the same spacing tokens */
+.hero__content [data-intro-group]{
+  display: grid;
+  grid-auto-rows: auto;
+  justify-items: center;
+  width: 100%;
+  max-width: 680px;
+  row-gap: var(--gap-lede-cta) !important;
+}
+.hero__content [data-intro-group] .lede{ margin: var(--gap-h1-lede) 0 0; }
+
+.hero__content > .h1,
+.hero__content > h1,
+.hero__content > .lede,
+.hero__content > .ctaWrap,
+.hero__content > .logo {
+  justify-self: center;
+}
+
+.hero__content > .h1,
+.hero__content > h1 { margin: 0; }
+.hero__content .h1,
+.hero__content h1{ margin-bottom: 0 !important; }
+.hero__content > .lede { margin: var(--gap-h1-lede) 0 0; }
+.hero__content > .ctaWrap,
+.hero__content > .paletteRow,
+.hero__content > .logo { margin: 0; }
+
+.ctaWrap, .paletteRow { margin-top: 0 !important; transform: none !important; translate: none !important; scale: 1 !important; }
+.paletteRow{ margin-top: var(--gap-cta-palette, var(--gap-lede-cta, 28px)); }
+.hero__brand, .logo{ grid-column: 1 / -1; place-self: center !important; text-align: center; margin-top: var(--gap-brand, 24px); position: static !important; left: auto !important; right: auto !important; transform: none !important; }
+.hero__content .logo { margin-top: 28px; }
+/* CTA width clamp without transforms */
+.hero__content [data-hero="cta"]{ width: clamp(320px, 56vw, 560px); max-width: 100%; }
+
+/* Defaults for spacing tokens and watermark offset */
+:root{ --gap-h1-lede: 16px; --gap-lede-cta: 24px; --brand-offset: 36px; }
+.hero__content .logo{ place-self: center; margin-top: var(--brand-offset); text-align: center; }
+
+/* 1200 × 900 medium band */
+@media (min-width:1180px) and (max-width:1260px) and (min-height:860px){
+  :root{ --gap-h1-lede: 20px; --gap-lede-cta: 32px; --brand-offset: 40px; }
+  .eyebrow{ display:block; }
+  .paletteRow{ display:block; }
+}
+
+/* 834 × 900 stack band */
+@media (min-width:834px) and (max-width:899px) and (min-height:860px){
+  :root{ --gap-h1-lede: 18px; --gap-lede-cta: 28px; --brand-offset: 28px; }
+  .eyebrow{ display:block; }
+  .paletteRow{ display:none; }
+  .hero__content{ padding-block-start: 28px; }
+}
+
+/* 1200×900 two‑pillar band — breathe + tuck palette */
+@media (min-width:1180px) and (max-width:1225px) and (min-height:880px){
+  .hero__content{ --pad-top: 24px; --pad-bottom: 40px; }
+  .eyebrow{ --gap-eyebrow: 6px; }
+  .lede{ --gap-h1-lede: 28px; --lede-max: 34ch; max-width: var(--lede-max); }
+  [data-intro-group]{ --gap-lede-cta: 28px; }
+  .paletteRow{
+    --gap-cta-palette: 12px;
+    margin-top: calc(var(--gap-cta-palette) - var(--gap-lede-cta)) !important;
+    margin-block-start: calc(var(--gap-cta-palette) - var(--gap-lede-cta)) !important;
+    display: grid !important;
+    transform: none !important;
+    margin-bottom: 0 !important;
+  }
+  /* Beat legacy rule below that sets margin-block-start with !important */
+  #hero.hero .palette-cta{ margin-block-start: calc(var(--gap-cta-palette) - var(--gap-lede-cta)) !important; }
+  .hero__brand, .logo{
+    align-self: center !important;
+    justify-self: center !important;
+    margin-top: 28px;
+    left: auto !important; right: auto !important;
+    transform: none !important;
+  }
+}
+
+/* Center H1 + eyebrow explicitly */
+.hero__content .h1,
+.hero__content .eyebrow{ justify-self: center; text-align: center !important; }
+
+/* Individual items inside the group center themselves */
+.hero__content .ctaWrap,
+.hero__content .paletteRow,
+.hero__content .logo{ justify-self: center !important; }
+
+/* CTA width clamp */
+.hero__content .ctaWrap{ width: min(560px, 100%); }
+
+/* Lede: center and readable by default; tokens control spacing */
+.lede{
+  max-width: 46ch;
+  margin-inline: auto;
+  text-align: center;
+  margin-top: var(--gap-h1-lede, 26px) !important;
+  transform: none;
+  padding: 0;
+}
+
+/* ====== 1600 × 788 band (wide/short) ====== */
+@media (min-width: 1560px) and (max-height: 820px) {
+  .hero__content {
+    --gap-h1-lede: 20px;
+    --gap-lede-cta: 30px;
+    max-width: 680px;
+  }
+}
+
+/* ====== 1200 × 900 band ====== */
+@media (min-width: 1180px) and (max-width: 1280px) and (min-height: 880px) {
+  .hero__content {
+    max-width: 640px;
+    padding-block: 36px 40px; /* slight raise, shorter bottom pad */
+    --gap-h1-lede: 24px; /* target */
+    --gap-lede-cta: 32px; /* target */
+    align-content: start;
+  }
+  .eyebrow { display: block; }
+  .hero__content .eyebrow{ display:block !important; }
+  .hero__content .paletteRow{ display:grid !important; }
+  .lede, .ctaWrap, .logo { text-align: center; }
+}
+
+/* ====== 834 × 900 band (stacked) ====== */
+@media (min-width: 820px) and (max-width: 899px) and (min-height: 880px) {
+  .hero__content {
+    max-width: 680px;
+    padding-block: 22px 26px; /* raise stack */
+    --gap-h1-lede: 20px;
+    --gap-lede-cta: 28px;
+  }
+  .eyebrow { display: block; margin-bottom: 8px; }
+  .paletteRow { display: none !important; }
+  .lede, .ctaWrap, .logo { text-align: center; }
+  .hero__content .logo { margin-top: 22px; }
+}
+
+/* ===== PATCH 1 — 1200×900 tablet, two‑pillar (token override) ===== */
+@media (min-width:1160px) and (max-width:1240px) and (min-height:880px){
+  :root{ --gap-h1-lede: 22px; --gap-lede-cta: 32px; --wm-bottom-offset: 36px; }
+  .hero__content{ padding-block: 40px 44px; align-content: start; }
+  .hero__content [data-intro-group]{ justify-items: center; width: 100%; }
+  .lede{ text-align:center; max-width:46ch; margin-inline:auto; }
+}
+
+/* ===== PATCH 2 — 834×900 stack mode (token override) ===== */
+@media (min-width:820px) and (max-width:899px) and (min-height:880px){
+  :root{ --gap-h1-lede: 20px; --gap-lede-cta: 28px; --wm-bottom-offset: 28px; }
+  .eyebrow{ display:block; margin-top: 4px; }
+  .hero__content{ padding-block-start: 24px; padding-block-end: 28px; align-content: start; }
+  .hero__content [data-intro-group]{ justify-items:center; width: 100%; }
+  .lede{ text-align:center; max-width:46ch; margin-inline:auto; }
+  .paletteRow{ display:none !important; }
+}
+
+/* ===== PATCH 3 — 1600×788 wide‑short (documented tokens; no layout change) ===== */
+@media (min-width:1500px) and (max-width:1640px) and (max-height:800px){
+  :root{ --gap-h1-lede: 16px; --gap-lede-cta: 24px; }
+}
+
 /* Prevent CTA pill from animating width/height during intro */
 .ctaWrap a { transition-property: opacity; transition-duration: var(--group-dur, 600ms); }
 /* === Pillars ≥1200 — reduce NEW & lede by 50%, grow CTA pill (no geometry) === */

@@ -6,12 +6,6 @@ export function initHeroCrossfade() {
   const content = hero.querySelector('[data-hero="content"]') || hero
 
   const apply = () => {
-    if (window.innerWidth < 1200) {
-      root.classList.remove('after-hero')
-      hero.style.removeProperty('opacity')
-      content.style.removeProperty('transform')
-      return
-    }
     const r = hero.getBoundingClientRect()
     const vh = window.innerHeight || 1
     // Fade sooner: start at 4% of viewport, fully faded by 24%

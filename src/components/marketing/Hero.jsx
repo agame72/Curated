@@ -83,6 +83,21 @@ export default function Hero() {
               show(eyebrowRef.current)
               const groupEl = document.querySelector('[data-intro-group]')
               show(groupEl)
+              // One-time sanitiser: remove legacy inline offsets
+              try {
+                const sc = s => document.querySelector(s)
+                const lede = sc('.hero__content .lede')
+                const cta  = sc('.hero__content .ctaWrap')
+                const pal  = sc('.hero__content .paletteRow')
+                const logo = sc('.hero__content .logo')
+                ;[lede, cta, pal, logo].forEach(el => {
+                  if (!el) return
+                  el.style.marginTop = ''
+                  el.style.transform = ''
+                  el.style.translate = ''
+                  el.style.scale = ''
+                })
+              } catch (e) { /* noop */ }
               if (root) root.dataset.animDone = '1'
               // — Start group exactly 300ms after the H1 begins —
               try {
@@ -170,10 +185,8 @@ export default function Hero() {
         setImp(heroRef.current, '--g-lede-cta', `${T.G_LEDE_CTA}px`)
       }
 
-      // 0a) Vertical lift of the whole content block per branch
-      if (contentRef.current) {
-        setImp(contentRef.current, 'transform', `translateY(${T.CONTENT_SHIFT}px)`)
-      }
+      // 0a) Do not translate the content block; spacing is token-driven
+      if (contentRef.current) { setImp(contentRef.current, 'transform', 'none') }
 
       // 1) H1 → lede gap controlled by lede's margin-top; keep H1 bottom margin modest
       if (h1Ref.current) { setImp(h1Ref.current, 'margin-bottom', '0') }
@@ -201,9 +214,7 @@ export default function Hero() {
         setImp(ctaWrapRef.current, 'transform', 'none')
         setImp(ctaWrapRef.current, 'margin-top', '0')
       }
-      if (paletteRowRef.current) {
-        setImp(paletteRowRef.current, 'transform', 'none')
-      }
+      if (paletteRowRef.current) { setImp(paletteRowRef.current, 'transform', 'none'); setImp(paletteRowRef.current, 'margin-top', '0') }
 
       // Eyebrow visibility per branch (optional)
       if (typeof T.SHOW_EYEBROW !== 'undefined' && eyebrowRef.current) {
@@ -859,6 +870,128 @@ export default function Hero() {
         }
         // eslint-disable-next-line no-console
         console.table({ w: Wnow, h: Hnow, band, using: Tband.BRANCH })
+      }
+
+      // ===== Targeted spacing tokens for specific tolerant breakpoints =====
+      // 1) Define token sets
+      const TOK_1600x788 = {
+        CONTENT_MAX: 820,
+        LEDE_CH: 44,
+        LEDE_SHIFT: -6,
+        H1_LEDE: 20,
+        ROW_GAP: 26,
+        SHOW_EYEBROW: true,
+        SHOW_PALETTE: true,
+        CURATED_NUDGE: 0,
+      }
+      const TOK_1200x900 = {
+        CONTENT_MAX: 860,
+        LEDE_CH: 46,
+        LEDE_SHIFT: -6,
+        H1_LEDE: 20,
+        ROW_GAP: 24,
+        SHOW_EYEBROW: true,
+        SHOW_PALETTE: true,
+        CURATED_NUDGE: 0,
+      }
+      const TOK_834x900 = {
+        CONTENT_MAX: 720,
+        LEDE_CH: 50,
+        LEDE_SHIFT: 0,
+        H1_LEDE: 18,
+        ROW_GAP: 28,
+        SHOW_EYEBROW: true,
+        SHOW_PALETTE: false,
+        CURATED_NUDGE: -10,
+      }
+
+      // 2) Branch detection (exact pins + tolerant fallbacks)
+      const is1600x788 = window.matchMedia('(width:1600px) and (height:788px)').matches || (Wnow >= 1550 && Wnow <= 1620 && Hnow >= 760 && Hnow <= 800)
+      const is1200x900_exact_or_tol = window.matchMedia('(width:1200px) and (height:900px)').matches || (Wnow >= 1180 && Wnow <= 1220 && Hnow >= 880 && Hnow <= 920)
+      const is834x900_exact_or_tol  = window.matchMedia('(width:834px) and (height:900px)').matches || (Wnow >= 820 && Wnow <= 860 && Hnow >= 880 && Hnow <= 920)
+
+      const Ttok = is1600x788 ? TOK_1600x788 : (is1200x900_exact_or_tol ? TOK_1200x900 : (is834x900_exact_or_tol ? TOK_834x900 : null))
+      // eslint-disable-next-line no-console
+      console.table({ w: Wnow, h: Hnow, branch: is1600x788 ? '1600×788' : (is1200x900_exact_or_tol ? '1200×900' : (is834x900_exact_or_tol ? '834×900' : 'other')) })
+
+      // 3) Deterministic writes (spacing + visibility only)
+      if (Ttok) {
+        if (contentRef.current) {
+          setImp(contentRef.current, 'max-inline-size', `${Ttok.CONTENT_MAX}px`)
+          setImp(contentRef.current, 'margin-inline', 'auto')
+        }
+        if (ledeRef.current) {
+          setImp(ledeRef.current, 'max-inline-size', `${Ttok.LEDE_CH}ch`)
+          setImp(ledeRef.current, 'transform', `translateY(${Ttok.LEDE_SHIFT}px)`)
+          setImp(ledeRef.current, 'margin-top', `${Ttok.H1_LEDE}px`)
+        }
+        if (h1Ref.current) setImp(h1Ref.current, 'margin-bottom', '0')
+        const groupEl = contentRef.current?.querySelector('[data-intro-group]')
+        if (groupEl) {
+          setImp(groupEl, 'display', 'grid')
+          setImp(groupEl, 'row-gap', `${Ttok.ROW_GAP}px`)
+          setImp(groupEl, 'justify-items', 'center')
+        }
+        if (ctaWrapRef.current) {
+          setImp(ctaWrapRef.current, 'margin-top', '0')
+          setImp(ctaWrapRef.current, 'transform', 'none')
+        }
+        if (paletteRowRef.current) {
+          setImp(paletteRowRef.current, 'display', Ttok.SHOW_PALETTE ? 'flex' : 'none')
+        }
+        if (eyebrowRef.current) setImp(eyebrowRef.current, 'display', Ttok.SHOW_EYEBROW ? 'block' : 'none')
+        if (is834x900_exact_or_tol && contentRef.current) {
+          setImp(contentRef.current, 'text-align', 'center')
+          ;[h1Ref.current, ledeRef.current, ctaWrapRef.current, paletteRowRef.current].forEach(el => { if (el) setImp(el, 'margin-inline', 'auto') })
+        }
+        if (brandRef.current && Ttok.CURATED_NUDGE !== 0) {
+          setImp(brandRef.current, 'transform', `translateY(${Ttok.CURATED_NUDGE}px)`)
+        }
+      }
+
+      // D) Inline variable writes (win the cascade against old CSS)
+      const root = heroRef.current
+      if (root) {
+        if (is1200x900_exact_or_tol) {
+          root.style.setProperty('--gap-h1-lede', '20px', 'important')
+          root.style.setProperty('--gap-lede-cta', '20px', 'important')
+          if (ctaWrapRef.current) ['margin-top','transform'].forEach(p => ctaWrapRef.current.style.setProperty(p, p==='transform'?'none':'0', 'important'))
+          // Move 1 — force lede to 3 lines via width (not font size)
+          if (ledeRef.current) {
+            setImp(ledeRef.current, 'margin-top', '20px')
+            setImp(ledeRef.current, 'max-inline-size', '36ch')
+            setImp(ledeRef.current, 'text-align', 'center')
+          }
+          // Move 2 — group gap 28px; palette nudge to achieve 12px CTA→palette
+          const groupEl = contentRef.current?.querySelector('[data-intro-group]')
+          if (groupEl) {
+            setImp(groupEl, 'justify-items', 'center')
+            setImp(groupEl, 'row-gap', '20px')
+          }
+          if (paletteRowRef.current) {
+            const delta = 4 // 20 gap + 4 = 24
+            setImp(paletteRowRef.current, 'margin-top', `${delta}px`)
+            try { paletteRowRef.current.style.setProperty('margin-block-start', `${delta}px`, 'important') } catch (e) { /* noop */ }
+            ;['transform','translate','scale'].forEach(p => {
+              try { paletteRowRef.current.style.setProperty(p, p==='transform'?'none':'', 'important') } catch (e) { /* noop */ }
+            })
+          }
+          if (ctaWrapRef.current) setImp(ctaWrapRef.current, 'margin-bottom', '0')
+          // Move 3 — hard-center watermark
+          if (brandRef.current) {
+            setImp(brandRef.current, 'position', 'absolute')
+            setImp(brandRef.current, 'left', '50%')
+            setImp(brandRef.current, 'transform', 'translateX(-50%)')
+            setImp(brandRef.current, 'bottom', '35px')
+            setImp(brandRef.current, 'margin', '0')
+            setImp(brandRef.current, 'place-self', 'auto')
+            setImp(brandRef.current, 'text-align', 'center')
+          }
+        }
+        if (is834x900_exact_or_tol) {
+          root.style.setProperty('--gap-h1-lede', '20px', 'important')
+          root.style.setProperty('--gap-lede-cta', '28px', 'important')
+        }
       }
 
       // === Exact 1600×900: nudge stack + CTA + palette up by 15px (brand stays put) ===
