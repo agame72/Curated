@@ -1,12 +1,37 @@
+[data-anim="B"]{
+  --g-h1-lede: 16px;  /* H1 → lede */
+  --g-lede-cta: 24px; /* lede → CTA */
+}
+[data-anim="B"] [data-intro-group]{
+  display: grid !important;
+  grid-auto-flow: row;
+  row-gap: var(--g-lede-cta) !important;
+  margin-top: 0 !important;
+}
+[data-anim="B"] .lede{
+  margin: 0 !important;
+  margin-top: var(--g-h1-lede) !important;
+  padding: 0 !important;
+  transform: none !important;
+  transition: none !important;
+  display: block !important;
+}
+[data-anim="B"] .ctaWrap,
+[data-anim="B"] .paletteRow{
+  margin-top: 0 !important;
+  transform: none !important;
+}
 :root{
   /* Apple‑y pacing */
   --ease: cubic-bezier(.23,.66,.36,1);
   --photo-dur: 1000ms;  /* slower, premium */
   --photo-pad: 180ms;   /* snappier than 200ms */
+  /* Title baseline offset: lowers start and end together */
+  --title-base: 12px;
   --h1-rise:   18px;    /* bigger rise */
   --h1-dur:    760ms;   /* stretched a touch */
   --h1-delay:  calc(var(--photo-dur) + var(--photo-pad));
-  --new-offset: 120ms;  /* more apple-y nudge */
+  --new-offset: 0ms;    /* NEW arrives exactly with H1 */
   --group-gap: 0ms;     /* JS applies 300ms after H1 begins */
   --group-dur: 800ms;   /* a touch tighter */
 }
@@ -34,6 +59,14 @@
 [data-anim="B"] .eyebrow{
   opacity:0 !important;
   visibility:hidden !important;
+}
+
+/* CHUNK 1 — Never let UA margins push the lede around */
+[data-anim="B"] .lede {
+  margin-block: 0 !important;
+  transform: none !important;
+  transition: none !important;
+  padding: 0 !important;
 }
 
 /* BEAT 1: Photos (both together) */
@@ -73,17 +106,17 @@
 
 /* BEAT 2: H1 + NEW (H1 first, NEW 80ms later, no recoil) */
 [data-anim="B"] .h1,
-[data-anim="B"] .eyebrow { opacity:0; visibility:hidden; transform:translateY(10px) scale(.985); }
-[data-anim="B"] .h1{ transform:translateY(var(--h1-rise)) scale(.985) !important; opacity:0 !important; visibility:hidden !important; }
+[data-anim="B"] .eyebrow { opacity:0; visibility:hidden; transform:translateY(calc(var(--title-base) + 10px)) scale(.985); }
+[data-anim="B"] .h1{ transform:translateY(calc(var(--title-base) + var(--h1-rise))) scale(.985) !important; opacity:0 !important; visibility:hidden !important; }
 [data-anim="B"][data-anim-state="in"] .h1{
-  opacity:1 !important; visibility:visible !important; transform:translateY(0) scale(1);
+  opacity:1 !important; visibility:visible !important; transform:translateY(var(--title-base)) scale(1) !important;
   transition: transform var(--h1-dur) var(--ease),
               opacity   var(--h1-dur) var(--ease),
               visibility 0s linear 0s;
   transition-delay: var(--h1-delay);
 }
 [data-anim="B"][data-anim-state="in"] .eyebrow{
-  opacity:1 !important; visibility:visible !important; transform:translateY(-3px) scale(1);
+  opacity:1 !important; visibility:visible !important; transform:translateY(calc(var(--title-base) - 3px)) scale(1) !important;
   transition: transform var(--h1-dur) var(--ease),
               opacity   var(--h1-dur) var(--ease),
               visibility 0s linear 0s;

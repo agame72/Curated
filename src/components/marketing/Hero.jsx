@@ -144,14 +144,14 @@ export default function Hero() {
         important(contentRef.current, 'transform', 'translateY(-15px)')
       }
 
-      // 1) H1: ensure a real bottom margin so the gap increases
-      if (isDesktop() && h1Ref.current) {
-        important(h1Ref.current, 'margin-bottom', '24px')
-      }
+      // 1) H1 → lede gap controlled by lede's margin-top; keep H1 bottom margin modest
+      if (h1Ref.current) { setImp(h1Ref.current, 'margin-bottom', '0') }
 
-      // LEDE placement — static tuck per token (no animation)
+      // LEDE spacing via margins (no transforms)
       if (ledeRef.current) {
-        setImp(ledeRef.current, 'transform', 'translateY(-8px)') // tokenized tuck; adjust per breakpoint if needed
+        const G_H1_LEDE = window.innerWidth >= 1600 ? 22 : (window.innerWidth >= 1200 ? 20 : 18)
+        setImp(ledeRef.current, 'margin-top', `${G_H1_LEDE}px`)
+        setImp(ledeRef.current, 'margin-bottom', '0')
         setImp(ledeRef.current, 'transition', 'none')
       }
       // Group wrapper spacing (tokenized row gap), no pre-gap above lede
@@ -160,10 +160,19 @@ export default function Hero() {
         if (groupEl) {
           setImp(groupEl, 'margin-top', '0')
           setImp(groupEl, 'display', 'grid')
-          // example tokens: XL 20px, else 18px
-          const gapPx = window.innerWidth >= 1600 ? 20 : (window.innerWidth >= 1200 ? 18 : 16)
+          // Tokenized lede → CTA gap
+          const gapPx = window.innerWidth >= 1600 ? 28 : (window.innerWidth >= 1200 ? 26 : 24)
           setImp(groupEl, 'row-gap', `${gapPx}px`)
         }
+      }
+
+      // Ensure the button and palette do not visually jump above the lede
+      if (ctaWrapRef.current) {
+        setImp(ctaWrapRef.current, 'transform', 'none')
+        setImp(ctaWrapRef.current, 'margin-top', '0')
+      }
+      if (paletteRowRef.current) {
+        setImp(paletteRowRef.current, 'transform', 'none')
       }
 
       // --- Palette row & brand (≥1200) ---
