@@ -52,7 +52,7 @@
 /* BEAT 2: NEW + H1 together */
 [data-anim="B"] .h1,
 [data-anim="B"] .eyebrow {
-  opacity: 0; transform: translateY(10px) scale(.985);
+  opacity: 0; transform: translateY(8px) scale(.985);
 }
 [data-anim="B"][data-anim-state="in"] .h1 {
   opacity: 1; transform: translateY(0) scale(1);
@@ -60,9 +60,9 @@
   transition-delay: var(--h1-delay);
 }
 /* the “bump” */
-@keyframes eyebrow-bump{ 0%{transform:translateY(0)}45%{transform:translateY(-3px)}100%{transform:translateY(0)} }
+@keyframes eyebrow-bump{ 0%{transform:translateY(8px) scale(.985)}45%{transform:translateY(-3px) scale(1)}100%{transform:translateY(-2px) scale(1)} }
 [data-anim="B"][data-anim-state="in"] .eyebrow{
-  animation: eyebrow-bump 360ms var(--ease) 1;
+  animation: eyebrow-bump 360ms var(--ease) 1 forwards;
   animation-delay: calc(var(--h1-delay) + var(--new-offset));
 }
 
