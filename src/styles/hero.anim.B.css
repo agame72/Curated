@@ -21,15 +21,17 @@
 [data-anim="B"] { opacity: 0; }
 [data-anim="B"][data-anim-state="in"] { opacity: 1; transition: opacity var(--h1-dur) var(--ease); }
 
-/* BEAT 1: Photos first */
-[data-anim="B"] [data-hero-media] img { opacity: 0; filter: blur(8px); }
-[data-anim="B"] [data-hero-media] img.is-left  { transform: translateX(-12px); }
-[data-anim="B"] [data-hero-media] img.is-right { transform: translateX( 12px); }
-[data-anim="B"][data-anim-state="in"] [data-hero-media] img {
-  opacity: 1; transform: translateX(0); filter: blur(0);
+/* BEAT 1: Photos (both together) */
+[data-anim="B"] [data-hero="left"]  img,
+[data-anim="B"] [data-hero="right"] img { opacity:0; filter:blur(8px); }
+[data-anim="B"] [data-hero="left"]  img { transform:translateX(-12px); }
+[data-anim="B"] [data-hero="right"] img { transform:translateX( 12px); }
+[data-anim="B"][data-anim-state="in"] [data-hero="left"] img,
+[data-anim="B"][data-anim-state="in"] [data-hero="right"] img {
+  opacity:1; transform:translateX(0); filter:blur(0);
   transition: transform var(--photo-dur) var(--ease),
               opacity   var(--photo-dur) var(--ease),
-              filter    calc(var(--photo-dur) + 160ms) ease;
+              filter    calc(var(--photo-dur) + 180ms) ease;
   transition-delay: 0ms;
 }
 

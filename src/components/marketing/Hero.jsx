@@ -66,7 +66,7 @@ export default function Hero() {
           if (imgs && imgs[0]) imgs[0].classList.add('is-left')
           if (imgs && imgs[1]) imgs[1].classList.add('is-right')
 
-          // === Media-ready gate (wait for both, with cap) ================
+          // === MEDIA GATE — wait for both photos (no early start) =========
           const imp = (el, prop, val) => el?.style?.setProperty(prop, val, 'important')
           const start = () => {
             try {
@@ -80,19 +80,17 @@ export default function Hero() {
             })
           }
 
-          if (reduce) {
-            start()
-          } else {
+          if (reduce) { start() }
+          else {
             const waitFor = (img) => {
               if (!img) return Promise.resolve()
               if (img.decode) return img.decode().catch(() => {})
               if (img.complete) return Promise.resolve()
               return new Promise(res => img.addEventListener('load', res, { once: true }))
             }
-            const photoNodes = Array.from(imgs || []).slice(0, 2)
-            const both = Promise.all(photoNodes.map(waitFor))
-            const cap = new Promise(res => setTimeout(res, 1000))
-            Promise.race([both, cap]).then(start)
+            const leftImg  = document.querySelector('[data-hero="left"]  img')
+            const rightImg = document.querySelector('[data-hero="right"] img')
+            Promise.all([waitFor(leftImg), waitFor(rightImg)]).then(start)
           }
         }
       }
@@ -961,7 +959,7 @@ export default function Hero() {
       data-anim-state="ready"
     >
       {/* Left stack tiles (900–1199) */}
-      <figure className="hero__tile hero__tile--a">
+      <figure className="hero__tile hero__tile--a" data-hero="left">
         <picture>
           <source media="(min-width: 600px) and (max-width: 899px)" type="image/webp" srcSet="/marketing/hero/selfie_899.webp" />
           <source media="(min-width: 900px) and (max-width: 1199px)" srcSet="/marketing/hero/selfie_square.webp" />
@@ -969,7 +967,7 @@ export default function Hero() {
         </picture>
       </figure>
 
-      <figure className="hero__tile hero__tile--b">
+      <figure className="hero__tile hero__tile--b" data-hero="right">
         <picture>
           <source media="(min-width: 600px) and (max-width: 899px)" type="image/webp" srcSet="/marketing/hero/closet_899.webp" />
           <source media="(min-width: 900px) and (max-width: 1199px)" srcSet="/marketing/hero/closet_square.webp" />
@@ -978,7 +976,7 @@ export default function Hero() {
       </figure>
 
       {/* Left pillar (≥1200) */}
-      <figure className="hero__pillar hero__pillar--left" data-hero="pillar-left" aria-hidden="true">
+      <figure className="hero__pillar hero__pillar--left" data-hero="pillar-left" data-hero="left" aria-hidden="true">
         <picture>
           <source
             type="image/webp"
@@ -1059,7 +1057,7 @@ export default function Hero() {
       </div>
 
       {/* Right pillar (≥1200) */}
-      <figure className="hero__pillar hero__pillar--right" data-hero="pillar-right" aria-hidden="true">
+      <figure className="hero__pillar hero__pillar--right" data-hero="pillar-right" data-hero="right" aria-hidden="true">
         <picture>
           <source
             type="image/webp"
