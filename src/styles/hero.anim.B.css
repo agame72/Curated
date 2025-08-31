@@ -2,12 +2,12 @@
   /* Apple‑y pacing */
   --ease: cubic-bezier(.23,.66,.36,1);
   --photo-dur: 1000ms;  /* slower, premium */
-  --photo-pad: 200ms;   /* breathing room before title */
+  --photo-pad: 180ms;   /* slightly snappier into title */
   --h1-dur:    650ms;
   --h1-delay:  calc(var(--photo-dur) + var(--photo-pad));
   --new-offset: 80ms;
-  --group-gap: 420ms;   /* shorter pause */
-  --group-dur: 900ms;   /* creamy fade */
+  --group-gap: 220ms;   /* start ~200ms sooner */
+  --group-dur: 800ms;   /* a touch tighter */
 }
 @media (prefers-reduced-motion: reduce) {
   [data-anim="B"] { opacity:1 !important; }
