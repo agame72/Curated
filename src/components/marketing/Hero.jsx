@@ -97,20 +97,27 @@ export default function Hero() {
                   const lockCta = () => {
                     const btn = ctaRef.current, wrap = ctaWrapRef.current
                     if (!btn || !wrap) return
-                    const measure = () => {
+                    const applyPin = () => {
                       const r = btn.getBoundingClientRect()
-                      btn.style.width = `${Math.round(r.width)}px`
-                      btn.style.height = `${Math.round(r.height)}px`
+                      const w = `${Math.round(r.width)}px`
+                      const h = `${Math.round(r.height)}px`
+                      btn.style.width = w
+                      btn.style.minWidth = w
+                      btn.style.maxWidth = w
+                      btn.style.height = h
                       btn.style.overflow = 'hidden'
+                      // Limit transitions to hover visuals only
                       btn.style.transitionProperty = 'background-color,color,box-shadow,transform'
                       btn.style.transitionDuration = '140ms'
+                      const label = btn.querySelector('.btn__label,[data-hero="cta-label"]')
+                      if (label) { try { label.style.whiteSpace = 'nowrap' } catch (e) { /* noop */ } }
                     }
-                    measure()
-                    try { document.fonts?.ready?.then(() => { try { measure() } catch (e) { /* noop */ } }) } catch (e) { /* noop */ }
-                    const rs = getComputedStyle(document.documentElement)
-                    const gap = parseFloat(rs.getPropertyValue('--group-gap')) || 300
-                    const dur = parseFloat(rs.getPropertyValue('--group-dur')) || 800
-                    setTimeout(() => { btn.style.width=''; btn.style.height=''; btn.style.overflow='' }, gap + dur + 60)
+                    applyPin()
+                    try { document.fonts?.ready?.then(() => { try { applyPin() } catch (e) { /* noop */ } }) } catch (e) { /* noop */ }
+                    // Keep pinned; recalc on resize/orientation change
+                    const onR = () => { try { applyPin() } catch (e) { /* noop */ } }
+                    window.addEventListener('resize', onR)
+                    window.addEventListener('orientationchange', onR)
                   }
                   lockCta()
                 }
@@ -139,20 +146,44 @@ export default function Hero() {
       const important = (el, prop, val) => el && el.style.setProperty(prop, val, 'important')
       const setImp = (el, prop, val) => el && el.style.setProperty(prop, val, 'important')
 
-      // 0) Shift entire content block up by 15px at ≥1200
-      if (isDesktop() && contentRef.current) {
-        important(contentRef.current, 'transform', 'translateY(-15px)')
+      // 0) Branch tokens (tolerant windows)
+      const isWS_1600x788 = (window.matchMedia('(width:1600px) and (height:788px)').matches) || (window.innerWidth >= 1500 && window.innerHeight <= 820)
+      const is1200x900  = (window.innerWidth >= 1180 && window.innerWidth <= 1220) && (window.innerHeight >= 880 && window.innerHeight <= 920)
+      const is834x900   = (window.innerWidth >= 820 && window.innerWidth <= 840) && (window.innerHeight >= 880 && window.innerHeight <= 920)
+
+      const T = {
+        G_H1_LEDE: 22,
+        G_LEDE_CTA: 28,
+        CONTENT_SHIFT: 0,
+      }
+      if (isWS_1600x788) {
+        T.G_H1_LEDE = 32; T.G_LEDE_CTA = 26; T.CONTENT_SHIFT = -4; T.SHOW_EYEBROW = true
+      } else if (is1200x900) {
+        T.G_H1_LEDE = 24; T.G_LEDE_CTA = 30; T.CONTENT_SHIFT = -4; T.SHOW_EYEBROW = true
+      } else if (is834x900) {
+        T.G_H1_LEDE = 20; T.G_LEDE_CTA = 24; T.CONTENT_SHIFT = -36; T.SHOW_EYEBROW = true
+      }
+
+      // Apply CSS variables on the hero root so CSS can read them
+      if (heroRef.current) {
+        setImp(heroRef.current, '--g-h1-lede', `${T.G_H1_LEDE}px`)
+        setImp(heroRef.current, '--g-lede-cta', `${T.G_LEDE_CTA}px`)
+      }
+
+      // 0a) Vertical lift of the whole content block per branch
+      if (contentRef.current) {
+        setImp(contentRef.current, 'transform', `translateY(${T.CONTENT_SHIFT}px)`)
       }
 
       // 1) H1 → lede gap controlled by lede's margin-top; keep H1 bottom margin modest
       if (h1Ref.current) { setImp(h1Ref.current, 'margin-bottom', '0') }
 
-      // LEDE spacing via margins (no transforms)
+      // LEDE spacing via margins (no transforms) — read from CSS var
       if (ledeRef.current) {
-        const G_H1_LEDE = window.innerWidth >= 1600 ? 22 : (window.innerWidth >= 1200 ? 20 : 18)
-        setImp(ledeRef.current, 'margin-top', `${G_H1_LEDE}px`)
-        setImp(ledeRef.current, 'margin-bottom', '0')
+        setImp(ledeRef.current, 'margin', '0')
+        setImp(ledeRef.current, 'margin-top', 'var(--g-h1-lede)')
         setImp(ledeRef.current, 'transition', 'none')
+        setImp(ledeRef.current, 'transform', 'none')
       }
       // Group wrapper spacing (tokenized row gap), no pre-gap above lede
       {
@@ -160,9 +191,8 @@ export default function Hero() {
         if (groupEl) {
           setImp(groupEl, 'margin-top', '0')
           setImp(groupEl, 'display', 'grid')
-          // Tokenized lede → CTA gap
-          const gapPx = window.innerWidth >= 1600 ? 28 : (window.innerWidth >= 1200 ? 26 : 24)
-          setImp(groupEl, 'row-gap', `${gapPx}px`)
+          setImp(groupEl, 'grid-auto-flow', 'row')
+          setImp(groupEl, 'row-gap', 'var(--g-lede-cta)')
         }
       }
 
@@ -173,6 +203,11 @@ export default function Hero() {
       }
       if (paletteRowRef.current) {
         setImp(paletteRowRef.current, 'transform', 'none')
+      }
+
+      // Eyebrow visibility per branch (optional)
+      if (typeof T.SHOW_EYEBROW !== 'undefined' && eyebrowRef.current) {
+        setImp(eyebrowRef.current, 'display', T.SHOW_EYEBROW ? 'block' : 'none')
       }
 
       // --- Palette row & brand (≥1200) ---

@@ -3,25 +3,29 @@ export function initHeroCrossfade() {
   const hero = document.querySelector('#hero')
   if (!hero) return
 
+  const content = hero.querySelector('[data-hero="content"]') || hero
+
   const apply = () => {
-    // Disable crossfade for sub‑desktop or if hero has no measurable height
     if (window.innerWidth < 1200) {
       root.classList.remove('after-hero')
+      hero.style.removeProperty('opacity')
+      content.style.removeProperty('transform')
       return
     }
     const r = hero.getBoundingClientRect()
-    const h = r.height || 0
-    if (h <= 1) {
-      root.classList.remove('after-hero')
-      return
-    }
-    const midpoint = h * 0.5
-    const passed = r.top <= -midpoint
-    root.classList.toggle('after-hero', passed)
+    const vh = window.innerHeight || 1
+    // Fade sooner: start at 4% of viewport, fully faded by 24%
+    const start = vh * 0.04
+    const end = vh * 0.24
+    const scrolled = -r.top // positive as we scroll down
+    const effective = Math.max(0, scrolled - start)
+    const f = Math.min(1, effective / Math.max(1, (end - start)))
+    const opacity = 1 - f
+    hero.style.setProperty('opacity', String(opacity))
+    // Exaggerated lift of center content as it fades (up to -40px)
+    const lift = f * 40
+    content.style.setProperty('transform', `translateY(${-lift}px)`)
   }
-
-  // Always start visible
-  root.classList.remove('after-hero')
 
   const onScroll = () => requestAnimationFrame(apply)
   window.addEventListener('scroll', onScroll, { passive: true })
