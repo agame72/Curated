@@ -84,6 +84,47 @@ export default function Hero() {
               const groupEl = document.querySelector('[data-intro-group]')
               show(groupEl)
               if (root) root.dataset.animDone = '1'
+              // — Start group exactly after the H1 finishes —
+              try {
+                const h1 = h1Ref.current
+                if (root && h1) {
+                  let fired = false
+                  const done = () => { if (fired) return; fired = true; root.setAttribute('data-title-done', '1') }
+                  const onEnd = (e) => {
+                    if (e.target !== h1) return
+                    if (e.propertyName === 'opacity' || e.propertyName === 'transform') {
+                      h1.removeEventListener('transitionend', onEnd)
+                      done()
+                    }
+                  }
+                  h1.addEventListener('transitionend', onEnd, { once: true })
+                  const cs = getComputedStyle(document.documentElement)
+                  const h1Delay = parseFloat(cs.getPropertyValue('--h1-delay')) || 0
+                  const h1Dur   = parseFloat(cs.getPropertyValue('--h1-dur'))   || 0
+                  setTimeout(done, h1Delay + h1Dur + 80)
+
+                  // CTA size lock to prevent mid-fade growth
+                  const lockCta = () => {
+                    const btn = ctaRef.current, wrap = ctaWrapRef.current
+                    if (!btn || !wrap) return
+                    const measure = () => {
+                      const r = btn.getBoundingClientRect()
+                      btn.style.width = `${Math.round(r.width)}px`
+                      btn.style.height = `${Math.round(r.height)}px`
+                      btn.style.overflow = 'hidden'
+                      btn.style.transitionProperty = 'background-color,color,box-shadow,transform'
+                      btn.style.transitionDuration = '140ms'
+                    }
+                    measure()
+                    try { document.fonts?.ready?.then(() => { try { measure() } catch (e) { /* noop */ } }) } catch (e) { /* noop */ }
+                    const rs = getComputedStyle(document.documentElement)
+                    const gap = parseFloat(rs.getPropertyValue('--group-gap')) || 300
+                    const dur = parseFloat(rs.getPropertyValue('--group-dur')) || 800
+                    setTimeout(() => { btn.style.width=''; btn.style.height=''; btn.style.overflow='' }, gap + dur + 60)
+                  }
+                  lockCta()
+                }
+              } catch (e) { /* noop */ }
             })
           }
 

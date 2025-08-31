@@ -6,7 +6,7 @@
   --h1-dur:    650ms;
   --h1-delay:  calc(var(--photo-dur) + var(--photo-pad));
   --new-offset: 80ms;
-  --group-gap: 220ms;   /* start ~200ms sooner */
+  --group-gap: 300ms;   /* exactly 300ms after title end */
   --group-dur: 800ms;   /* a touch tighter */
 }
 @media (prefers-reduced-motion: reduce) {
@@ -21,12 +21,18 @@
 [data-anim="B"] { opacity: 0; }
 [data-anim="B"][data-anim-state="in"] { opacity: 1; transition: opacity var(--h1-dur) var(--ease); }
 
-/* Force-show when anim state is IN (wins over inline) */
-[data-anim="B"][data-anim-state="in"] .h1,
-[data-anim="B"][data-anim-state="in"] .eyebrow,
+/* ORDER LOCK: group is hidden by default and even when 'in' */
+[data-anim="B"] [data-intro-group],
 [data-anim="B"][data-anim-state="in"] [data-intro-group]{
-  opacity: 1 !important;
-  visibility: visible !important;
+  opacity:0 !important;
+  visibility:hidden !important;
+}
+
+/* NEW/H1 must also be hidden until their beat (prevents early flashes) */
+[data-anim="B"] .h1,
+[data-anim="B"] .eyebrow{
+  opacity:0 !important;
+  visibility:hidden !important;
 }
 
 /* BEAT 1: Photos (both together) */
@@ -85,11 +91,11 @@
 /* ==== BEAT 3 — single group wrapper (opacity only) ==== */
 [data-anim="B"] [data-intro-group]{ opacity:0 !important; visibility:hidden !important; display:grid; row-gap:16px; }
 @media (min-width:1200px){ [data-intro-group]{ row-gap:18px; } }
-[data-anim="B"][data-anim-state="in"] [data-intro-group]{
-  opacity:1; visibility:visible;
-  transition: opacity var(--group-dur) var(--ease),
-              visibility 0s linear 0s;
-  transition-delay: calc(var(--h1-delay) + var(--h1-dur) + var(--group-gap));
+/* Show the group only after the H1 has finished (flag set by JS) */
+[data-anim="B"][data-title-done="1"] [data-intro-group]{
+  opacity:1 !important; visibility:visible !important;
+  transition: opacity var(--group-dur) var(--ease);
+  transition-delay: var(--group-gap);
 }
 /* Children inherit — forbid inner transitions during intro */
 [data-intro-group] *{ transition: none !important; transform: none !important; }
