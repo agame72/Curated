@@ -9,6 +9,31 @@
   .hero__content .logo{ margin-top:0 !important; }
 }
 
+/* 834 × 900 — lift follow-group ~30px; raise Curated 15px; keep center */
+@media (min-width: 830px) and (max-width: 838px) and (min-height: 880px) and (max-height: 920px){
+
+  /* 1) Move everything BELOW the H1 up as a block (lede + CTA [+ palette if shown]) */
+  #hero .hero__content [data-intro-group]{
+    margin-top: -30px !important;      /* lift ~30px; use -25px if you want a softer nudge */
+    justify-items: center !important;  /* keep perfectly centered */
+  }
+
+  /* 2) Make sure internal rhythm stays the same (no accidental transforms) */
+  #hero .ctaWrap, #hero .paletteRow{
+    transform: none !important;
+    translate: none !important;
+    scale: 1 !important;
+    margin-top: 0 !important;          /* spacing still comes from the group gap */
+  }
+
+  /* 3) “Curated” — centered and raised 15px from its current position */
+  #hero .hero__brand, #hero .logo{
+    place-self: center !important;
+    margin-top: calc( var(--gap-brand, 24px) - 15px ) !important; /* +15px upward */
+    text-align: center !important;
+  }
+}
+
 /* 1200 × 900 — spacing polish (overrides) */
 @media (min-width:1180px) and (max-width:1225px) and (min-height:880px){
   .paletteRow{ margin-top: calc(20px - 28px) !important; }
@@ -31,6 +56,48 @@
 
   /* 3) Pin Curated near bottom, perfectly centered */
   #hero .hero__brand { position: absolute !important; left: 50% !important; transform: translateX(-50%) !important; bottom: 35px !important; margin: 0 !important; place-self: auto !important; text-align: center !important; }
+}
+
+/* === LOCK: 1200 × 900 — final spacing & pin === */
+@media (min-width:1188px) and (max-width:1212px) and (min-height:880px) and (max-height:920px){
+  #hero .hero__content{
+    position: relative !important;
+    padding-block: 18px 48px !important;
+    row-gap: 0 !important;
+  }
+
+  #hero .eyebrow{ margin: 0 0 6px 0 !important; }
+  #hero .h1, #hero h1{ margin: 0 !important; }
+
+  #hero .lede{
+    margin: 20px auto 0 auto !important;
+    max-width: 36ch !important;
+    text-align: center !important;
+    transform: none !important; padding: 0 !important;
+  }
+
+  #hero .hero__content [data-intro-group]{
+    display: grid; justify-items: center !important;
+    row-gap: 20px !important;
+  }
+
+  #hero .ctaWrap, #hero .paletteRow{
+    margin-top: 0 !important; transform:none !important;
+    translate:none !important; scale:1 !important;
+  }
+
+  #hero .paletteRow{
+    margin-block-start: 4px !important;
+    display:grid !important;
+  }
+
+  #hero .hero__brand, #hero .logo{
+    position: absolute !important;
+    left: 50% !important; transform: translateX(-50%) !important;
+    bottom: 35px !important;
+    margin: 0 !important; text-align: center !important;
+    place-self: auto !important;
+  }
 }
 
 /* 834×900 exact band — stack, center, higher */
