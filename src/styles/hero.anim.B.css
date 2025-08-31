@@ -1,13 +1,13 @@
 :root{
   /* Apple‑y pacing */
   --ease: cubic-bezier(.23,.66,.36,1);
-  --photo-dur: 900ms;
-  --photo-pad: 180ms; /* breathing room before the title */
-  --h1-dur:    600ms;
+  --photo-dur: 1125ms; /* +25% */
+  --photo-pad: 225ms;  /* +25% */
+  --h1-dur:    750ms;  /* +25% */
   --h1-delay:  calc(var(--photo-dur) + var(--photo-pad));
   --new-offset: 80ms;
   --group-gap: 600ms;
-  --group-dur: 1000ms;
+  --group-dur: 1250ms; /* +25% */
 }
 @media (prefers-reduced-motion: reduce) {
   [data-anim="B"] { opacity: 1 !important; }
@@ -62,10 +62,12 @@
   transition: transform var(--h1-dur) var(--ease), opacity var(--h1-dur) var(--ease);
   transition-delay: var(--h1-delay);
 }
+/* Eyebrow follows H1 but settles at final position (no drop back) */
 [data-anim="B"][data-anim-state="in"] .eyebrow {
-  opacity: 1; transform: translateY(0) scale(1);
-  transition: transform var(--h1-dur) var(--ease), opacity var(--h1-dur) var(--ease);
-  transition-delay: calc(var(--h1-delay) + var(--new-offset));
+  opacity: 1;
+  transition: opacity var(--h1-dur) var(--ease);
+  animation: eyebrow-bump var(--h1-dur) var(--ease) 1 forwards;
+  animation-delay: calc(var(--h1-delay) + var(--new-offset));
 }
 
 /* BEAT 3: One unified group (no motion) — use data-intro hook */
@@ -79,13 +81,10 @@
 [data-intro="group"] > * { opacity: inherit !important; transform: none !important; transition: none !important; }
 
 @keyframes eyebrow-bump {
-  0%   { transform: translateY(0); }
-  45%  { transform: translateY(-3px); }
-  100% { transform: translateY(0); }
+  0%   { transform: translateY(10px) scale(.985); }
+  60%  { transform: translateY(-3px) scale(1); }
+  100% { transform: translateY(0)     scale(1); }
 }
-
-/* Trigger the bump when NEW starts (slightly after H1) */
-[data-anim="B"][data-anim-state="in"] .eyebrow { animation: eyebrow-bump 360ms var(--ease) 1; animation-delay: calc(var(--h1-delay) + var(--new-offset)); }
 
 /* Icon follows paletteRow container (no separate timing) */
 [data-anim="B"] .icon--bolt { opacity: 0; }
