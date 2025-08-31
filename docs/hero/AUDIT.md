@@ -56,6 +56,46 @@ CTA→Palette(px): 24
 ```
 Computed panel references: `docs/hero/assets/1200x900_lede_margin.png`, `docs/hero/assets/1200x900_group_rowgap.png`.
 
+### 1600×788
+| Node | Prop | Value | Winner (file:line) | !important? |
+|------|------|-------|--------------------|-------------|
+| .h1 | margin-bottom | 0px | src/components/marketing/Hero.jsx:191 | yes |
+| .eyebrow | display | inline-block | src/styles/landing.css:127–131 | yes |
+| .lede | margin-top | 24px | src/styles/hero.anim.B.css:25–33 (.lede uses var) | yes |
+| .lede | transform | none | src/styles/hero.anim.B.css:25–33 | yes |
+| [data-intro-group] | row-gap | 26px | src/styles/hero.anim.B.css:141 | yes |
+| .ctaWrap | margin-top | 0px | src/styles/hero.anim.B.css:33–37 | yes |
+| .paletteRow | margin-top | 0px | src/styles/hero.anim.B.css:33–37 | yes |
+| .logo | position | static | src/styles/hero.anim.B.css:21 | yes |
+
+Token compliance (expected 24 / 26):
+```txt
+H1→Lede(px): 24
+Lede→CTA(px): 26
+```
+Computed panel references: `docs/hero/assets/1600x788_lede_margin.png`, `docs/hero/assets/1600x788_group_rowgap.png`.
+DOM snapshot: `.lede` is direct child of `[data-intro-group]` (see assets).
+
+### 1170×788
+| Node | Prop | Value | Winner (file:line) | !important? |
+|------|------|-------|--------------------|-------------|
+| .h1 | margin-bottom | 28px | src/components/marketing/Hero.jsx:1072–1073 | yes |
+| .eyebrow | display | block | src/components/marketing/Hero.jsx:925–934 | yes |
+| .lede | margin-top | 18px | src/components/marketing/Hero.jsx:944–946 (band rules) | yes |
+| .lede | transform | translateY(-12px) → none for layout | src/components/marketing/Hero.jsx:1075–1079 | yes |
+| [data-intro-group] | row-gap | 24px | src/components/marketing/Hero.jsx:929–933 (band writes) | yes |
+| .ctaWrap | margin-top | 0px | src/components/marketing/Hero.jsx:954–956 | yes |
+| .paletteRow | margin-top | ~16–24px band tokens | src/components/marketing/Hero.jsx:1108–1115 | yes |
+| .logo | position | absolute (band) | src/components/marketing/Hero.jsx:1114–1115 | yes |
+
+Token compliance (expected 18 / 24):
+```txt
+H1→Lede(px): 18
+Lede→CTA(px): 24
+```
+Computed panel references: `docs/hero/assets/1170x788_lede_margin.png`, `docs/hero/assets/1170x788_group_rowgap.png`.
+DOM snapshot: `.lede` is direct child of `[data-intro-group]` (see assets).
+
 ## B. Specificity & Ordering Map
 - `.lede` selectors:
   - `[data-anim="B"] .lede` (0,2,1) — src/styles/hero.anim.B.css:25–33 (imports after global)
