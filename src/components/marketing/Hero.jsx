@@ -76,6 +76,33 @@ export default function Hero() {
               const finalW = Math.max(260, Math.min(wish, Math.floor(cw - 40)))
               ;['inline-size','width','max-inline-size','min-inline-size'].forEach(p => imp(ctaWrapRef.current, p, `${finalW}px`))
               imp(ctaWrapRef.current, 'flex', `0 0 ${finalW}px`)
+              // === CTA size lock for intro ===================================
+              const btn = ctaRef.current
+              const wrap = ctaWrapRef.current
+              if (btn && wrap && !wrap.dataset.locked) {
+                wrap.dataset.locked = '1'
+                const r = btn.getBoundingClientRect()
+                imp(btn, 'width', `${Math.round(r.width)}px`)
+                imp(btn, 'height', `${Math.round(r.height)}px`)
+                imp(btn, 'overflow', 'hidden')
+                btn.style.transitionProperty = 'background-color,color,box-shadow,transform'
+                btn.style.transitionDuration = '140ms'
+                imp(btn, 'will-change', 'opacity')
+                imp(btn, 'contain', 'layout paint')
+                // derive unlock from CSS var --group-dur (ms) with small pad
+                let unlockMs = 1050
+                try {
+                  const gd = getComputedStyle(document.documentElement).getPropertyValue('--group-dur') || '1000ms'
+                  const ms = parseInt(gd.trim(), 10)
+                  if (!Number.isNaN(ms)) unlockMs = ms + 50
+                } catch (e) { /* noop */ }
+                setTimeout(() => {
+                  btn.style.width = ''
+                  btn.style.height = ''
+                  btn.style.overflow = ''
+                  wrap.dataset.locked = ''
+                }, unlockMs)
+              }
             } catch (e) { /* noop */ }
             requestAnimationFrame(() => {
               root.setAttribute('data-anim-state', 'in')
