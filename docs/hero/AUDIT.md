@@ -98,6 +98,48 @@ Lede→CTA(px): 24
 Computed panel references: `docs/hero/assets/1170x788_lede_margin.png`, `docs/hero/assets/1170x788_group_rowgap.png`.
 DOM snapshot: `.lede` is direct child of `[data-intro-group]` (see assets).
 
+### 834×900
+| Node | Prop | Value | Winner (file:line) | !important? |
+|------|------|-------|--------------------|-------------|
+| .h1 | margin-bottom | 0px | src/components/marketing/Hero.jsx:191 | yes |
+| .eyebrow | display | block | src/styles/landing.css:(834 band) | yes |
+| .lede | margin-top | 16px | src/styles/hero.anim.B.css:25–33 (.lede uses var) | yes |
+| .lede | transform | none | src/styles/hero.anim.B.css:25–33 | yes |
+| [data-intro-group] | row-gap | 22px | src/styles/hero.anim.B.css:141 | yes |
+| .ctaWrap | margin-top | 0px | src/styles/hero.anim.B.css:33–37 | yes |
+| .paletteRow | display | none | src/styles/landing.css:(834 band) | yes |
+| .logo | position | static | src/styles/hero.anim.B.css:21 | yes |
+
+Eyebrow check: visible; winner selector `@media (min-width: 820px) and (max-width: 899px)… .eyebrow { display:block; }` in src/styles/landing.css.
+
+Token compliance (expected 16 / 22):
+```txt
+H1→Lede(px): 16
+Lede→CTA(px): 22
+```
+Computed panel refs: `docs/hero/assets/834x900_lede_margin.png`, `docs/hero/assets/834x900_group_rowgap.png`.
+DOM snapshot: `.lede` direct child of `[data-intro-group]`.
+
+### 768×900
+| Node | Prop | Value | Winner (file:line) | !important? |
+|------|------|-------|--------------------|-------------|
+| .h1 | margin-bottom | 0px | src/components/marketing/Hero.jsx:191 | yes |
+| .eyebrow | display | block | src/components/marketing/Hero.jsx:444–452 | yes |
+| .lede | margin-top | 16px | src/styles/hero.anim.B.css:25–33 | yes |
+| .lede | transform | none | src/styles/hero.anim.B.css:25–33 | yes |
+| [data-intro-group] | row-gap | 22px | src/styles/hero.anim.B.css:141 | yes |
+| .ctaWrap | margin-top | 0px | src/styles/hero.anim.B.css:33–37 | yes |
+| .paletteRow | display | flex | src/components/marketing/Hero.jsx:431–440 | yes |
+| .logo | position | static | src/styles/hero.anim.B.css:21 | yes |
+
+Token compliance (expected 16 / 22):
+```txt
+H1→Lede(px): 16
+Lede→CTA(px): 22
+```
+Computed panel refs: `docs/hero/assets/768x900_lede_margin.png`, `docs/hero/assets/768x900_group_rowgap.png`.
+DOM snapshot: `.lede` direct child of `[data-intro-group]`.
+
 ## B. Specificity & Ordering Map
 - `.lede` selectors:
   - `[data-anim="B"] .lede` (0,2,1) — src/styles/hero.anim.B.css:25–33 (imports after global)
