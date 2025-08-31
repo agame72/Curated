@@ -51,6 +51,11 @@
   transition-delay: 0ms;
 }
 
+/* Belt-and-suspenders initial hide */
+[data-anim="B"] .eyebrow,
+[data-anim="B"] .h1,
+[data-anim="B"] [data-intro-group]{ opacity:0 !important; visibility:hidden !important; }
+
 /* BEAT 2: H1 + NEW (H1 first, NEW 80ms later, no recoil) */
 [data-anim="B"] .h1,
 [data-anim="B"] .eyebrow { opacity:0; visibility:hidden; transform:translateY(10px) scale(.985); }
@@ -70,7 +75,8 @@
 }
 
 /* ==== BEAT 3 — single group wrapper (opacity only) ==== */
-[data-anim="B"] [data-intro-group]{ opacity:0; visibility:hidden; }
+[data-anim="B"] [data-intro-group]{ opacity:0 !important; visibility:hidden !important; display:grid; row-gap:16px; }
+@media (min-width:1200px){ [data-intro-group]{ row-gap:18px; } }
 [data-anim="B"][data-anim-state="in"] [data-intro-group]{
   opacity:1; visibility:visible;
   transition: opacity var(--group-dur) var(--ease),

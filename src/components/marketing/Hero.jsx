@@ -993,10 +993,10 @@ export default function Hero() {
       {/* Center content (safe area) */}
       <div className="hero__content" data-hero="content" ref={contentRef}>
         <div className="hero__stack" ref={stackRef}>
-          <span ref={eyebrowRef} className="hero__eyebrow eyebrow" data-hero="eyebrow">NEW</span>
-          <h1 ref={h1Ref} className="hero__heading h1">Selfies to a Shopping Guide</h1>
+          <span ref={eyebrowRef} className="hero__eyebrow eyebrow" data-hero="eyebrow" style={{opacity:0, visibility:'hidden'}}>NEW</span>
+          <h1 ref={h1Ref} className="hero__heading h1" style={{opacity:0, visibility:'hidden'}}>Selfies to a Shopping Guide</h1>
         </div>
-        <div data-intro-group ref={el => (window.__heroGroup = el)}>
+        <div data-intro-group ref={el => (window.__heroGroup = el)} style={{opacity:0, visibility:'hidden'}}>
           <p
             ref={ledeRef}
             className="lede hero__lede lede"
