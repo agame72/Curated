@@ -119,8 +119,8 @@ export default function Hero() {
             }
             const photoNodes = Array.from(imgs || []).slice(0, 2)
             const both = Promise.all(photoNodes.map(waitFor))
-            const cap = new Promise(res => setTimeout(res, 1800))
-            Promise.race([Promise.all([both, cap])]).then(start)
+            const cap = new Promise(res => setTimeout(res, 1000))
+            Promise.race([both, cap]).then(start)
           }
         }
       }
