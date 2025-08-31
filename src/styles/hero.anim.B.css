@@ -6,8 +6,8 @@
   --h1-dur:    750ms;  /* +25% */
   --h1-delay:  calc(var(--photo-dur) + var(--photo-pad));
   --new-offset: 80ms;
-  --group-gap: 360ms;  /* start group sooner */
-  --group-dur: 800ms;  /* simple fade */
+  --group-gap: 180ms;  /* start group even sooner */
+  --group-dur: 520ms;  /* quicker, simple fade */
 }
 @media (prefers-reduced-motion: reduce) {
   [data-anim="B"] { opacity:1 !important; }
