@@ -69,17 +69,16 @@
   transition-delay: calc(var(--h1-delay) + var(--new-offset));
 }
 
-/* ==== BEAT 3: One unified group (opacity only) ==== */
-/* Add data-intro="group" to: lede, CTA wrapper, palette container, and logo */
-[data-anim="B"] [data-intro="group"]{ opacity:0; visibility:hidden; transform:none; }
-[data-anim="B"][data-anim-state="in"] [data-intro="group"]{
+/* ==== BEAT 3 — single group wrapper (opacity only) ==== */
+[data-anim="B"] [data-intro-group]{ opacity:0; visibility:hidden; }
+[data-anim="B"][data-anim-state="in"] [data-intro-group]{
   opacity:1; visibility:visible;
   transition: opacity var(--group-dur) var(--ease),
               visibility 0s linear 0s;
   transition-delay: calc(var(--h1-delay) + var(--h1-dur) + var(--group-gap));
 }
-/* Children inherit — kill any rogue transitions */
-[data-intro="group"] > * { opacity: inherit !important; transform: none !important; transition: none !important; }
+/* Children inherit — forbid inner transitions during intro */
+[data-intro-group] *{ transition: none !important; transform: none !important; }
 
 @keyframes eyebrow-bump {
   0%   { transform: translateY(10px) scale(.985); }

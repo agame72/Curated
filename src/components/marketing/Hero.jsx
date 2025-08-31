@@ -976,7 +976,7 @@ export default function Hero() {
       </figure>
 
       {/* Left pillar (≥1200) */}
-      <figure className="hero__pillar hero__pillar--left" data-hero="pillar-left" data-hero="left" aria-hidden="true">
+      <figure className="hero__pillar hero__pillar--left" data-hero="left" aria-hidden="true">
         <picture>
           <source
             type="image/webp"
@@ -993,24 +993,18 @@ export default function Hero() {
       {/* Center content (safe area) */}
       <div className="hero__content" data-hero="content" ref={contentRef}>
         <div className="hero__stack" ref={stackRef}>
-          <span
-            ref={eyebrowRef}
-            className="hero__eyebrow eyebrow"
-            data-hero="eyebrow"
-          >
-            NEW
-          </span>
+          <span ref={eyebrowRef} className="hero__eyebrow eyebrow" data-hero="eyebrow">NEW</span>
           <h1 ref={h1Ref} className="hero__heading h1">Selfies to a Shopping Guide</h1>
+        </div>
+        <div data-intro-group ref={el => (window.__heroGroup = el)}>
           <p
             ref={ledeRef}
             className="lede hero__lede lede"
             data-hero="lede"
-            data-intro="group"
           >
             Share a few photos and we’ll curate a seasonal guide based on your appearance and preferences.
           </p>
-        </div>
-        <div ref={ctaWrapRef} className="hero__cta-wrap ctaWrap" data-hero="cta-wrap" data-intro="group">
+          <div ref={ctaWrapRef} className="hero__cta-wrap ctaWrap" data-hero="cta-wrap">
           <a ref={ctaRef} className="btn btn--primary hero__cta-btn" data-hero="cta" href="/guide" aria-label="Get your seasonal shopping guide">
             <span className="btn__label" data-hero="cta-label">Get Seasonal Guide</span>
             <span
@@ -1035,29 +1029,29 @@ export default function Hero() {
               }}
             />
           </a>
+          </div>
+          {/* Palette row (predictable hooks; paintable icon) */}
+          <div
+            className="palette-cta paletteRow"
+            data-hero="palette"
+            aria-label="Check your palette, about thirty seconds"
+            ref={paletteRowRef}
+          >
+            <img ref={boltRef} className="icon icon--bolt" src="/icons/bolt.svg" alt="" aria-hidden="true" />
+            <span ref={paletteLabelRef} className="label"> 
+              Check your Palette
+            </span>
+            <span className="sep" aria-hidden="true" data-hero="palette-sep">·</span>
+            <span ref={paletteMetaRef} className="meta" data-hero="palette-meta">
+              30 sec
+            </span>
+          </div>
+          <div className="brandmark hero__brand logo" data-hero="wordmark" ref={brandRef}>Curated</div>
         </div>
-        {/* Palette row (predictable hooks; paintable icon) */}
-        <div
-          className="palette-cta paletteRow"
-          data-hero="palette"
-          data-intro="group"
-          aria-label="Check your palette, about thirty seconds"
-          ref={paletteRowRef}
-        >
-          <img ref={boltRef} className="icon icon--bolt" src="/icons/bolt.svg" alt="" aria-hidden="true" />
-          <span ref={paletteLabelRef} className="label"> 
-            Check your Palette
-          </span>
-          <span className="sep" aria-hidden="true" data-hero="palette-sep">·</span>
-          <span ref={paletteMetaRef} className="meta" data-hero="palette-meta">
-            30 sec
-          </span>
-        </div>
-        <div className="brandmark hero__brand logo" data-hero="wordmark" data-intro="group" ref={brandRef}>Curated</div>
       </div>
 
       {/* Right pillar (≥1200) */}
-      <figure className="hero__pillar hero__pillar--right" data-hero="pillar-right" data-hero="right" aria-hidden="true">
+      <figure className="hero__pillar hero__pillar--right" data-hero="right" aria-hidden="true">
         <picture>
           <source
             type="image/webp"
