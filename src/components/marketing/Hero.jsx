@@ -69,8 +69,50 @@ export default function Hero() {
           // === Media-ready gate (wait for both, with cap) ================
           const imp = (el, prop, val) => el?.style?.setProperty(prop, val, 'important')
           const start = () => {
-            // Keep CTA simple: no width lock; just reveal with group
+            // === CTA SIZE LOCK (prevents mid-fade growth) ===================
             try {
+              const btn  = ctaRef.current
+              const wrap = ctaWrapRef.current
+              if (btn && wrap && !wrap.dataset.locked) {
+                wrap.dataset.locked = '1'
+
+                const measure = () => {
+                  const r = btn.getBoundingClientRect()
+                  imp(btn, 'width',  `${Math.round(r.width)}px`)
+                  imp(btn, 'height', `${Math.round(r.height)}px`)
+                  imp(btn, 'overflow', 'hidden')
+                  // Only allow hover visuals to transition; not width/line-height
+                  btn.style.transitionProperty = 'background-color,color,box-shadow,transform'
+                  btn.style.transitionDuration = '140ms'
+                }
+
+                // 1) measure now (tokens applied)
+                measure()
+                // 2) measure again once fonts are ready (prevents swap jitter)
+                try {
+                  if (document.fonts && document.fonts.ready) {
+                    document.fonts.ready.then(() => { try { measure() } catch (e) { /* noop */ } })
+                  }
+                } catch (e) { /* noop */ }
+
+                // 3) unlock after the group fade has fully finished
+                let unlockMs = 1080
+                try {
+                  const cs       = getComputedStyle(document.documentElement)
+                  const h1Delay  = parseFloat(cs.getPropertyValue('--h1-delay'))  || 0
+                  const h1Dur    = parseFloat(cs.getPropertyValue('--h1-dur'))    || 0
+                  const gap      = parseFloat(cs.getPropertyValue('--group-gap')) || 0
+                  const gDur     = parseFloat(cs.getPropertyValue('--group-dur')) || 0
+                  unlockMs = h1Delay + h1Dur + gap + gDur + 80
+                } catch (e) { /* noop */ }
+                setTimeout(() => {
+                  btn.style.width = ''
+                  btn.style.height = ''
+                  btn.style.overflow = ''
+                  wrap.dataset.locked = ''
+                }, unlockMs)
+              }
+              // GPU/paint hints
               imp(ctaRef.current, 'will-change', 'opacity')
               imp(ctaRef.current, 'contain', 'layout paint')
             } catch (e) { /* noop */ }
