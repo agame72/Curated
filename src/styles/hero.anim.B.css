@@ -83,7 +83,7 @@
 @keyframes eyebrow-bump {
   0%   { transform: translateY(10px) scale(.985); }
   60%  { transform: translateY(-3px) scale(1); }
-  100% { transform: translateY(0)     scale(1); }
+  100% { transform: translateY(-2px) scale(1); }
 }
 
 /* Icon follows paletteRow container (no separate timing) */
