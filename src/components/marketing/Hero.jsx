@@ -84,24 +84,14 @@ export default function Hero() {
               const groupEl = document.querySelector('[data-intro-group]')
               show(groupEl)
               if (root) root.dataset.animDone = '1'
-              // — Start group exactly after the H1 finishes —
+              // — Start group exactly 300ms after the H1 begins —
               try {
                 const h1 = h1Ref.current
                 if (root && h1) {
-                  let fired = false
-                  const done = () => { if (fired) return; fired = true; root.setAttribute('data-title-done', '1') }
-                  const onEnd = (e) => {
-                    if (e.target !== h1) return
-                    if (e.propertyName === 'opacity' || e.propertyName === 'transform') {
-                      h1.removeEventListener('transitionend', onEnd)
-                      done()
-                    }
-                  }
-                  h1.addEventListener('transitionend', onEnd, { once: true })
                   const cs = getComputedStyle(document.documentElement)
                   const h1Delay = parseFloat(cs.getPropertyValue('--h1-delay')) || 0
-                  const h1Dur   = parseFloat(cs.getPropertyValue('--h1-dur'))   || 0
-                  setTimeout(done, h1Delay + h1Dur + 80)
+                  const beginPlus = 300
+                  setTimeout(() => { root.setAttribute('data-title-done', '1') }, h1Delay + beginPlus)
 
                   // CTA size lock to prevent mid-fade growth
                   const lockCta = () => {
@@ -159,18 +149,21 @@ export default function Hero() {
         important(h1Ref.current, 'margin-bottom', '24px')
       }
 
-      // restore tokenized lede nudge (static; not animated)
+      // LEDE placement — static tuck per token (no animation)
       if (ledeRef.current) {
-        // Default tuck value; specific blocks may override below (e.g., 1170x788)
-        setImp(ledeRef.current, 'transform', 'translateY(-5px)')
+        setImp(ledeRef.current, 'transform', 'translateY(-8px)') // tokenized tuck; adjust per breakpoint if needed
         setImp(ledeRef.current, 'transition', 'none')
       }
-      // ensure the group wrapper doesn't add a pre-gap and uses grid spacing inside
-      const groupEl = contentRef.current?.querySelector('[data-intro-group]')
-      if (groupEl) {
-        setImp(groupEl, 'margin-top', '0')
-        setImp(groupEl, 'display', 'grid')
-        setImp(groupEl, 'row-gap', window.innerWidth >= 1200 ? '18px' : '16px')
+      // Group wrapper spacing (tokenized row gap), no pre-gap above lede
+      {
+        const groupEl = contentRef.current?.querySelector('[data-intro-group]')
+        if (groupEl) {
+          setImp(groupEl, 'margin-top', '0')
+          setImp(groupEl, 'display', 'grid')
+          // example tokens: XL 20px, else 18px
+          const gapPx = window.innerWidth >= 1600 ? 20 : (window.innerWidth >= 1200 ? 18 : 16)
+          setImp(groupEl, 'row-gap', `${gapPx}px`)
+        }
       }
 
       // --- Palette row & brand (≥1200) ---

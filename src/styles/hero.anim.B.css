@@ -2,11 +2,12 @@
   /* Apple‑y pacing */
   --ease: cubic-bezier(.23,.66,.36,1);
   --photo-dur: 1000ms;  /* slower, premium */
-  --photo-pad: 180ms;   /* slightly snappier into title */
-  --h1-dur:    650ms;
+  --photo-pad: 180ms;   /* snappier than 200ms */
+  --h1-rise:   18px;    /* bigger rise */
+  --h1-dur:    760ms;   /* stretched a touch */
   --h1-delay:  calc(var(--photo-dur) + var(--photo-pad));
-  --new-offset: 80ms;
-  --group-gap: 300ms;   /* exactly 300ms after title end */
+  --new-offset: 120ms;  /* more apple-y nudge */
+  --group-gap: 0ms;     /* JS applies 300ms after H1 begins */
   --group-dur: 800ms;   /* a touch tighter */
 }
 @media (prefers-reduced-motion: reduce) {
@@ -73,15 +74,16 @@
 /* BEAT 2: H1 + NEW (H1 first, NEW 80ms later, no recoil) */
 [data-anim="B"] .h1,
 [data-anim="B"] .eyebrow { opacity:0; visibility:hidden; transform:translateY(10px) scale(.985); }
+[data-anim="B"] .h1{ transform:translateY(var(--h1-rise)) scale(.985) !important; opacity:0 !important; visibility:hidden !important; }
 [data-anim="B"][data-anim-state="in"] .h1{
-  opacity:1; visibility:visible; transform:translateY(0) scale(1);
+  opacity:1 !important; visibility:visible !important; transform:translateY(0) scale(1);
   transition: transform var(--h1-dur) var(--ease),
               opacity   var(--h1-dur) var(--ease),
               visibility 0s linear 0s;
   transition-delay: var(--h1-delay);
 }
 [data-anim="B"][data-anim-state="in"] .eyebrow{
-  opacity:1; visibility:visible; transform:translateY(-3px) scale(1);
+  opacity:1 !important; visibility:visible !important; transform:translateY(-3px) scale(1);
   transition: transform var(--h1-dur) var(--ease),
               opacity   var(--h1-dur) var(--ease),
               visibility 0s linear 0s;
