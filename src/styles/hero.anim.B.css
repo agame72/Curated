@@ -1,0 +1,162 @@
+[data-anim="B"][data-anim-state="ready"] .hero__content [data-intro-group]{ opacity:0; }
+[data-anim="B"][data-anim-state="in"] .hero__content [data-intro-group]{ opacity:1; transition: opacity var(--group-dur, 800ms) var(--ease, ease); }
+[data-anim="B"] .hero__content .lede,
+[data-anim="B"] .hero__content .ctaWrap,
+[data-anim="B"] .hero__content .paletteRow,
+[data-anim="B"] .hero__content .logo{ transform:none !important; }
+[data-anim="B"]{
+  --g-h1-lede: 16px;  /* H1 → lede */
+  --g-lede-cta: 24px; /* lede → CTA */
+}
+[data-anim="B"] [data-intro-group]{
+  display: grid !important;
+  grid-auto-flow: row;
+  row-gap: var(--gap-lede-cta, 28px) !important;
+  margin-top: 0 !important;
+}
+[data-anim="B"] .h1,
+[data-anim="B"] .lede,
+[data-anim="B"] .ctaWrap,
+[data-anim="B"] .paletteRow,
+[data-anim="B"] .logo { margin: 0; transform: none !important; position: static !important; }
+[data-anim="B"] .lede { padding: 0; text-align: center; max-width: 46ch; margin-inline: auto; }
+[data-anim="B"] [data-intro-group]{ justify-items:center; align-items:start; width:100%; }
+[data-anim="B"] .lede { margin-top: var(--gap-h1-lede, 20px); }
+[data-anim="B"] .lede{
+  margin: 0 !important;
+  margin-top: var(--g-h1-lede) !important;
+  padding: 0 !important;
+  transform: none !important;
+  transition: none !important;
+  display: block !important;
+}
+[data-anim="B"] .ctaWrap,
+[data-anim="B"] .paletteRow{
+  margin-top: 0 !important;
+  transform: none !important;
+}
+:root{
+  /* Apple‑y pacing */
+  --ease: cubic-bezier(.23,.66,.36,1);
+  --photo-dur: 1000ms;  /* slower, premium */
+  --photo-pad: 180ms;   /* snappier than 200ms */
+  /* Title baseline offset: lowers start and end together */
+  --title-base: 12px;
+  --h1-rise:   18px;    /* bigger rise */
+  --h1-dur:    760ms;   /* stretched a touch */
+  --h1-delay:  calc(var(--photo-dur) + var(--photo-pad));
+  --new-offset: 0ms;    /* NEW arrives exactly with H1 */
+  --group-gap: 0ms;     /* JS applies 300ms after H1 begins */
+  --group-dur: 800ms;   /* a touch tighter */
+}
+@media (prefers-reduced-motion: reduce) {
+  [data-anim="B"] { opacity:1 !important; }
+  [data-anim="B"] .h1, [data-anim="B"] .eyebrow,
+  [data-anim="B"] [data-intro="group"],
+  [data-anim="B"] [data-hero-media] img {
+    opacity:1 !important; transform:none !important; filter:none !important; visibility:visible !important;
+  }
+}
+
+[data-anim="B"] { opacity: 0; }
+[data-anim="B"][data-anim-state="in"] { opacity: 1; transition: opacity var(--h1-dur) var(--ease); }
+
+/* ORDER LOCK: group is hidden by default and even when 'in' */
+[data-anim="B"] [data-intro-group],
+[data-anim="B"][data-anim-state="in"] [data-intro-group]{
+  opacity:0 !important;
+  visibility:hidden !important;
+}
+
+/* NEW/H1 must also be hidden until their beat (prevents early flashes) */
+[data-anim="B"] .h1,
+[data-anim="B"] .eyebrow{
+  opacity:0 !important;
+  visibility:hidden !important;
+}
+
+/* CHUNK 1 — Never let UA margins push the lede around */
+[data-anim="B"] .lede {
+  margin-block: 0 !important;
+  transform: none !important;
+  transition: none !important;
+  padding: 0 !important;
+}
+
+/* BEAT 1: Photos (both together) */
+[data-anim="B"] [data-hero="left"]  img,
+[data-anim="B"] [data-hero="right"] img { opacity:0; filter:blur(8px); }
+[data-anim="B"] [data-hero="left"]  img { transform:translateX(-12px); }
+[data-anim="B"] [data-hero="right"] img { transform:translateX( 12px); }
+[data-anim="B"][data-anim-state="in"] [data-hero="left"] img,
+[data-anim="B"][data-anim-state="in"] [data-hero="right"] img {
+  opacity:1; transform:translateX(0); filter:blur(0);
+  transition: transform var(--photo-dur) var(--ease),
+              opacity   var(--photo-dur) var(--ease),
+              filter    calc(var(--photo-dur) + 180ms) ease;
+  transition-delay: 0ms;
+}
+
+/* Fallback for pillar/tile images outside data-hero-media container */
+[data-anim="B"] .hero__pillar img,
+[data-anim="B"] .hero__tile img { opacity: 0; filter: blur(8px); }
+[data-anim="B"] .hero__pillar--left img.is-left,
+[data-anim="B"] .hero__tile--a img.is-left { transform: translateX(-12px); }
+[data-anim="B"] .hero__pillar--right img.is-right,
+[data-anim="B"] .hero__tile--b img.is-right { transform: translateX(12px); }
+[data-anim="B"][data-anim-state="in"] .hero__pillar img,
+[data-anim="B"][data-anim-state="in"] .hero__tile img {
+  opacity: 1; transform: translateX(0); filter: blur(0);
+  transition: transform var(--photo-dur) var(--ease),
+              opacity   var(--photo-dur) var(--ease),
+              filter    calc(var(--photo-dur) + 160ms) ease;
+  transition-delay: 0ms;
+}
+
+/* Belt-and-suspenders initial hide */
+[data-anim="B"] .eyebrow,
+[data-anim="B"] .h1,
+[data-anim="B"] [data-intro-group]{ opacity:0 !important; visibility:hidden !important; }
+
+/* BEAT 2: H1 + NEW (H1 first, NEW 80ms later, no recoil) */
+[data-anim="B"] .h1,
+[data-anim="B"] .eyebrow { opacity:0; visibility:hidden; transform:translateY(calc(var(--title-base) + 10px)) scale(.985); }
+[data-anim="B"] .h1{ transform:translateY(calc(var(--title-base) + var(--h1-rise))) scale(.985) !important; opacity:0 !important; visibility:hidden !important; }
+[data-anim="B"][data-anim-state="in"] .h1{
+  opacity:1 !important; visibility:visible !important; transform:translateY(var(--title-base)) scale(1) !important;
+  transition: transform var(--h1-dur) var(--ease),
+              opacity   var(--h1-dur) var(--ease),
+              visibility 0s linear 0s;
+  transition-delay: var(--h1-delay);
+}
+[data-anim="B"][data-anim-state="in"] .eyebrow{
+  opacity:1 !important; visibility:visible !important; transform:translateY(calc(var(--title-base) - 3px)) scale(1) !important;
+  transition: transform var(--h1-dur) var(--ease),
+              opacity   var(--h1-dur) var(--ease),
+              visibility 0s linear 0s;
+  transition-delay: calc(var(--h1-delay) + var(--new-offset));
+}
+
+/* ==== BEAT 3 — single group wrapper (opacity only) ==== */
+[data-anim="B"] [data-intro-group]{ opacity:0 !important; visibility:hidden !important; display:grid; row-gap: var(--gap-lede-cta, 28px); }
+@media (min-width:1200px){ [data-intro-group]{ row-gap:18px; } }
+/* Show the group only after the H1 has finished (flag set by JS) */
+[data-anim="B"][data-title-done="1"] [data-intro-group]{
+  opacity:1 !important; visibility:visible !important;
+  transition: opacity var(--group-dur) var(--ease);
+  transition-delay: var(--group-gap);
+}
+/* Children inherit — forbid inner transitions during intro */
+[data-intro-group] *{ transition: none !important; transform: none !important; }
+
+@keyframes eyebrow-bump {
+  0%   { transform: translateY(10px) scale(.985); }
+  60%  { transform: translateY(-3px) scale(1); }
+  100% { transform: translateY(-2px) scale(1); }
+}
+
+/* Icon follows paletteRow container (no separate timing) */
+[data-anim="B"] .icon--bolt { opacity: 0; }
+[data-anim="B"][data-anim-state="in"] .icon--bolt { opacity: 1; transition: opacity var(--group-dur) var(--ease); }
+
+

@@ -1,13 +1,13 @@
+@import './styles/tokens.css';
 @import "./styles/fonts.css";
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-@import './styles/tokens.css';
-
 /* tokens come from src/styles/tokens.css */
 
-html, body { margin: 0; }
+html, body, #root { height: 100%; }
+body { margin: 0; }
 body{ background: var(--bg-cream); font-family: var(--sans) !important; }
 .h-serif{ font-family: var(--serif); font-weight: var(--weight-bold); letter-spacing:-0.02em; }
 h1,h2{ font-family: var(--serif) !important; font-weight: var(--weight-bold); letter-spacing:-0.02em; }

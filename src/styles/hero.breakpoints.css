@@ -1,0 +1,59 @@
+/* ---- HERO BREAKPOINT REFINEMENTS (load LAST) ---------------------------- */
+#hero { --hero-gold: #C99B2B; --hero-text: #2A2A2A; --hero-meta: #74726E; }
+
+/* XL micro-nudges (≥1440): pull lede/palette up a touch; tighten arrow gap */
+@media (min-width: 1440px) {
+  #hero [data-hero="lede"]        { transform: translateY(-10px); }
+  #hero [data-hero="palette"]     { margin-top: 10px !important; } /* was ~20 */
+  #hero [data-hero="cta"]         { gap: 12px !important; }        /* was 14 */
+}
+
+/* L pillars equalize (1200–1439): guarantee equal side widths and no gap */
+@media (min-width: 1200px) and (max-width: 1439.98px) {
+  /* If your outer hero container is already grid, this ensures symmetry */
+  #hero.hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, var(--center-max, 880px)) minmax(0, 1fr);
+    column-gap: 0 !important;
+  }
+  /* Make sure both pillars expand identically & crop the same way */
+  #hero .hero__pillar,
+  #hero [data-hero="pillar-left"],
+  #hero [data-hero="pillar-right"] { min-width: 0; }
+  #hero .hero__pillar img,
+  #hero [data-hero="pillar-left"] img,
+  #hero [data-hero="pillar-right"] img { width: 100%; height: 100%; object-fit: cover; }
+}
+
+/* Edge M (1024–1199) – fix NEW color/size, tighten spacing, left-align wordmark,
+   correct palette row, remove any dot separator */
+@media (min-width: 1024px) and (max-width: 1199.98px) {
+  #hero [data-hero="content"]     { text-align: left; align-items: flex-start; max-inline-size: 760px; margin-inline: auto; }
+  #hero [data-hero="eyebrow"]     { color: var(--hero-gold) !important; font-size: 14px !important; letter-spacing: .16em !important; text-transform: uppercase; }
+  #hero [data-hero="lede"]        { margin-top: 12px !important; }
+  #hero [data-hero="palette"]     { margin-top: 16px !important; }
+  #hero [data-hero="palette-label"] { font-weight: 400 !important; font-size: 20px !important; color: var(--hero-text) !important; }
+  #hero [data-hero="palette-meta"]  { font-weight: 400 !important; font-size: 16px !important; color: var(--hero-meta) !important; }
+  #hero .palette-sep, #hero [data-hero="palette-sep"] { display: none !important; }
+  #hero [data-hero="wordmark"]    { color: #B7B3AD !important; align-self: flex-start; margin-left: 0; }
+}
+
+/* Square lock (exact 900×900) – stronger wrap, left-aligned wordmark, no dot */
+@media (width: 900px) and (height: 900px) {
+  #hero [data-hero="content"]     { text-align: left; align-items: flex-start; max-inline-size: 720px; margin-inline: auto; }
+  #hero [data-hero="lede"]        { margin-top: 10px !important; }
+  #hero [data-hero="palette"]     { margin-top: 16px !important; }
+  #hero .palette-sep, #hero [data-hero="palette-sep"] { display: none !important; }
+  #hero [data-hero="wordmark"]    { align-self: flex-start; }
+}
+
+/* 899×800-ish (≤900 wide, ≥760 tall) – compact/center, hide eyebrow & palette row */
+@media (max-width: 900px) and (min-height: 760px) {
+  #hero [data-hero="eyebrow"]     { display: none !important; }
+  #hero [data-hero="palette"]     { display: none !important; }
+  #hero [data-hero="content"]     { text-align: center; align-items: center; max-inline-size: 680px; margin-inline: auto; }
+  #hero [data-hero="lede"]        { margin-top: 10px !important; }
+  #hero [data-hero="wordmark"]    { color: #B7B3AD !important; margin-top: 28px; align-self: center; }
+}
+
+
