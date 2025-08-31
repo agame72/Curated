@@ -140,6 +140,46 @@ Lede→CTA(px): 22
 Computed panel refs: `docs/hero/assets/768x900_lede_margin.png`, `docs/hero/assets/768x900_group_rowgap.png`.
 DOM snapshot: `.lede` direct child of `[data-intro-group]`.
 
+### 428×800
+| Node | Prop | Value | Winner (file:line) | !important? |
+|------|------|-------|--------------------|-------------|
+| .h1 | margin-bottom | 0px | src/components/marketing/Hero.jsx:191 | yes |
+| .eyebrow | display | none | src/components/marketing/Hero.jsx:475–477 | yes |
+| .lede | margin-top | 16px | src/styles/hero.anim.B.css:25–33 | yes |
+| .lede | transform | none | src/styles/hero.anim.B.css:25–33 | yes |
+| [data-intro-group] | row-gap | 20px | src/styles/landing.css (mobile baseline) | yes |
+| .ctaWrap | margin-top | 0px | src/styles/hero.anim.B.css:33–37 | yes |
+| .paletteRow | display | none | src/components/marketing/Hero.jsx:399, 477–479 | yes |
+| .logo | position | absolute; bottom:12px | src/components/marketing/Hero.jsx:396–397 | yes |
+
+Token compliance (expected 16 / 20):
+```txt
+H1→Lede(px): 16
+Lede→CTA(px): 20
+```
+Computed panel refs: `docs/hero/assets/428x800_lede_margin.png`, `docs/hero/assets/428x800_group_rowgap.png`.
+DOM snapshot: `.lede` direct child of `[data-intro-group]`.
+
+### 360×780
+| Node | Prop | Value | Winner (file:line) | !important? |
+|------|------|-------|--------------------|-------------|
+| .h1 | margin-bottom | 0px | src/components/marketing/Hero.jsx:191 | yes |
+| .eyebrow | display | none | src/components/marketing/Hero.jsx:475–477 | yes |
+| .lede | margin-top | 14px | src/styles/hero.anim.B.css:25–33 | yes |
+| .lede | transform | none | src/styles/hero.anim.B.css:25–33 | yes |
+| [data-intro-group] | row-gap | 18px | src/styles/landing.css (mobile baseline) | yes |
+| .ctaWrap | margin-top | 0px | src/styles/hero.anim.B.css:33–37 | yes |
+| .paletteRow | display | none | src/styles/landing.css/mobile | yes |
+| .logo | position | absolute; bottom:12px | src/components/marketing/Hero.jsx:396–397 | yes |
+
+Token compliance (expected 14 / 18):
+```txt
+H1→Lede(px): 14
+Lede→CTA(px): 18
+```
+Computed panel refs: `docs/hero/assets/360x780_lede_margin.png`, `docs/hero/assets/360x780_group_rowgap.png`.
+DOM snapshot: `.lede` direct child of `[data-intro-group]`.
+
 ## B. Specificity & Ordering Map
 - `.lede` selectors:
   - `[data-anim="B"] .lede` (0,2,1) — src/styles/hero.anim.B.css:25–33 (imports after global)
