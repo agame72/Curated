@@ -21,6 +21,14 @@
 [data-anim="B"] { opacity: 0; }
 [data-anim="B"][data-anim-state="in"] { opacity: 1; transition: opacity var(--h1-dur) var(--ease); }
 
+/* Force-show when anim state is IN (wins over inline) */
+[data-anim="B"][data-anim-state="in"] .h1,
+[data-anim="B"][data-anim-state="in"] .eyebrow,
+[data-anim="B"][data-anim-state="in"] [data-intro-group]{
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
 /* BEAT 1: Photos (both together) */
 [data-anim="B"] [data-hero="left"]  img,
 [data-anim="B"] [data-hero="right"] img { opacity:0; filter:blur(8px); }

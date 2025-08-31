@@ -75,7 +75,14 @@ export default function Hero() {
               imp(ctaRef.current, 'contain', 'layout paint')
             } catch (e) { /* noop */ }
             requestAnimationFrame(() => {
+              // flip
               root?.setAttribute('data-anim-state', 'in')
+              // clear inline hides to avoid future conflicts
+              const show = (el) => { if (!el) return; try { el.style.opacity = ''; el.style.visibility = ''; } catch (e) { /* noop */ } }
+              show(h1Ref.current)
+              show(eyebrowRef.current)
+              const groupEl = document.querySelector('[data-intro-group]')
+              show(groupEl)
               if (root) root.dataset.animDone = '1'
             })
           }
@@ -109,6 +116,20 @@ export default function Hero() {
       // 1) H1: ensure a real bottom margin so the gap increases
       if (isDesktop() && h1Ref.current) {
         important(h1Ref.current, 'margin-bottom', '24px')
+      }
+
+      // restore tokenized lede nudge (static; not animated)
+      if (ledeRef.current) {
+        // Default tuck value; specific blocks may override below (e.g., 1170x788)
+        setImp(ledeRef.current, 'transform', 'translateY(-5px)')
+        setImp(ledeRef.current, 'transition', 'none')
+      }
+      // ensure the group wrapper doesn't add a pre-gap and uses grid spacing inside
+      const groupEl = contentRef.current?.querySelector('[data-intro-group]')
+      if (groupEl) {
+        setImp(groupEl, 'margin-top', '0')
+        setImp(groupEl, 'display', 'grid')
+        setImp(groupEl, 'row-gap', window.innerWidth >= 1200 ? '18px' : '16px')
       }
 
       // --- Palette row & brand (≥1200) ---
