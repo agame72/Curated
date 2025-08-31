@@ -10,14 +10,11 @@
   --group-dur: 1250ms; /* +25% */
 }
 @media (prefers-reduced-motion: reduce) {
-  [data-anim="B"] { opacity: 1 !important; }
-  [data-anim="B"] .h1,
-  [data-anim="B"] .lede,
-  [data-anim="B"] .ctaWrap,
-  [data-anim="B"] .paletteRow,
-  [data-anim="B"] .logo,
+  [data-anim="B"] { opacity:1 !important; }
+  [data-anim="B"] .h1, [data-anim="B"] .eyebrow,
+  [data-anim="B"] [data-intro="group"],
   [data-anim="B"] [data-hero-media] img {
-    opacity: 1 !important; transform: none !important; filter: none !important;
+    opacity:1 !important; transform:none !important; filter:none !important; visibility:visible !important;
   }
 }
 
@@ -62,19 +59,20 @@
   transition: transform var(--h1-dur) var(--ease), opacity var(--h1-dur) var(--ease);
   transition-delay: var(--h1-delay);
 }
-/* Eyebrow follows H1 but settles at final position (no drop back) */
-[data-anim="B"][data-anim-state="in"] .eyebrow {
-  opacity: 1;
-  transition: opacity var(--h1-dur) var(--ease);
-  animation: eyebrow-bump var(--h1-dur) var(--ease) 1 forwards;
+/* the “bump” */
+@keyframes eyebrow-bump{ 0%{transform:translateY(0)}45%{transform:translateY(-3px)}100%{transform:translateY(0)} }
+[data-anim="B"][data-anim-state="in"] .eyebrow{
+  animation: eyebrow-bump 360ms var(--ease) 1;
   animation-delay: calc(var(--h1-delay) + var(--new-offset));
 }
 
-/* BEAT 3: One unified group (no motion) — use data-intro hook */
-[data-anim="B"] [data-intro="group"] { opacity: 0; transform: none; }
-[data-anim="B"][data-anim-state="in"] [data-intro="group"] {
-  opacity: 1;
-  transition: opacity var(--group-dur) var(--ease);
+/* ==== BEAT 3: One unified group (opacity only) ==== */
+/* Add data-intro="group" to: lede, CTA wrapper, palette container, and logo */
+[data-anim="B"] [data-intro="group"]{ opacity:0; visibility:hidden; transform:none; }
+[data-anim="B"][data-anim-state="in"] [data-intro="group"]{
+  opacity:1; visibility:visible;
+  transition: opacity var(--group-dur) var(--ease),
+              visibility 0s linear 0s;
   transition-delay: calc(var(--h1-delay) + var(--h1-dur) + var(--group-gap));
 }
 /* Children inherit — kill any rogue transitions */
