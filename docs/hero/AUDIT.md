@@ -36,6 +36,7 @@ H1→Lede(px): 22
 Lede→CTA(px): 28
 ```
 Computed panel references: see `docs/hero/assets/1600x900_lede_margin.png`, `docs/hero/assets/1600x900_group_rowgap.png`.
+Resolved vars: --g-h1-lede: 22px; --g-lede-cta: 28px.
 
 ### 1200×900
 | Node | Prop | Value | Winner (file:line) | !important? |
@@ -55,6 +56,7 @@ Lede→CTA(px): 20
 CTA→Palette(px): 24
 ```
 Computed panel references: `docs/hero/assets/1200x900_lede_margin.png`, `docs/hero/assets/1200x900_group_rowgap.png`.
+Resolved vars: --g-h1-lede: 20px; --g-lede-cta: 20px.
 
 ### 1600×788
 | Node | Prop | Value | Winner (file:line) | !important? |
